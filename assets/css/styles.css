@@ -1,0 +1,142 @@
+:root {
+    --primary: #111111;
+    --accent: #ff4600;
+    --bg-light: #f8f9fa;
+    --text-main: #222222;
+    --text-muted: #666666;
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--white);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 8%;
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: var(--accent);
+}
+
+.nav-links a {
+    color: #cccccc;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--white);
+}
+
+.nav-links .btn-login {
+    background-color: var(--accent);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+.hero {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 8%;
+    background: linear-gradient(135deg, #0d0d0d 0%, #1f1f1f 100%);
+    color: var(--white);
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.badge {
+    display: inline-block;
+    background-color: rgba(255, 70, 0, 0.15);
+    color: var(--accent);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.tagline {
+    font-size: 1.4rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.description {
+    color: #aaaaaa;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 0.8rem 1.8rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background-color: var(--accent);
+    color: var(--white);
+}
+
+.btn-secondary {
+    border: 1px solid #444444;
+    color: var(--white);
+}
+
+.footer {
+    background-color: var(--primary);
+    color: var(--text-muted);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.85rem;
+}
