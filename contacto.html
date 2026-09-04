@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strydr | Contacto</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">STRYDR<span>.</span></div>
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="contacto.html" class="active">Contacto</a>
+            <a href="login.html" class="btn-login">Iniciar sesión</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h2>Ponte en Contacto</h2>
+            <p class="subtitle">¿Dudas con tallas o lanzamientos? Escríbenos.</p>
+        </section>
+
+        <div class="form-container">
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="c-name">Nombre completo</label>
+                    <input type="text" id="c-name" placeholder="Ej. Carlos Mendoza" required>
+                </div>
+                <div class="form-group">
+                    <label for="c-email">Correo electrónico</label>
+                    <input type="email" id="c-email" placeholder="tucorreo@ejemplo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="c-msg">Mensaje</label>
+                    <textarea id="c-msg" rows="4" placeholder="¿En qué podemos ayudarte?" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-full">Enviar Mensaje</button>
+            </form>
+
+            <div id="contactStatus" class="alert success hidden">
+                ¡Mensaje enviado (simulado)! Nos pondremos en contacto pronto.
+            </div>
+
+            <div class="social-links">
+                <p>Síguenos en redes:</p>
+                <a href="#facebook">Facebook</a> |
+                <a href="#instagram">Instagram</a> |
+                <a href="#x">X (Twitter)</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>
