@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Strydr | Mi Perfil</title>
     <link rel="stylesheet" href="assets/css/styles.css">
+
 </head>
 
 <body>
@@ -28,27 +29,61 @@
         </section>
 
         <div class="card-grid">
-            <!-- Sección: Mis Datos -->
+            <!-- Sección Mis Datos (Lectura y Edición) -->
             <div class="info-card">
                 <h3>Mis Datos</h3>
-                <p><strong>Nombre:</strong> Brayan Camarillo (Usuario Demo)</p>
-                <p><strong>Correo:</strong> brayan@strydr.com</p>
-                <p><strong>Nivel de Membresía:</strong> Strydr Runner Club (Activo)</p>
-                <p><strong>Dirección:</strong> Aguascalientes, Ags.</p>
+
+                <!-- Vista de lectura -->
+                <div id="viewData">
+                    <p><strong>Nombre:</strong> <span id="dispName">Brayan Camarillo</span></p>
+                    <p><strong>Correo:</strong> <span id="dispEmail">brayan@strydr.com</span></p>
+                    <p><strong>Nivel de Membresía:</strong> Strydr Runner Club (Activo)</p>
+                    <p><strong>Dirección:</strong> <span id="dispAddress">Aguascalientes, Ags.</span></p>
+                    <div style="margin-top: 1.2rem;">
+                        <button id="btnEdit" class="btn-secondary"
+                            style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Editar Datos</button>
+                    </div>
+                </div>
+
+                <!-- Formulario de edición simulada -->
+                <form id="editForm" class="hidden" style="margin-top: 1rem;" novalidate>
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" id="inputName" value="Brayan Camarillo">
+                    </div>
+                    <div class="form-group">
+                        <label>Correo:</label>
+                        <input type="text" id="inputEmail" value="brayan@strydr.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Dirección:</label>
+                        <input type="text" id="inputAddress" value="Aguascalientes, Ags.">
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button type="submit" class="btn-primary"
+                            style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Guardar Cambios</button>
+                        <button type="button" id="btnCancel" class="btn-secondary"
+                            style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Cancelar</button>
+                    </div>
+                </form>
+
+                <div id="editNotice" class="alert success hidden" style="margin-top: 1rem;">
+                    ¡Datos actualizados con éxito!
+                </div>
             </div>
 
-            <!-- Sección: Mis Compras (Próximamente) -->
+            <!-- Sección Mis Compras (Próximamente) -->
             <div class="info-card">
                 <h3>Mis Compras</h3>
                 <p class="text-muted">No cuentas con compras finalizadas aún.</p>
                 <div class="alert info">
-                    El historial de pedidos y tickets se integrará en el Bloque 4.
+                    PROXIMAMENTE.
                 </div>
             </div>
         </div>
 
         <div style="margin-top: 2.5rem; text-align: center;">
-            <button id="btnLogout" class="btn-secondary">Cerrar Sesión (Simulado)</button>
+            <button id="btnLogout" class="btn-secondary">Cerrar Sesión </button>
         </div>
     </main>
 
@@ -57,6 +92,35 @@
     </footer>
 
     <script>
+        const viewData = document.getElementById('viewData');
+        const editForm = document.getElementById('editForm');
+        const btnEdit = document.getElementById('btnEdit');
+        const btnCancel = document.getElementById('btnCancel');
+        const editNotice = document.getElementById('editNotice');
+
+        btnEdit.addEventListener('click', () => {
+            viewData.classList.add('hidden');
+            editForm.classList.remove('hidden');
+            editNotice.classList.add('hidden');
+        });
+
+        btnCancel.addEventListener('click', () => {
+            editForm.classList.add('hidden');
+            viewData.classList.remove('hidden');
+        });
+
+        editForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Asignar los nuevos valores en pantalla
+            document.getElementById('dispName').innerText = document.getElementById('inputName').value || 'Usuario Strydr';
+            document.getElementById('dispEmail').innerText = document.getElementById('inputEmail').value || 'usuario@strydr.com';
+            document.getElementById('dispAddress').innerText = document.getElementById('inputAddress').value || 'Sin especificar';
+
+            editForm.classList.add('hidden');
+            viewData.classList.remove('hidden');
+            editNotice.classList.remove('hidden');
+        });
+
         document.getElementById('btnLogout').addEventListener('click', () => {
             alert('Has cerrado sesión correctamente (simulado). Redirigiendo al inicio...');
             window.location.href = 'index.html';
