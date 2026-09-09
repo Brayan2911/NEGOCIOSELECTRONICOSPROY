@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strydr | Iniciar Sesión</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">STRYDR<span>.</span></div>
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="contacto.html">Contacto</a>
+            <a href="login.html" class="active btn-login">Iniciar sesión</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="auth-card">
+            <section class="page-header" style="margin-bottom: 1.5rem;">
+                <h2>Bienvenido de nuevo</h2>
+                <p class="subtitle">Accede a tu cuenta para gestionar tus pedidos y perfil.</p>
+            </section>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="l-email">Correo electrónico</label>
+                    <input type="email" id="l-email" placeholder="usuario@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="l-pass">Contraseña</label>
+                    <input type="password" id="l-pass" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary w-full">Entrar</button>
+            </form>
+
+            <div id="loginStatus" class="alert success hidden">
+                Credenciales aceptadas (simulado). Redirigiendo a tu perfil...
+            </div>
+
+            <p class="auth-switch">¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const statusBox = document.getElementById('loginStatus');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            statusBox.classList.remove('hidden');
+            setTimeout(() => {
+                window.location.href = 'perfil.html';
+            }, 1200);
+        });
+    </script>
+</body>
+
+</html>
