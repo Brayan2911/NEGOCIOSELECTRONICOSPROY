@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strydr | Mi Perfil</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">STRYDR<span>.</span></div>
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="contacto.html">Contacto</a>
+            <a href="perfil.html" class="active">Mi Perfil</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h2>Panel de Atleta</h2>
+            <p class="subtitle">Gestiona tu perfil, direcciones y pedidos en Strydr.</p>
+        </section>
+
+        <div class="card-grid">
+            <!-- Sección: Mis Datos -->
+            <div class="info-card">
+                <h3>Mis Datos</h3>
+                <p><strong>Nombre:</strong> Brayan Camarillo (Usuario Demo)</p>
+                <p><strong>Correo:</strong> brayan@strydr.com</p>
+                <p><strong>Nivel de Membresía:</strong> Strydr Runner Club (Activo)</p>
+                <p><strong>Dirección:</strong> Aguascalientes, Ags.</p>
+            </div>
+
+            <!-- Sección: Mis Compras (Próximamente) -->
+            <div class="info-card">
+                <h3>Mis Compras</h3>
+                <p class="text-muted">No cuentas con compras finalizadas aún.</p>
+                <div class="alert info">
+                    El historial de pedidos y tickets se integrará en el Bloque 4.
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 2.5rem; text-align: center;">
+            <button id="btnLogout" class="btn-secondary">Cerrar Sesión (Simulado)</button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            alert('Has cerrado sesión correctamente (simulado). Redirigiendo al inicio...');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+
+</html>
