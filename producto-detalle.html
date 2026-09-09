@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strydr | Detalle de Producto</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">STRYDR<span>.</span></div>
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="contacto.html">Contacto</a>
+            <a href="login.html" class="btn-login">Iniciar sesión</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <a href="catalogo.html" class="back-link">&larr; Regresar al catálogo</a>
+
+        <div class="detail-container">
+            <div class="detail-image">
+                <span>👟 Vista del Modelo</span>
+            </div>
+            <div class="detail-info">
+                <span class="badge">Nuevo Lanzamiento</span>
+                <h2>Strydr Velocity Pro</h2>
+                <p class="price-large">$2,499 MXN</p>
+                <p class="detail-desc">
+                    Diseñado con amortiguación reactiva y tejido transpirable de alto rendimiento. Ideal tanto para
+                    entrenamientos diarios como para carreras de larga distancia en asfalto.
+                </p>
+
+                <div class="product-meta">
+                    <p><strong>Categoría:</strong> Calzado Deportivo / Running</p>
+                    <p><strong>Disponibilidad:</strong> En inventario (Simulado)</p>
+                </div>
+
+                <div class="detail-actions">
+                    <button id="btnAddToCart" class="btn-primary">Añadir al carrito</button>
+                </div>
+
+                <div id="cartNotice" class="alert info hidden">
+                    Función de carrito próximamente disponible en el Bloque 2.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        document.getElementById('btnAddToCart').addEventListener('click', () => {
+            document.getElementById('cartNotice').classList.remove('hidden');
+        });
+    </script>
+</body>
+
+</html>
