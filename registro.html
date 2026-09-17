@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Strydr | Registro</title>
     <link rel="stylesheet" href="assets/css/styles.css">
-
 </head>
-
 
 <body>
 
@@ -30,24 +28,24 @@
                 <p class="subtitle">Únete a la comunidad Strydr y sigue tus metas deportivas.</p>
             </section>
 
-            <form id="registerForm">
+            <form id="registerForm" novalidate>
                 <div class="form-group">
                     <label for="r-name">Nombre completo</label>
-                    <input type="text" id="r-name" placeholder="Ej. Brayan Camarillo" required>
+                    <input type="text" id="r-name" placeholder="Ej. Brayan Camarillo">
                 </div>
                 <div class="form-group">
                     <label for="r-email">Correo electrónico</label>
-                    <input type="email" id="r-email" placeholder="usuario@correo.com" required>
+                    <input type="text" id="r-email" placeholder="usuario@correo.com">
                 </div>
                 <div class="form-group">
                     <label for="r-pass">Contraseña</label>
-                    <input type="password" id="r-pass" placeholder="••••••••" required>
+                    <input type="password" id="r-pass" placeholder="••••••••">
                 </div>
                 <button type="submit" class="btn-primary w-full">Registrarme</button>
             </form>
 
             <div id="registerStatus" class="alert success hidden">
-                ¡Registro exitoso ! Redirigiendo al inicio de sesión...
+                ¡Registro exitoso! Redirigiendo al inicio de sesión...
             </div>
 
             <p class="auth-switch">¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a></p>
@@ -67,7 +65,7 @@
             statusBox.classList.remove('hidden');
             setTimeout(() => {
                 window.location.href = 'login.html';
-            }, 1500);
+            }, 1200);
         });
     </script>
 </body>
