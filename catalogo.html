@@ -17,19 +17,34 @@
             <a href="catalogo.html" class="active">Catálogo</a>
             <a href="nosotros.html">Nosotros</a>
             <a href="contacto.html">Contacto</a>
-            <a href="login.html" class="btn-login">Iniciar sesión</a>
+            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">2</span></a>
+
+            <!-- Estado con sesión activa y enlace a Admin -->
+            <span id="navAuth">
+                <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
+                    Perfil</a>
+                <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8; margin-left: 0.5rem;">Admin</a>
+            </span>
         </nav>
     </header>
-
-    <main class="container">
+    <main class="container" style="min-height: auto; padding-bottom: 4rem; overflow: visible;">
         <section class="page-header">
             <h2>Catálogo de Calzado Deportivo</h2>
-            <p class="subtitle">Explora nuestra selección para running, básquetbol y moda urbana.</p>
+            <p class="subtitle">Explora nuestra selección para running, básquetbol, moda urbana y entrenamiento.</p>
         </section>
+
+        <!-- Filtros Visuales -->
+        <div class="filter-container">
+            <button class="btn-filter active" onclick="filterCategory('all', this)">Todos</button>
+            <button class="btn-filter" onclick="filterCategory('running', this)">Running</button>
+            <button class="btn-filter" onclick="filterCategory('basketball', this)">Básquetbol</button>
+            <button class="btn-filter" onclick="filterCategory('urban', this)">Moda Urbana</button>
+            <button class="btn-filter" onclick="filterCategory('training', this)">Training</button>
+        </div>
 
         <div class="product-grid">
             <!-- Producto 1 -->
-            <div class="product-card">
+            <div class="product-card" data-category="running">
                 <div class="product-thumb">👟 Running</div>
                 <div class="product-info">
                     <h3>Strydr Velocity Pro</h3>
@@ -40,7 +55,7 @@
             </div>
 
             <!-- Producto 2 -->
-            <div class="product-card">
+            <div class="product-card" data-category="basketball">
                 <div class="product-thumb">🏀 Basketball</div>
                 <div class="product-info">
                     <h3>Strydr Court King</h3>
@@ -51,7 +66,7 @@
             </div>
 
             <!-- Producto 3 -->
-            <div class="product-card">
+            <div class="product-card" data-category="urban">
                 <div class="product-thumb">👟 Urban Style</div>
                 <div class="product-info">
                     <h3>Strydr Retro Flow</h3>
@@ -62,7 +77,7 @@
             </div>
 
             <!-- Producto 4 -->
-            <div class="product-card">
+            <div class="product-card" data-category="training">
                 <div class="product-thumb">⚡ Training</div>
                 <div class="product-info">
                     <h3>Strydr Apex Trainer</h3>
@@ -78,6 +93,49 @@
         <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
     </footer>
 
+    <script>
+        // 1. Revisa el estado de la sesión al cargar la vista
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const navAuth = document.getElementById('navAuth');
+
+            if (isLoggedIn && navAuth) {
+                navAuth.innerHTML = `
+                    <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi Perfil</a>
+                    <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8; margin-left: 0.5rem;">Admin</a>
+                `;
+            }
+        });
+
+        // 2. Lógica de los filtros de categoría
+        function filterCategory(category, button) {
+            const buttons = document.querySelectorAll('.btn-filter');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Consultar si la sesión existe en cualquiera de los dos almacenamientos
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
+            const navAuth = document.getElementById('navAuth');
+
+            if (isLoggedIn && navAuth) {
+                navAuth.innerHTML = `
+                <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi Perfil</a>
+                <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8; margin-left: 0.5rem;">Admin</a>
+            `;
+            }
+        });
+    </script>
 </body>
 
 </html>

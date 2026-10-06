@@ -17,7 +17,10 @@
             <a href="catalogo.html">Catálogo</a>
             <a href="nosotros.html">Nosotros</a>
             <a href="contacto.html">Contacto</a>
-            <a href="perfil.html" class="active">Mi Perfil</a>
+            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">2</span></a>
+            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
+                Perfil</a>
+            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
         </nav>
     </header>
 
@@ -28,11 +31,9 @@
         </section>
 
         <div class="card-grid">
-            <!-- Sección Mis Datos (Lectura y Edición) -->
             <div class="info-card">
                 <h3>Mis Datos</h3>
 
-                <!-- Vista de lectura -->
                 <div id="viewData">
                     <p><strong>Nombre:</strong> <span id="dispName">Brayan Camarillo</span></p>
                     <p><strong>Correo:</strong> <span id="dispEmail">brayan@strydr.com</span></p>
@@ -126,6 +127,20 @@
 
         document.getElementById('btnLogout').addEventListener('click', () => {
             logoutNotice.style.display = 'block';
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1200);
+        });
+
+        localStorage.removeItem('isLoggedIn');
+
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            // Limpiar ambas memorias al salir
+            localStorage.removeItem('isLoggedIn');
+            sessionStorage.removeItem('isLoggedIn');
+
+            document.getElementById('logoutNotice').style.display = 'block';
+
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1200);

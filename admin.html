@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strydr | Panel Admin</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">STRYDR<span>.ADMIN</span></div>
+        <nav class="nav-links">
+            <a href="index.html">Volver a la Tienda</a>
+            <a href="admin.html" class="active">Gestión de Productos</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h2>Panel Administrativo Visual</h2>
+            <p class="subtitle">Simula el alta de nuevo calzado en el inventario.</p>
+        </section>
+
+        <div class="form-container">
+            <form id="adminForm" novalidate>
+                <div class="form-group">
+                    <label>Nombre del Modelo</label>
+                    <input type="text" id="p-name" placeholder="Ej. Strydr Phantom">
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="p-cat" style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px;">
+                        <option>Running</option>
+                        <option>Básquetbol</option>
+                        <option>Moda Urbana</option>
+                        <option>Training</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Precio (MXN)</label>
+                    <input type="text" id="p-price" placeholder="2399">
+                </div>
+                <button type="submit" class="btn-primary w-full">Guardar Producto en Catálogo</button>
+            </form>
+
+            <div id="adminNotice" class="alert success" style="display: none; margin-top: 1rem;">
+                ¡Producto agregado al inventario (simulado)! Redirigiendo al catálogo...
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Strydr Inc. Módulo Administrativo.</p>
+    </footer>
+
+    <script>
+        document.getElementById('adminForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.getElementById('adminNotice').style.display = 'block';
+            setTimeout(() => {
+                window.location.href = 'catalogo.html';
+            }, 1200);
+        });
+    </script>
+</body>
+
+</html>

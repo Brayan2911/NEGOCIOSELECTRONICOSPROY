@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strydr | Carrito de Compras</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">STRYDR<span>.</span></div>
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="contacto.html">Contacto</a>
+            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">2</span></a>
+            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
+                Perfil</a>
+            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h2>Tu Carrito de Compras</h2>
+            <p class="subtitle">Revisa tus productos antes de simular el pedido.</p>
+        </section>
+
+        <div id="cartContent">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItems">
+                    <tr>
+                        <td><strong>Strydr Velocity Pro</strong><br><small>Talla: 27.5 MX</small></td>
+                        <td>$2,499 MXN</td>
+                        <td>1</td>
+                        <td><button class="btn-danger" onclick="removeItem(this, 2499)">Quitar</button></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Strydr Retro Flow</strong><br><small>Talla: 28.0 MX</small></td>
+                        <td>$1,999 MXN</td>
+                        <td>1</td>
+                        <td><button class="btn-danger" onclick="removeItem(this, 1999)">Quitar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="cart-summary">
+                <h3>Resumen de Pedido</h3>
+                <br>
+                <p><strong>Subtotal:</strong> <span id="subtotal">$4,498 MXN</span></p>
+                <p><strong>Envío:</strong> Gratis (Aguascalientes)</p>
+                <hr style="margin: 1rem 0;">
+                <p style="font-size: 1.2rem;"><strong>Total:</strong> <span id="total"
+                        style="color: var(--accent);">$4,498 MXN</span></p>
+                <br>
+                <button id="btnCheckout" class="btn-primary w-full">Simular Compra</button>
+            </div>
+        </div>
+
+        <div id="checkoutNotice" class="alert success" style="display: none; text-align: center; margin-top: 2rem;">
+            ¡Pedido simulado con éxito! Gracias por tu compra en Strydr. Redirigiendo a tu perfil...
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        let currentTotal = 4498;
+        let itemCount = 2;
+
+        function removeItem(btn, price) {
+            btn.closest('tr').remove();
+            currentTotal -= price;
+            itemCount--;
+            document.getElementById('cartCount').innerText = itemCount;
+            document.getElementById('subtotal').innerText = `$${currentTotal.toLocaleString()} MXN`;
+            document.getElementById('total').innerText = `$${currentTotal.toLocaleString()} MXN`;
+
+            if (itemCount === 0) {
+                document.getElementById('cartContent').innerHTML = '<div class="alert info" style="text-align:center;">Tu carrito está vacío. <a href="catalogo.html">Volver al catálogo</a></div>';
+            }
+        }
+
+        document.getElementById('btnCheckout').addEventListener('click', () => {
+            document.getElementById('cartContent').style.display = 'none';
+            document.getElementById('checkoutNotice').style.display = 'block';
+            setTimeout(() => {
+                window.location.href = 'perfil.html';
+            }, 1800);
+        });
+    </script>
+</body>
+
+</html>

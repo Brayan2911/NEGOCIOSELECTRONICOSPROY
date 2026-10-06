@@ -17,10 +17,12 @@
             <a href="catalogo.html">Catálogo</a>
             <a href="nosotros.html">Nosotros</a>
             <a href="contacto.html">Contacto</a>
-            <a href="login.html" class="btn-login">Iniciar sesión</a>
+            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">2</span></a>
+            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
+                Perfil</a>
+            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
         </nav>
     </header>
-
     <main class="container">
         <a href="catalogo.html" class="back-link">&larr; Regresar al catálogo</a>
 
@@ -43,11 +45,8 @@
                 </div>
 
                 <div class="detail-actions">
-                    <button id="btnAddToCart" class="btn-primary">Añadir al carrito</button>
-                </div>
-
-                <div id="cartNotice" class="alert info hidden">
-                    Función de carrito próximamente disponible en el Bloque 2.
+                    <a href="carrito.html" class="btn-primary"
+                        style="display: inline-block; text-align: center; text-decoration: none;">Añadir al carrito</a>
                 </div>
             </div>
         </div>
@@ -57,11 +56,6 @@
         <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
     </footer>
 
-    <script>
-        document.getElementById('btnAddToCart').addEventListener('click', () => {
-            document.getElementById('cartNotice').classList.remove('hidden');
-        });
-    </script>
 </body>
 
 </html>

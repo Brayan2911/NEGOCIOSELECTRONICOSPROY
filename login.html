@@ -17,34 +17,39 @@
             <a href="catalogo.html">Catálogo</a>
             <a href="nosotros.html">Nosotros</a>
             <a href="contacto.html">Contacto</a>
-            <a href="login.html" class="active btn-login">Iniciar sesión</a>
+            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">2</span></a>
+            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
+                Perfil</a>
+            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
         </nav>
     </header>
 
     <main class="container">
-        <div class="auth-card">
+        <div class="form-container" style="max-width: 400px; margin: 3rem auto;">
             <section class="page-header" style="margin-bottom: 1.5rem;">
-                <h2>Bienvenido de nuevo</h2>
-                <p class="subtitle">Accede a tu cuenta para gestionar tus pedidos y perfil.</p>
+                <h2>Iniciar Sesión</h2>
+                <p class="subtitle">Ingresa a tu cuenta de Strydr.</p>
             </section>
 
             <form id="loginForm" novalidate>
                 <div class="form-group">
-                    <label for="l-email">Correo electrónico</label>
-                    <input type="text" id="l-email" placeholder="usuario@correo.com">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="loginEmail" placeholder="tu@correo.com" value="brayan@strydr.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="l-pass">Contraseña</label>
-                    <input type="password" id="l-pass" placeholder="••••••••">
+                    <label>Contraseña</label>
+                    <input type="password" id="loginPass" value="123456" required>
                 </div>
                 <button type="submit" class="btn-primary w-full">Entrar</button>
             </form>
 
-            <div id="loginStatus" class="alert success hidden">
-                Credenciales aceptadas (simulado). Redirigiendo a tu perfil...
+            <div id="loginNotice" class="alert success" style="margin-top: 1rem; display: none;">
+                ¡Sesión iniciada correctamente! Redirigiendo a tu perfil...
             </div>
 
-            <p class="auth-switch">¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+            <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem;">
+                ¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>
+            </p>
         </div>
     </main>
 
@@ -53,16 +58,34 @@
     </footer>
 
     <script>
-        const form = document.getElementById('loginForm');
-        const statusBox = document.getElementById('loginStatus');
-
-        form.addEventListener('submit', (e) => {
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            statusBox.classList.remove('hidden');
+
+            // Guardar el estado de la sesión activa
+            localStorage.setItem('isLoggedIn', 'true');
+
+            const notice = document.getElementById('loginNotice');
+            notice.style.display = 'block';
+
             setTimeout(() => {
                 window.location.href = 'perfil.html';
-            }, 1000);
+            }, 800);
         });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Consultar si la sesión existe en cualquiera de los dos almacenamientos
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
+            const navAuth = document.getElementById('navAuth');
+
+            if (isLoggedIn && navAuth) {
+                navAuth.innerHTML = `
+                <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi Perfil</a>
+                <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8; margin-left: 0.5rem;">Admin</a>
+            `;
+            }
+        });
+
     </script>
 </body>
 
