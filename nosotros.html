@@ -15,9 +15,10 @@
         <nav class="nav-links">
             <a href="index.html">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
-            <a href="nosotros.html">Nosotros</a>
-            <a href="contacto.html">Contacto</a>
-            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">2</span></a>
+            <a href="campana.html">Campañas & Promos</a>
+            <a href="publicar.html">Vender (C2C)</a>
+            <a href="subasta.html">Subasta</a>
+            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">0</span></a>
             <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
                 Perfil</a>
             <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
@@ -56,6 +57,16 @@
     <footer class="footer">
         <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
     </footer>
+
+    <script>
+        // Sincronización dinámica del contador del carrito
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) badge.textContent = totalItems;
+        });
+    </script>
 
 </body>
 
