@@ -15,9 +15,10 @@
         <nav class="nav-links">
             <a href="index.html">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
-            <a href="nosotros.html">Nosotros</a>
-            <a href="contacto.html">Contacto</a>
-            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">2</span></a>
+            <a href="campana.html">Campañas & Promos</a>
+            <a href="publicar.html">Vender (C2C)</a>
+            <a href="subasta.html">Subasta</a>
+            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">0</span></a>
             <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
                 Perfil</a>
             <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
@@ -34,24 +35,26 @@
             <form id="registerForm" novalidate>
                 <div class="form-group">
                     <label for="r-name">Nombre completo</label>
-                    <input type="text" id="r-name" placeholder="Ej. Brayan Camarillo">
+                    <input type="text" id="r-name" placeholder="Ej. Brayan Camarillo" required>
                 </div>
                 <div class="form-group">
                     <label for="r-email">Correo electrónico</label>
-                    <input type="text" id="r-email" placeholder="usuario@correo.com">
+                    <input type="email" id="r-email" placeholder="usuario@correo.com" required>
                 </div>
                 <div class="form-group">
                     <label for="r-pass">Contraseña</label>
-                    <input type="password" id="r-pass" placeholder="••••••••">
+                    <input type="password" id="r-pass" placeholder="••••••••" required>
                 </div>
                 <button type="submit" class="btn-primary w-full">Registrarme</button>
             </form>
 
-            <div id="registerStatus" class="alert success hidden">
-                ¡Registro exitoso! Redirigiendo al inicio de sesión...
+            <div id="registerStatus" class="alert success hidden"
+                style="margin-top: 1rem; background: #2ecc71; color: white; padding: 0.75rem; border-radius: 4px;">
+                ¡Registro exitoso (Simulado)! Redirigiendo al inicio de sesión...
             </div>
 
-            <p class="auth-switch">¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a></p>
+            <p class="auth-switch" style="margin-top: 1rem; text-align: center;">¿Ya tienes una cuenta? <a
+                    href="login.html">Inicia sesión</a></p>
         </div>
     </main>
 
@@ -66,9 +69,19 @@
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             statusBox.classList.remove('hidden');
+            statusBox.style.display = 'block';
+
             setTimeout(() => {
                 window.location.href = 'login.html';
             }, 1200);
+        });
+
+        // Sincronización dinámica del contador del carrito
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) badge.textContent = totalItems;
         });
     </script>
 </body>
