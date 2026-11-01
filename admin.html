@@ -20,50 +20,260 @@
 
     <main class="container">
         <section class="page-header">
-            <h2>Panel Administrativo Visual</h2>
-            <p class="subtitle">Simula el alta de nuevo calzado en el inventario.</p>
+            <h2>Panel Administrativo General</h2>
+            <p class="subtitle">Gestión interactiva de inventario, pedidos activos y modificación de promociones.</p>
         </section>
 
-        <div class="form-container">
-            <form id="adminForm" novalidate>
-                <div class="form-group">
-                    <label>Nombre del Modelo</label>
-                    <input type="text" id="p-name" placeholder="Ej. Strydr Phantom">
-                </div>
-                <div class="form-group">
-                    <label>Categoría</label>
-                    <select id="p-cat" style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px;">
-                        <option>Running</option>
-                        <option>Básquetbol</option>
-                        <option>Moda Urbana</option>
-                        <option>Training</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Precio (MXN)</label>
-                    <input type="text" id="p-price" placeholder="2399">
-                </div>
-                <button type="submit" class="btn-primary w-full">Guardar Producto en Catálogo</button>
-            </form>
+        <!-- Navegación por pestañas simples -->
+        <div
+            style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #ddd; padding-bottom: 0.5rem; flex-wrap: wrap;">
+            <button onclick="showTab('productos')" class="btn-secondary" style="cursor: pointer;">📦 Gestión de
+                Productos (CRUD)</button>
+            <button onclick="showTab('promociones')" class="btn-secondary" style="cursor: pointer;">🏷 Control de
+                Promociones</button>
+            <button onclick="showTab('pedidos')" class="btn-secondary" style="cursor: pointer;">🛒 Pedidos
+                Recientes</button>
+        </div>
 
-            <div id="adminNotice" class="alert success" style="display: none; margin-top: 1rem;">
-                ¡Producto agregado al inventario (simulado)! Redirigiendo al catálogo...
+        <div id="alertNotification" class="alert success"
+            style="display: none; margin-bottom: 1.5rem; background: #2ecc71; color: white; padding: 0.75rem; border-radius: 4px;">
+        </div>
+
+        <!-- MÓDULO 1: GESTIÓN Y ALTA DE PRODUCTOS (CRUD) -->
+        <div id="tab-productos">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <!-- Formulario Alta / Edición -->
+                <div class="form-container" style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px;">
+                    <h3>Alta / Edición de Calzado</h3>
+                    <form id="adminForm" style="margin-top: 1rem;">
+                        <input type="hidden" id="p-id-edit">
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label>Nombre del Modelo</label>
+                            <input type="text" id="p-name" placeholder="Ej. Strydr Velocity Pro" required
+                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label>Categoría</label>
+                            <select id="p-cat"
+                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                                <option value="Running">Running</option>
+                                <option value="Básquetbol">Básquetbol</option>
+                                <option value="Moda Urbana">Moda Urbana</option>
+                                <option value="Training">Training</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label>Precio (MXN)</label>
+                            <input type="number" id="p-price" placeholder="2499" required
+                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; cursor: pointer;">Guardar en
+                            Inventario</button>
+                    </form>
+                </div>
+
+                <!-- Tabla Inventario -->
+                <div>
+                    <h3>Inventario de Productos</h3>
+                    <div style="overflow-x: auto; margin-top: 1rem;">
+                        <table
+                            style="width: 100%; border-collapse: collapse; background: white; border: 1px solid #ddd;">
+                            <thead>
+                                <tr style="background: #eee; text-align: left;">
+                                    <th style="padding: 0.5rem;">ID</th>
+                                    <th style="padding: 0.5rem;">Producto</th>
+                                    <th style="padding: 0.5rem;">Precio</th>
+                                    <th style="padding: 0.5rem;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody">
+                                <!-- Render dinámico -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <!-- MÓDULO 2: CONTROL DE PROMOCIONES -->
+        <div id="tab-promociones" style="display: none;">
+            <div class="form-container"
+                style="max-width: 550px; background: #f9f9f9; padding: 1.5rem; border-radius: 8px;">
+                <h3>Modificar Promoción de Calzado</h3>
+                <form id="promoForm" style="margin-top: 1rem;">
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label>Seleccionar Calzado:</label>
+                        <select id="promo-product"
+                            style="width: 100%; padding: 0.5rem; font-weight: bold; border: 1px solid #ccc; border-radius: 4px;">
+                            <option value="1">1. Strydr Velocity Pro</option>
+                            <option value="2">2. Strydr Court King</option>
+                            <option value="3">3. Strydr Retro Flow</option>
+                            <option value="4">4. Strydr Apex Trainer</option>
+                            <option value="5">5. Strydr Air Marathon</option>
+                            <option value="6">6. Strydr Slam Dunk</option>
+                            <option value="7">7. Strydr Urban Street</option>
+                            <option value="8">8. Strydr Power Lift</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label>Nueva Etiqueta Promocional:</label>
+                        <select id="promo-tag"
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                            <option value="none">Sin Promoción (Estándar)</option>
+                            <option value="Nuevo">🔥 Nuevo Lanzamiento</option>
+                            <option value="Oferta">⚡ Oferta Especial</option>
+                            <option value="15% Descuento">🏷 15% Descuento</option>
+                            <option value="20% Descuento">🏷 20% Descuento</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; cursor: pointer;">Actualizar
+                        Promoción</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MÓDULO 3: PEDIDOS RECIENTES -->
+        <div id="tab-pedidos" style="display: none;">
+            <h3>Resumen de Pedidos del Sistema</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem; background: white;">
+                <thead>
+                    <tr style="background: #eee; text-align: left;">
+                        <th style="padding: 0.5rem;">ID Pedido</th>
+                        <th style="padding: 0.5rem;">Cliente</th>
+                        <th style="padding: 0.5rem;">Total</th>
+                        <th style="padding: 0.5rem;">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 0.5rem;">#ORD-9021</td>
+                        <td style="padding: 0.5rem;">Brayan López</td>
+                        <td style="padding: 0.5rem;">$2,499 MXN</td>
+                        <td style="padding: 0.5rem;"><span
+                                style="background: #2ecc71; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem;">Completado</span>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 0.5rem;">#ORD-9022</td>
+                        <td style="padding: 0.5rem;">María Gómez</td>
+                        <td style="padding: 0.5rem;">$4,898 MXN</td>
+                        <td style="padding: 0.5rem;"><span
+                                style="background: #f39c12; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem;">En
+                                Proceso</span></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" style="margin-top: 4rem;">
         <p>&copy; 2026 Strydr Inc. Módulo Administrativo.</p>
     </footer>
 
     <script>
+        const initialProducts = [
+            { id: 1, name: 'Strydr Velocity Pro', category: 'Running', price: 2499 },
+            { id: 2, name: 'Strydr Court King', category: 'Básquetbol', price: 2899 },
+            { id: 3, name: 'Strydr Retro Flow', category: 'Moda Urbana', price: 1999 },
+            { id: 4, name: 'Strydr Apex Trainer', category: 'Training', price: 2199 }
+        ];
+
+        function getInventory() {
+            return JSON.parse(localStorage.getItem('strydr_inventory')) || initialProducts;
+        }
+
+        function saveInventory(data) {
+            localStorage.setItem('strydr_inventory', JSON.stringify(data));
+        }
+
+        function showAlert(msg) {
+            const box = document.getElementById('alertNotification');
+            box.textContent = msg;
+            box.style.display = 'block';
+            setTimeout(() => { box.style.display = 'none'; }, 2500);
+        }
+
+        function renderInventory() {
+            const items = getInventory();
+            const tbody = document.getElementById('inventoryTableBody');
+            tbody.innerHTML = items.map((item, index) => `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 0.5rem;">#${item.id}</td>
+                    <td style="padding: 0.5rem;"><strong>${item.name}</strong><br><small style="color:#777;">${item.category}</small></td>
+                    <td style="padding: 0.5rem;">$${item.price.toLocaleString()} MXN</td>
+                    <td style="padding: 0.5rem;">
+                        <button onclick="editProduct(${index})" style="background: #3498db; color: white; border: none; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Editar</button>
+                        <button onclick="deleteProduct(${index})" style="background: #e74c3c; color: white; border: none; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteProduct(index) {
+            if (confirm('¿Seguro que deseas eliminar este producto del inventario?')) {
+                let items = getInventory();
+                items.splice(index, 1);
+                saveInventory(items);
+                renderInventory();
+                showAlert('¡Producto eliminado con éxito (Simulado)!');
+            }
+        }
+
+        function editProduct(index) {
+            const items = getInventory();
+            const p = items[index];
+            document.getElementById('p-id-edit').value = index;
+            document.getElementById('p-name').value = p.name;
+            document.getElementById('p-cat').value = p.category;
+            document.getElementById('p-price').value = p.price;
+            showAlert('Modo edición activado. Modifica los campos y presiona guardar.');
+        }
+
         document.getElementById('adminForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            document.getElementById('adminNotice').style.display = 'block';
-            setTimeout(() => {
-                window.location.href = 'catalogo.html';
-            }, 1200);
+            const editIndex = document.getElementById('p-id-edit').value;
+            let items = getInventory();
+
+            const name = document.getElementById('p-name').value;
+            const category = document.getElementById('p-cat').value;
+            const price = parseFloat(document.getElementById('p-price').value);
+
+            if (editIndex !== '') {
+                items[editIndex] = { ...items[editIndex], name, category, price };
+                document.getElementById('p-id-edit').value = '';
+                showAlert('¡Producto editado con éxito (Simulado)!');
+            } else {
+                items.push({ id: Date.now(), name, category, price });
+                showAlert('¡Nuevo producto registrado en inventario (Simulado)!');
+            }
+
+            saveInventory(items);
+            document.getElementById('adminForm').reset();
+            renderInventory();
         });
+
+        document.getElementById('promoForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const productId = document.getElementById('promo-product').value;
+            const newTag = document.getElementById('promo-tag').value;
+
+            let customPromos = JSON.parse(localStorage.getItem('strydr_promos')) || {};
+            customPromos[productId] = newTag;
+            localStorage.setItem('strydr_promos', JSON.stringify(customPromos));
+
+            showAlert('¡Estado promocional actualizado correctamente (Simulado)! Redirigiendo...');
+            setTimeout(() => { window.location.href = 'catalogo.html'; }, 1000);
+        });
+
+        function showTab(tabName) {
+            document.getElementById('tab-productos').style.display = tabName === 'productos' ? 'block' : 'none';
+            document.getElementById('tab-promociones').style.display = tabName === 'promociones' ? 'block' : 'none';
+            document.getElementById('tab-pedidos').style.display = tabName === 'pedidos' ? 'block' : 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', renderInventory);
     </script>
 </body>
 
