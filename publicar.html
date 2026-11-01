@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strydr | Vender mi Calzado (C2C)</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">STRYDR<span>.C2C</span></div>
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="campana.html">Campañas & Promos</a>
+            <a href="publicar.html" class="active">Vender (C2C)</a>
+            <a href="subasta.html">Subasta</a>
+            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">0</span></a>
+            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
+                Perfil</a>
+            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h2>Marketplace C2C — Vende tu Calzado</h2>
+            <p class="subtitle">Publica tus tenis seminuevos o de colección para venderlos a otros usuarios de la
+                comunidad.</p>
+        </section>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <!-- FORMULARIO DE PUBLICACIÓN -->
+            <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px;">
+                <h3>Publica tu Producto</h3>
+                <form id="c2cForm" style="margin-top: 1rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <label>Nombre del Producto</label>
+                        <input type="text" id="c2cName" placeholder="Ej. Nike Jordan 1 Retro (Seminuevo)" required
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label>Precio Propuesto (MXN)</label>
+                        <input type="number" id="c2cPrice" placeholder="1800" required
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label>Descripción del Estado</label>
+                        <textarea id="c2cDesc" placeholder="Detalla uso, talla y condición..." rows="3" required
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label>Fotografía (Simulada / Icono)</label>
+                        <select id="c2cIcon"
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                            <option value="👟">👟 Tenis Urbanos</option>
+                            <option value="🏀">🏀 Basquetbol</option>
+                            <option value="🏃">🏃 Running</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%; cursor: pointer;">Publicar
+                        Producto</button>
+                </form>
+
+                <div id="c2cNotice" class="alert success"
+                    style="display: none; margin-top: 1rem; background: #2ecc71; color: white; padding: 0.75rem; border-radius: 4px;">
+                    ¡Publicado con éxito (Simulado)! Puedes verlo en la lista.
+                </div>
+            </div>
+
+            <!-- SECCIÓN MIS PUBLICACIONES -->
+            <div>
+                <h3>Mis Publicaciones Activas</h3>
+                <div id="userPostsList" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Lista C2C renderizada dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" style="margin-top: 4rem;">
+        <p>&copy; 2026 Strydr Marketplace C2C.</p>
+    </footer>
+
+    <script>
+        function renderUserPosts() {
+            const defaultPosts = [
+                { id: 1, name: "Adidas Ultraboost 21", price: 1650, desc: "Talla 27.5 MX, 9/10 de estética.", icon: "🏃" }
+            ];
+
+            const posts = JSON.parse(localStorage.getItem('strydr_c2c_posts')) || defaultPosts;
+            const container = document.getElementById('userPostsList');
+
+            if (posts.length === 0) {
+                container.innerHTML = `<p style="color: #666;">No tienes productos publicados actualmente.</p>`;
+                return;
+            }
+
+            container.innerHTML = posts.map((p, index) => `
+                <div style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px; background: white; display: flex; gap: 1rem; align-items: center;">
+                    <div style="font-size: 2.5rem;">${p.icon}</div>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0;">${p.name}</h4>
+                        <p style="margin: 0.25rem 0; color: #e67e22; font-weight: bold;">$${p.price.toLocaleString()} MXN</p>
+                        <small style="color: #666;">${p.desc}</small>
+                        <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                            <button onclick="editPost(${index})" style="background: #3498db; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Editar (Simulado)</button>
+                            <button onclick="deletePost(${index})" style="background: #e74c3c; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('c2cForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('c2cName').value;
+            const price = parseFloat(document.getElementById('c2cPrice').value);
+            const desc = document.getElementById('c2cDesc').value;
+            const icon = document.getElementById('c2cIcon').value;
+
+            let posts = JSON.parse(localStorage.getItem('strydr_c2c_posts')) || [
+                { id: 1, name: "Adidas Ultraboost 21", price: 1650, desc: "Talla 27.5 MX, 9/10 de estética.", icon: "🏃" }
+            ];
+
+            posts.unshift({ id: Date.now(), name, price, desc, icon });
+            localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
+
+            document.getElementById('c2cNotice').style.display = 'block';
+            document.getElementById('c2cForm').reset();
+            renderUserPosts();
+
+            setTimeout(() => {
+                document.getElementById('c2cNotice').style.display = 'none';
+            }, 2500);
+        });
+
+        function deletePost(index) {
+            let posts = JSON.parse(localStorage.getItem('strydr_c2c_posts')) || [];
+            posts.splice(index, 1);
+            localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
+            renderUserPosts();
+        }
+
+        function editPost(index) {
+            alert('Modo edición activado (Simulado). Puedes reescribir los datos en el formulario.');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderUserPosts();
+            const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) badge.textContent = totalItems;
+        });
+    </script>
+</body>
+
+</html>
