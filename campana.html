@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strydr | Campaña & Comunidad</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">STRYDR<span>.</span></div>
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="campana.html" class="active">Campañas & Promos</a>
+            <a href="publicar.html">Vender (C2C)</a>
+            <a href="subasta.html">Subasta</a>
+            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">0</span></a>
+            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
+                Perfil</a>
+            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- 1. LANDING DE CAMPAÑA Y PRODUCTO DESTACADO -->
+        <section class="page-header"
+            style="text-align: center; background: #111; color: white; padding: 2.5rem 1rem; border-radius: 8px; margin-bottom: 2rem;">
+            <span
+                style="background: #e74c3c; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;">CAMPAÑA
+                URBANA 2026</span>
+            <h1 style="font-size: 2.5rem; margin: 0.5rem 0;">Strydr Velocity Pro: Edición Limitada</h1>
+            <p style="color: #ccc; max-width: 600px; margin: 0 auto 1.5rem auto;">Rendimiento extremo con diseño urbano.
+                Consíguelo hoy con beneficios exclusivos de temporada.</p>
+            <a href="producto-detalle.html?id=1" class="btn-primary"
+                style="display: inline-block; padding: 0.75rem 2rem; font-weight: bold; text-decoration: none;">Comprar
+                ahora</a>
+        </section>
+
+        <!-- 2. CÓDIGO DE DESCUENTO Y PROMOS ACTIVAS -->
+        <section style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 3rem;">
+            <h3>🏷 Promociones Activas & Cupones</h3>
+            <p style="color: #666; font-size: 0.9rem;">Ingresa un código de promoción para aplicar un descuento directo
+                en tu carrito:</p>
+
+            <div style="display: flex; gap: 0.5rem; max-width: 400px; margin-top: 1rem;">
+                <input type="text" id="couponCode" placeholder="Ej. STRYDR10 o 2X1"
+                    style="flex: 1; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; text-transform: uppercase;">
+                <button onclick="applyCoupon()" class="btn-primary" style="cursor: pointer;">Aplicar</button>
+            </div>
+
+            <div id="couponNotice" class="alert success"
+                style="display: none; margin-top: 1rem; background: #2ecc71; color: white; padding: 0.75rem; border-radius: 4px;">
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                <div style="background: #fff; border: 1px dashed #e74c3c; padding: 0.75rem 1rem; border-radius: 6px;">
+                    <strong>STRYDR10</strong> — 10% de descuento directo
+                </div>
+                <div style="background: #fff; border: 1px dashed #27ae60; padding: 0.75rem 1rem; border-radius: 6px;">
+                    <strong>2X1SPECIAL</strong> — Promoción 2x1 aplicada
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. RESEÑAS Y TESTIMONIOS -->
+        <section style="margin-bottom: 3rem;">
+            <h3>⭐ Reseñas de Atletas Destacados</h3>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div style="border: 1px solid #eee; padding: 1rem; border-radius: 8px; background: #fff;">
+                    <p style="font-style: italic;">"La amortiguación del Velocity Pro en maratón es inigualable. 100%
+                        recomendado."</p>
+                    <small style="font-weight: bold; color: #e67e22;">— Carlos R., Maratonista</small>
+                </div>
+                <div style="border: 1px solid #eee; padding: 1rem; border-radius: 8px; background: #fff;">
+                    <p style="font-style: italic;">"El agarre en duela del Court King me dio la seguridad que buscaba en
+                        los saltos."</p>
+                    <small style="font-weight: bold; color: #e67e22;">— Andrea M., Jugadora de Basquetbol</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. COMUNIDAD / COMENTARIOS DE USUARIOS -->
+        <section style="background: #f4f4f4; padding: 1.5rem; border-radius: 8px;">
+            <h3>💬 Muro de la Comunidad</h3>
+            <p style="color: #666; font-size: 0.9rem;">Déjanos tus comentarios sobre la nueva colección.</p>
+
+            <form id="commentForm" style="margin: 1rem 0;">
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <input type="text" id="commentUser" placeholder="Tu nombre" required
+                        style="padding: 0.5rem; flex: 1; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <textarea id="commentText" placeholder="Escribe tu opinión aquí..." rows="3" required
+                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+                <button type="submit" class="btn-primary" style="margin-top: 0.5rem; cursor: pointer;">Publicar
+                    Comentario</button>
+            </form>
+
+            <div id="commentsList" style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                <!-- Comentarios dinámicos -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" style="margin-top: 4rem;">
+        <p>&copy; 2026 Strydr Inc. Módulo de Marketing.</p>
+    </footer>
+
+    <script>
+        // Aplicar código de descuento simulado
+        function applyCoupon() {
+            const code = document.getElementById('couponCode').value.trim().toUpperCase();
+            const notice = document.getElementById('couponNotice');
+
+            if (code === 'STRYDR10' || code === '2X1SPECIAL') {
+                localStorage.setItem('strydr_discount', '10');
+                notice.textContent = `¡Código "${code}" validado! Descuento aplicado (simulado).`;
+                notice.style.display = 'block';
+            } else if (code !== '') {
+                notice.textContent = `Código "${code}" aplicado con éxito (Descuento promocional simulado).`;
+                notice.style.display = 'block';
+            }
+        }
+
+        // Sistema de comentarios comunitarios
+        function loadComments() {
+            const defaultComments = [
+                { user: "Mateo_Runner", text: "¡Esperando la llegada de los nuevos modelos de Training!" },
+                { user: "Sofia_Sneakers", text: "El envío llegó súper rápido, excelente calidad de calzado." }
+            ];
+
+            const stored = JSON.parse(localStorage.getItem('strydr_comments')) || defaultComments;
+            const container = document.getElementById('commentsList');
+
+            container.innerHTML = stored.map(c => `
+                <div style="background: white; padding: 0.75rem 1rem; border-radius: 6px; border-left: 4px solid #e67e22;">
+                    <strong>${c.user}</strong>
+                    <p style="margin: 0.25rem 0 0 0; color: #444; font-size: 0.95rem;">${c.text}</p>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('commentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = document.getElementById('commentUser').value.trim();
+            const text = document.getElementById('commentText').value.trim();
+
+            let stored = JSON.parse(localStorage.getItem('strydr_comments')) || [
+                { user: "Mateo_Runner", text: "¡Esperando la llegada de los nuevos modelos de Training!" },
+                { user: "Sofia_Sneakers", text: "El envío llegó súper rápido, excelente calidad de calzado." }
+            ];
+
+            stored.unshift({ user, text });
+            localStorage.setItem('strydr_comments', JSON.stringify(stored));
+
+            document.getElementById('commentUser').value = '';
+            document.getElementById('commentText').value = '';
+            loadComments();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComments();
+            const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) badge.textContent = totalItems;
+        });
+    </script>
+</body>
+
+</html>
