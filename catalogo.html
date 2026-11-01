@@ -9,82 +9,152 @@
 </head>
 
 <body>
-
     <header class="navbar">
         <div class="logo">STRYDR<span>.</span></div>
         <nav class="nav-links">
             <a href="index.html">Inicio</a>
             <a href="catalogo.html" class="active">Catálogo</a>
-            <a href="nosotros.html">Nosotros</a>
-            <a href="contacto.html">Contacto</a>
-            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">2</span></a>
-
-            <!-- Estado con sesión activa y enlace a Admin -->
-            <span id="navAuth">
-                <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
-                    Perfil</a>
-                <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8; margin-left: 0.5rem;">Admin</a>
-            </span>
+            <a href="campana.html">Campañas & Promos</a>
+            <a href="publicar.html">Vender (C2C)</a>
+            <a href="subasta.html">Subasta</a>
+            <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">0</span></a>
+            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
+                Perfil</a>
+            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
         </nav>
     </header>
     <main class="container" style="min-height: auto; padding-bottom: 4rem; overflow: visible;">
         <section class="page-header">
             <h2>Catálogo de Calzado Deportivo</h2>
-            <p class="subtitle">Explora nuestra selección para running, básquetbol, moda urbana y entrenamiento.</p>
+            <p class="subtitle">Explora nuestra selección completa y aprovecha las promociones exclusivas.</p>
         </section>
 
-        <!-- Filtros Visuales -->
-        <div class="filter-container">
+        <!-- Filtros Visuales con Menú de Promociones -->
+        <div class="filter-container"
+            style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
             <button class="btn-filter active" onclick="filterCategory('all', this)">Todos</button>
+            <button class="btn-filter" onclick="filterCategory('promo', this)"
+                style="background: #e74c3c; color: white; border: none; font-weight: bold;">🔥 Promociones</button>
             <button class="btn-filter" onclick="filterCategory('running', this)">Running</button>
             <button class="btn-filter" onclick="filterCategory('basketball', this)">Básquetbol</button>
             <button class="btn-filter" onclick="filterCategory('urban', this)">Moda Urbana</button>
             <button class="btn-filter" onclick="filterCategory('training', this)">Training</button>
         </div>
 
-        <div class="product-grid">
+        <div class="product-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem;">
             <!-- Producto 1 -->
-            <div class="product-card" data-category="running">
-                <div class="product-thumb">👟 Running</div>
-                <div class="product-info">
-                    <h3>Strydr Velocity Pro</h3>
-                    <p class="category">Running / Alto Rendimiento</p>
-                    <p class="price">$2,499 MXN</p>
-                    <a href="producto-detalle.html?id=1" class="btn-secondary w-full">Ver detalle</a>
-                </div>
+            <div class="product-card" data-id="1" data-category="running" data-promo="false"
+                style="border: 1px solid #eee; border-radius: 8px; padding: 1rem; position: relative;">
+                <span class="tag-badge"
+                    style="position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Nuevo</span>
+                <div class="product-thumb" style="font-size: 3rem; text-align: center; margin: 1rem 0;">👟</div>
+                <h3>Strydr Velocity Pro</h3>
+                <p style="color: #666; font-size: 0.85rem;">Running / Alto Rendimiento</p>
+                <p style="font-weight: bold; font-size: 1.1rem; color: #e67e22;">$2,499 MXN</p>
+                <a href="producto-detalle.html?id=1" class="btn-secondary w-full"
+                    style="display: block; text-align: center; margin-top: 0.5rem; text-decoration: none;">Ver
+                    detalle</a>
             </div>
 
             <!-- Producto 2 -->
-            <div class="product-card" data-category="basketball">
-                <div class="product-thumb">🏀 Basketball</div>
-                <div class="product-info">
-                    <h3>Strydr Court King</h3>
-                    <p class="category">Básquetbol / Soporte de Tobillo</p>
-                    <p class="price">$2,899 MXN</p>
-                    <a href="producto-detalle.html?id=2" class="btn-secondary w-full">Ver detalle</a>
-                </div>
+            <div class="product-card" data-id="2" data-category="basketball" data-promo="true"
+                style="border: 1px solid #eee; border-radius: 8px; padding: 1rem; position: relative;">
+                <span class="tag-badge"
+                    style="position: absolute; top: 10px; right: 10px; background: #27ae60; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Oferta</span>
+                <div class="product-thumb" style="font-size: 3rem; text-align: center; margin: 1rem 0;">🏀</div>
+                <h3>Strydr Court King</h3>
+                <p style="color: #666; font-size: 0.85rem;">Básquetbol / Soporte</p>
+                <p style="font-weight: bold; font-size: 1.1rem; color: #e67e22;">$2,899 MXN</p>
+                <a href="producto-detalle.html?id=2" class="btn-secondary w-full"
+                    style="display: block; text-align: center; margin-top: 0.5rem; text-decoration: none;">Ver
+                    detalle</a>
             </div>
 
             <!-- Producto 3 -->
-            <div class="product-card" data-category="urban">
-                <div class="product-thumb">👟 Urban Style</div>
-                <div class="product-info">
-                    <h3>Strydr Retro Flow</h3>
-                    <p class="category">Moda Urbana / Casual</p>
-                    <p class="price">$1,999 MXN</p>
-                    <a href="producto-detalle.html?id=3" class="btn-secondary w-full">Ver detalle</a>
-                </div>
+            <div class="product-card" data-id="3" data-category="urban" data-promo="true"
+                style="border: 1px solid #eee; border-radius: 8px; padding: 1rem; position: relative;">
+                <span class="tag-badge"
+                    style="position: absolute; top: 10px; right: 10px; background: #f39c12; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">20%
+                    Descuento</span>
+                <div class="product-thumb" style="font-size: 3rem; text-align: center; margin: 1rem 0;">👟</div>
+                <h3>Strydr Retro Flow</h3>
+                <p style="color: #666; font-size: 0.85rem;">Moda Urbana / Casual</p>
+                <p style="font-weight: bold; font-size: 1.1rem; color: #e67e22;">$1,999 MXN</p>
+                <a href="producto-detalle.html?id=3" class="btn-secondary w-full"
+                    style="display: block; text-align: center; margin-top: 0.5rem; text-decoration: none;">Ver
+                    detalle</a>
             </div>
 
             <!-- Producto 4 -->
-            <div class="product-card" data-category="training">
-                <div class="product-thumb">⚡ Training</div>
-                <div class="product-info">
-                    <h3>Strydr Apex Trainer</h3>
-                    <p class="category">Gimnasio / Cross Training</p>
-                    <p class="price">$2,199 MXN</p>
-                    <a href="producto-detalle.html?id=4" class="btn-secondary w-full">Ver detalle</a>
-                </div>
+            <div class="product-card" data-id="4" data-category="training" data-promo="false"
+                style="border: 1px solid #eee; border-radius: 8px; padding: 1rem; position: relative;">
+                <span class="tag-badge"
+                    style="position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Nuevo</span>
+                <div class="product-thumb" style="font-size: 3rem; text-align: center; margin: 1rem 0;">⚡</div>
+                <h3>Strydr Apex Trainer</h3>
+                <p style="color: #666; font-size: 0.85rem;">Gimnasio / Cross Training</p>
+                <p style="font-weight: bold; font-size: 1.1rem; color: #e67e22;">$2,199 MXN</p>
+                <a href="producto-detalle.html?id=4" class="btn-secondary w-full"
+                    style="display: block; text-align: center; margin-top: 0.5rem; text-decoration: none;">Ver
+                    detalle</a>
+            </div>
+
+            <!-- Producto 5 -->
+            <div class="product-card" data-id="5" data-category="running" data-promo="true"
+                style="border: 1px solid #eee; border-radius: 8px; padding: 1rem; position: relative;">
+                <span class="tag-badge"
+                    style="position: absolute; top: 10px; right: 10px; background: #27ae60; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Oferta</span>
+                <div class="product-thumb" style="font-size: 3rem; text-align: center; margin: 1rem 0;">🏃</div>
+                <h3>Strydr Air Marathon</h3>
+                <p style="color: #666; font-size: 0.85rem;">Running / Maratón</p>
+                <p style="font-weight: bold; font-size: 1.1rem; color: #e67e22;">$3,100 MXN</p>
+                <a href="producto-detalle.html?id=5" class="btn-secondary w-full"
+                    style="display: block; text-align: center; margin-top: 0.5rem; text-decoration: none;">Ver
+                    detalle</a>
+            </div>
+
+            <!-- Producto 6 -->
+            <div class="product-card" data-id="6" data-category="basketball" data-promo="true"
+                style="border: 1px solid #eee; border-radius: 8px; padding: 1rem; position: relative;">
+                <span class="tag-badge"
+                    style="position: absolute; top: 10px; right: 10px; background: #f39c12; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">15%
+                    Descuento</span>
+                <div class="product-thumb" style="font-size: 3rem; text-align: center; margin: 1rem 0;">🏀</div>
+                <h3>Strydr Slam Dunk</h3>
+                <p style="color: #666; font-size: 0.85rem;">Básquetbol / Profesional</p>
+                <p style="font-weight: bold; font-size: 1.1rem; color: #e67e22;">$2,650 MXN</p>
+                <a href="producto-detalle.html?id=6" class="btn-secondary w-full"
+                    style="display: block; text-align: center; margin-top: 0.5rem; text-decoration: none;">Ver
+                    detalle</a>
+            </div>
+
+            <!-- Producto 7 -->
+            <div class="product-card" data-id="7" data-category="urban" data-promo="false"
+                style="border: 1px solid #eee; border-radius: 8px; padding: 1rem; position: relative;">
+                <span class="tag-badge"
+                    style="position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Nuevo</span>
+                <div class="product-thumb" style="font-size: 3rem; text-align: center; margin: 1rem 0;">👟</div>
+                <h3>Strydr Urban Street</h3>
+                <p style="color: #666; font-size: 0.85rem;">Moda Urbana / Lifestyle</p>
+                <p style="font-weight: bold; font-size: 1.1rem; color: #e67e22;">$1,799 MXN</p>
+                <a href="producto-detalle.html?id=7" class="btn-secondary w-full"
+                    style="display: block; text-align: center; margin-top: 0.5rem; text-decoration: none;">Ver
+                    detalle</a>
+            </div>
+
+            <!-- Producto 8 -->
+            <div class="product-card" data-id="8" data-category="training" data-promo="true"
+                style="border: 1px solid #eee; border-radius: 8px; padding: 1rem; position: relative;">
+                <span class="tag-badge"
+                    style="position: absolute; top: 10px; right: 10px; background: #27ae60; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Oferta</span>
+                <div class="product-thumb" style="font-size: 3rem; text-align: center; margin: 1rem 0;">🏋️️</div>
+                <h3>Strydr Power Lift</h3>
+                <p style="color: #666; font-size: 0.85rem;">Gimnasio / Powerlifting</p>
+                <p style="font-weight: bold; font-size: 1.1rem; color: #e67e22;">$2,350 MXN</p>
+                <a href="producto-detalle.html?id=8" class="btn-secondary w-full"
+                    style="display: block; text-align: center; margin-top: 0.5rem; text-decoration: none;">Ver
+                    detalle</a>
             </div>
         </div>
     </main>
@@ -94,20 +164,6 @@
     </footer>
 
     <script>
-        // 1. Revisa el estado de la sesión al cargar la vista
-        document.addEventListener('DOMContentLoaded', () => {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const navAuth = document.getElementById('navAuth');
-
-            if (isLoggedIn && navAuth) {
-                navAuth.innerHTML = `
-                    <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi Perfil</a>
-                    <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8; margin-left: 0.5rem;">Admin</a>
-                `;
-            }
-        });
-
-        // 2. Lógica de los filtros de categoría
         function filterCategory(category, button) {
             const buttons = document.querySelectorAll('.btn-filter');
             buttons.forEach(btn => btn.classList.remove('active'));
@@ -115,8 +171,16 @@
 
             const cards = document.querySelectorAll('.product-card');
             cards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'flex';
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else if (category === 'promo') {
+                    if (card.dataset.promo === 'true') {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                } else if (card.dataset.category === category) {
+                    card.style.display = 'block';
                 } else {
                     card.style.display = 'none';
                 }
@@ -124,18 +188,55 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Consultar si la sesión existe en cualquiera de los dos almacenamientos
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
-            const navAuth = document.getElementById('navAuth');
+            // Cargar datos de promociones modificados desde Admin
+            const customPromos = JSON.parse(localStorage.getItem('strydr_promos')) || {};
 
-            if (isLoggedIn && navAuth) {
-                navAuth.innerHTML = `
-                <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi Perfil</a>
-                <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8; margin-left: 0.5rem;">Admin</a>
-            `;
-            }
+            Object.keys(customPromos).forEach(id => {
+                const card = document.querySelector(`.product-card[data-id="${id}"]`);
+                if (card) {
+                    const tagValue = customPromos[id];
+                    let tagSpan = card.querySelector('.tag-badge');
+
+                    if (!tagSpan && tagValue !== 'none') {
+                        tagSpan = document.createElement('span');
+                        tagSpan.className = 'tag-badge';
+                        tagSpan.style.cssText = 'position: absolute; top: 10px; right: 10px; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;';
+                        card.appendChild(tagSpan);
+                    }
+
+                    if (tagValue === 'none') {
+                        if (tagSpan) tagSpan.style.display = 'none';
+                        card.dataset.promo = 'false';
+                    } else {
+                        if (tagSpan) {
+                            tagSpan.style.display = 'inline-block';
+                            tagSpan.textContent = tagValue;
+
+                            if (tagValue.includes('Nuevo')) {
+                                tagSpan.style.background = '#e74c3c';
+                                card.dataset.promo = 'false';
+                            } else if (tagValue.includes('Oferta')) {
+                                tagSpan.style.background = '#27ae60';
+                                card.dataset.promo = 'true';
+                            } else {
+                                tagSpan.style.background = '#f39c12';
+                                card.dataset.promo = 'true';
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Actualizar número en el carrito
+            const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) badge.textContent = totalItems;
         });
     </script>
 </body>
 
 </html>
+
+
+CRUD PRODUCTOS NOTIFICACION ELIMNAR, TERMINOS Y CONDICIONES PRODUCTO RELACIONADO EN CATALGO EN VER
