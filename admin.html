@@ -25,16 +25,16 @@
         </nav>
     </header>
 
-    <main class="container">
+    <main class="container" style="padding-bottom: 4rem;">
         <section class="page-header">
             <h2>Panel de Administración de Strydr</h2>
-            <p class="subtitle">Gestiona el inventario B2C, promociones del catálogo y las reseñas/testimonios de
-                atletas en directo.</p>
+            <p class="subtitle">Gestiona en directo el inventario B2C, etiquetas de promoción del catálogo y las reseñas
+                de atletas.</p>
         </section>
 
         <!-- MÓDULO 1: GESTIÓN DE RESEÑAS Y TESTIMONIOS -->
         <section
-            style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 3rem; border: 1px solid #ddd;">
+            style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2.5rem; border: 1px solid #ddd;">
             <h3 id="tFormTitle">⭐ Gestionar Reseñas y Testimonios de Atletas</h3>
             <p style="color: #666; font-size: 0.85rem; margin-bottom: 1rem;">Agrega o edita las opiniones que se
                 despliegan en la página de Campañas.</p>
@@ -84,7 +84,33 @@
             <h4>Reseñas Publicadas Actualmente</h4>
             <div id="adminTestimonialsList"
                 style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                <!-- Lista de testimonios renderizados -->
+            </div>
+        </section>
+
+        <!-- MÓDULO 2: GESTIÓN DE INVENTARIO B2C CON SCROLL HORIZONTAL DE LOS 8 MODELOS -->
+        <section
+            style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2.5rem; border: 1px solid #ddd;">
+            <h3>👟 Precios e Inventario del Catálogo B2C (Desliza hacia los lados)</h3>
+            <p style="color: #666; font-size: 0.85rem; margin-bottom: 1.5rem;">Modifica los precios de los 8 modelos del
+                catálogo público directamente.</p>
+
+            <div
+                style="overflow-x: auto; padding-bottom: 0.75rem; border: 1px dashed #ccc; background: #fff; padding: 1rem; border-radius: 6px;">
+                <div id="adminInventoryList" style="display: flex; gap: 1rem; width: max-content;">
+                    <!-- Se inyectan los 8 productos con scroll lateral -->
+                </div>
+            </div>
+        </section>
+
+        <!-- MÓDULO 3: ASIGNADOR DE ETIQUETAS DE PROMOCIÓN CON BOTÓN DE GUARDAR -->
+        <section style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
+            <h3>🔥 Asignador de Etiquetas de Promoción</h3>
+            <p style="color: #666; font-size: 0.85rem; margin-bottom: 1.5rem;">Asigna distintivos visuales (Oferta, %
+                Descuento de hasta 50%) y guarda cada uno para actualizar el catálogo.</p>
+
+            <div id="adminPromosList"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;">
+                <!-- Carga dinámica con selector y botón guardar -->
             </div>
         </section>
     </main>
@@ -94,6 +120,9 @@
     </footer>
 
     <script>
+        // -------------------------------------------------------------
+        // MÓDULO 1: RESEÑAS Y TESTIMONIOS
+        // -------------------------------------------------------------
         const defaultTestimonials = [
             { id: 1, name: "Carlos Rodríguez", role: "Maratonista Semi-Profesional", initials: "CR", color: "#e67e22", stars: "⭐⭐⭐⭐⭐", text: "La respuesta de la suela en distancias superiores a 21k es increíble. Ningún cansancio acumulado en las rodillas. Simplemente el mejor par que he usado este año." },
             { id: 2, name: "Andrea Mendoza", role: "Jugadora de Básquetbol Liga Estatal", initials: "AM", color: "#2980b9", stars: "⭐⭐⭐⭐⭐", text: "El agarre en duela del Court King me dio la estabilidad necesaria para mis saltos en cancha. La tracción lateral es de nivel profesional." },
@@ -181,12 +210,128 @@
             document.getElementById('tSubmitBtn').textContent = "Guardar Reseña";
         }
 
+        // -------------------------------------------------------------
+        // MÓDULO 2 Y 3: INVENTARIO Y ETIQUETAS DE PROMOCIÓN
+        // -------------------------------------------------------------
+        const defaultCatalogProducts = [
+            { id: 1, name: 'Strydr Velocity Pro', category: 'Running', price: 2499, emoji: '👟', defaultTag: 'Nuevo' },
+            { id: 2, name: 'Strydr Court King', category: 'Básquetbol', price: 2899, emoji: '🏀', defaultTag: 'Oferta' },
+            { id: 3, name: 'Strydr Retro Flow', category: 'Moda Urbana', price: 1999, emoji: '👟', defaultTag: '20% Descuento' },
+            { id: 4, name: 'Strydr Apex Trainer', category: 'Training', price: 2199, emoji: '⚡', defaultTag: 'Nuevo' },
+            { id: 5, name: 'Strydr Air Marathon', category: 'Running', price: 3100, emoji: '🏃', defaultTag: 'Oferta' },
+            { id: 6, name: 'Strydr Slam Dunk', category: 'Básquetbol', price: 2650, emoji: '🏀', defaultTag: '15% Descuento' },
+            { id: 7, name: 'Strydr Urban Street', category: 'Moda Urbana', price: 1799, emoji: '👟', defaultTag: 'Nuevo' },
+            { id: 8, name: 'Strydr Power Lift', category: 'Training', price: 2350, emoji: '🏋️', defaultTag: 'Oferta' }
+        ];
+
+        function renderAdminInventory() {
+            const container = document.getElementById('adminInventoryList');
+            let inventory = JSON.parse(localStorage.getItem('strydr_inventory'));
+            if (!inventory || inventory.length < 8) {
+                inventory = defaultCatalogProducts;
+                localStorage.setItem('strydr_inventory', JSON.stringify(inventory));
+            }
+
+            container.innerHTML = inventory.map((p) => {
+                const emojiToDisplay = p.emoji || (defaultCatalogProducts.find(item => item.id === p.id)?.emoji || '👟');
+
+                return `
+                    <div style="background: white; border: 1px solid #ccc; padding: 1rem; border-radius: 8px; width: 230px; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        <div style="font-size: 2.5rem; text-align: center;">${emojiToDisplay}</div>
+                        <strong style="display: block; margin: 0.5rem 0 0.2rem 0; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</strong>
+                        <small style="color: #777; display: block; margin-bottom: 0.5rem; font-size: 0.75rem;">${p.category || 'Deportivo'}</small>
+                        <label style="font-size: 0.75rem; font-weight: bold;">Precio (MXN):</label>
+                        <div style="display: flex; gap: 0.3rem; margin-top: 0.25rem;">
+                            <input type="number" id="priceInput-${p.id}" value="${p.price}" style="width: 100%; padding: 0.3rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.85rem;">
+                            <button onclick="updatePrice(${p.id})" style="background: #e67e22; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Guardar</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updatePrice(id) {
+            const newPrice = parseFloat(document.getElementById(`priceInput-${id}`).value);
+            let inventory = JSON.parse(localStorage.getItem('strydr_inventory')) || defaultCatalogProducts;
+
+            const index = inventory.findIndex(item => item.id === id);
+            if (index !== -1 && newPrice > 0) {
+                inventory[index].price = newPrice;
+                localStorage.setItem('strydr_inventory', JSON.stringify(inventory));
+                alert(`¡Precio actualizado a $${newPrice.toLocaleString()} MXN con éxito!`);
+            }
+        }
+
+        function renderAdminPromos() {
+            const container = document.getElementById('adminPromosList');
+            const customPromos = JSON.parse(localStorage.getItem('strydr_promos')) || {};
+
+            container.innerHTML = defaultCatalogProducts.map(p => {
+                const currentTag = customPromos[p.id] !== undefined ? customPromos[p.id] : p.defaultTag;
+                return `
+                    <div style="background: white; border: 1px solid #ccc; padding: 1rem; border-radius: 8px;">
+                        <strong style="display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">${p.name}</strong>
+                        <small style="color: #777; display: block; margin-bottom: 0.5rem;">Etiqueta actual: <span style="font-weight: bold; color: #e67e22;">${currentTag}</span></small>
+                        
+                        <select id="promoSelect-${p.id}" style="width: 100%; padding: 0.4rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 0.5rem; font-size: 0.8rem;">
+                            <option value="Nuevo" ${currentTag === 'Nuevo' ? 'selected' : ''}>Nuevo</option>
+                            <option value="Oferta" ${currentTag === 'Oferta' ? 'selected' : ''}>🔥 Oferta</option>
+                            <option value="15% Descuento" ${currentTag === '15% Descuento' ? 'selected' : ''}>🏷 15% Descuento</option>
+                            <option value="20% Descuento" ${currentTag === '20% Descuento' ? 'selected' : ''}>🏷 20% Descuento</option>
+                            <option value="30% Descuento" ${currentTag === '30% Descuento' ? 'selected' : ''}>🏷 30% Descuento</option>
+                            <option value="40% Descuento" ${currentTag === '40% Descuento' ? 'selected' : ''}>🏷 40% Descuento</option>
+                            <option value="50% Descuento" ${currentTag === '50% Descuento' ? 'selected' : ''}>🏷 50% Descuento</option>
+                            <option value="none" ${currentTag === 'none' ? 'selected' : ''}>Sin etiqueta</option>
+                        </select>
+                        
+                        <button onclick="updatePromoTag(${p.id})" class="btn-primary" style="width: 100%; padding: 0.35rem; font-size: 0.8rem; cursor: pointer;">Guardar Promoción</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updatePromoTag(id) {
+            const selectElement = document.getElementById(`promoSelect-${id}`);
+            const tag = selectElement.value;
+
+            let customPromos = JSON.parse(localStorage.getItem('strydr_promos')) || {};
+            customPromos[id] = tag;
+            localStorage.setItem('strydr_promos', JSON.stringify(customPromos));
+
+            alert(`¡Promoción guardada con éxito para este modelo! Se reflejará en el catálogo.`);
+            renderAdminPromos();
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            const currentInv = JSON.parse(localStorage.getItem('strydr_inventory'));
+            if (!currentInv || currentInv.length < 8) {
+                localStorage.setItem('strydr_inventory', JSON.stringify(defaultCatalogProducts));
+            }
+
             renderAdminTestimonials();
+            renderAdminInventory();
+            renderAdminPromos();
+
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const badge = document.getElementById('cartCount');
             if (badge) badge.textContent = totalItems;
+
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const adminLink = document.getElementById('adminNavLink');
+            const profileLink = document.getElementById('profileNavLink');
+
+            if (session && session.isLoggedIn && session.role === 'Admin') {
+                if (adminLink) adminLink.style.display = 'inline-block';
+            } else {
+                if (adminLink) adminLink.style.display = 'none';
+                if (!session || !session.isLoggedIn) {
+                    if (profileLink) {
+                        profileLink.textContent = "Iniciar Sesión";
+                        profileLink.href = "login.html";
+                    }
+                }
+            }
         });
     </script>
 </body>
