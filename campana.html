@@ -73,7 +73,7 @@
             </div>
         </section>
 
-        <!-- RESEÑAS Y TESTIMONIOS (VISTA PÚBLICA SIN BOTONES DE EDICIÓN) -->
+        <!-- RESEÑAS Y TESTIMONIOS -->
         <section style="margin-bottom: 3.5rem;">
             <div style="text-align: center; margin-bottom: 2rem;">
                 <span
@@ -84,7 +84,7 @@
 
             <div id="testimonialsContainer"
                 style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-                <!-- Testimonios renderizados dinámicamente -->
+                <!-- Testimonios dinámicos -->
             </div>
         </section>
 
@@ -116,7 +116,7 @@
             </div>
         </section>
 
-        <!-- MURO DE LA COMUNIDAD -->
+        <!-- MURO DE LA COMUNIDAD CON CONFIRMACIÓN Y BOTÓN DE CANCELAR -->
         <section style="background: #f4f4f4; padding: 2rem; border-radius: 12px;">
             <h3>💬 Muro de la Comunidad</h3>
             <p style="color: #666; font-size: 0.9rem;">Déjanos tus comentarios sobre la nueva colección.</p>
@@ -192,6 +192,7 @@
             }, 3000);
         });
 
+        // CARGA Y ACCIONES DE BORRADO / CANCELACIÓN EN EL MURO
         function loadComments() {
             const defaultComments = [
                 { user: "Mateo_Runner", text: "¡Esperando la llegada de los nuevos modelos de Training!" },
@@ -201,12 +202,46 @@
             const stored = JSON.parse(localStorage.getItem('strydr_comments')) || defaultComments;
             const container = document.getElementById('commentsList');
 
-            container.innerHTML = stored.map(c => `
-                <div style="background: white; padding: 0.75rem 1rem; border-radius: 6px; border-left: 4px solid #e67e22;">
-                    <strong>${c.user}</strong>
-                    <p style="margin: 0.25rem 0 0 0; color: #444; font-size: 0.95rem;">${c.text}</p>
+            container.innerHTML = stored.map((c, index) => `
+                <div style="background: white; padding: 0.75rem 1rem; border-radius: 6px; border-left: 4px solid #e67e22; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${c.user}</strong>
+                        <p style="margin: 0.25rem 0 0 0; color: #444; font-size: 0.95rem;">${c.text}</p>
+                    </div>
+                    <div id="actionContainer-${index}" style="display: flex; gap: 0.4rem; align-items: center;">
+                        <button onclick="confirmDeleteComment(this, ${index})" data-confirm="false" style="background: #e74c3c; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; white-space: nowrap; margin-left: 1rem;">Eliminar</button>
+                    </div>
                 </div>
             `).join('');
+        }
+
+        function confirmDeleteComment(btn, index) {
+            const container = document.getElementById(`actionContainer-${index}`);
+            if (btn.getAttribute('data-confirm') === 'false') {
+                btn.setAttribute('data-confirm', 'true');
+                btn.textContent = '¿Seguro de querer borrar esto?';
+                btn.style.background = '#c0392b';
+                btn.style.fontWeight = 'bold';
+
+                // Añadir botón Cancelar si aún no existe
+                if (!document.getElementById(`cancelBtn-${index}`)) {
+                    const cancelBtn = document.createElement('button');
+                    cancelBtn.id = `cancelBtn-${index}`;
+                    cancelBtn.textContent = 'Cancelar';
+                    cancelBtn.style.cssText = 'background: #7f8c8d; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; white-space: nowrap;';
+                    cancelBtn.onclick = () => loadComments();
+                    container.appendChild(cancelBtn);
+                }
+            } else {
+                deleteComment(index);
+            }
+        }
+
+        function deleteComment(index) {
+            let stored = JSON.parse(localStorage.getItem('strydr_comments')) || [];
+            stored.splice(index, 1);
+            localStorage.setItem('strydr_comments', JSON.stringify(stored));
+            loadComments();
         }
 
         document.getElementById('commentForm').addEventListener('submit', (e) => {
@@ -238,7 +273,6 @@
             const badge = document.getElementById('cartCount');
             if (badge) badge.textContent = totalItems;
 
-            // VALIDACIÓN ESTRICTA DE ROL ADMINISTRADOR
             const session = JSON.parse(localStorage.getItem('strydr_session'));
             const adminLink = document.getElementById('adminNavLink');
             const profileLink = document.getElementById('profileNavLink');
