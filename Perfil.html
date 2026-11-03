@@ -12,7 +12,7 @@
 
     <header class="navbar">
         <div class="logo">STRYDR<span>.</span></div>
-        <nav class="nav-links">
+        <nav class="nav-links" id="navLinksContainer">
             <a href="index.html">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
             <a href="campana.html">Campañas & Promos</a>
@@ -21,124 +21,93 @@
             <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">0</span></a>
             <a href="perfil.html" class="active btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
                 Perfil</a>
-            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
+            <a href="admin.html" id="adminNavLink" style="font-size: 0.85rem; opacity: 0.8; display: none;">Admin</a>
+            <button onclick="logout()"
+                style="background: #e74c3c; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; cursor: pointer; margin-left: 0.5rem;">Cerrar
+                Sesión</button>
         </nav>
     </header>
 
     <main class="container">
         <section class="page-header">
-            <h2>Panel de Atleta</h2>
-            <p class="subtitle">Gestiona tu perfil, direcciones y pedidos en Strydr.</p>
+            <h2>Mi Perfil de Usuario</h2>
+            <p class="subtitle">Gestiona tu información personal, publicaciones C2C y compras recientes.</p>
         </section>
 
-        <div class="card-grid">
-            <div class="info-card">
-                <h3>Mis Datos</h3>
-
-                <div id="viewData">
-                    <p><strong>Nombre:</strong> <span id="dispName">Brayan Camarillo</span></p>
-                    <p><strong>Correo:</strong> <span id="dispEmail">brayan@strydr.com</span></p>
-                    <p><strong>Nivel de Membresía:</strong> Strydr Runner Club (Activo)</p>
-                    <p><strong>Dirección:</strong> <span id="dispAddress">Aguascalientes, Ags.</span></p>
-                    <div style="margin-top: 1.2rem;">
-                        <button id="btnEdit" class="btn-secondary"
-                            style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Editar Datos</button>
-                    </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+            <!-- DETALLES DEL USUARIO LOGUEADO -->
+            <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px;">
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <div style="font-size: 4rem;">👤</div>
+                    <h3 id="profileName">Cargando...</h3>
+                    <p id="profileEmail" style="color: #666; font-size: 0.9rem;"></p>
+                    <span id="profileRole"
+                        style="background: #e67e22; color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;"></span>
                 </div>
-
-                <form id="editForm" style="margin-top: 1rem; display: none;">
-                    <div class="form-group" style="margin-bottom: 0.5rem;">
-                        <label>Nombre:</label>
-                        <input type="text" id="inputName" value="Brayan Camarillo"
-                            style="width: 100%; padding: 0.4rem;">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 0.5rem;">
-                        <label>Correo:</label>
-                        <input type="text" id="inputEmail" value="brayan@strydr.com"
-                            style="width: 100%; padding: 0.4rem;">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 0.5rem;">
-                        <label>Dirección:</label>
-                        <input type="text" id="inputAddress" value="Aguascalientes, Ags."
-                            style="width: 100%; padding: 0.4rem;">
-                    </div>
-                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                        <button type="submit" class="btn-primary"
-                            style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Guardar Cambios</button>
-                        <button type="button" id="btnCancel" class="btn-secondary"
-                            style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Cancelar</button>
-                    </div>
-                </form>
-
-                <div id="editNotice" class="alert success"
-                    style="margin-top: 1rem; display: none; background: #2ecc71; color: white; padding: 0.5rem; border-radius: 4px;">
-                    ¡Datos actualizados con éxito (Simulado)!
-                </div>
+                <hr style="border: none; border-top: 1px solid #ddd; margin: 1rem 0;">
+                <button onclick="logout()" class="btn-primary"
+                    style="width: 100%; background: #e74c3c; cursor: pointer;">Cerrar Sesión Activa</button>
             </div>
 
-            <div class="info-card">
-                <h3>Mis Compras</h3>
-                <p class="text-muted">No cuentas con compras finalizadas aún.</p>
-                <div class="alert info"
-                    style="margin-top: 1rem; background: #3498db; color: white; padding: 0.75rem; border-radius: 4px;">
-                    PRÓXIMAMENTE (Disponible en Bloque 4 — Historial de Pagos y Facturación).
+            <!-- HISTORIAL / ACTIVIDAD -->
+            <div style="background: #fff; border: 1px solid #eee; padding: 1.5rem; border-radius: 8px;">
+                <h3>Resumen de Actividad</h3>
+                <div style="margin-top: 1rem; line-height: 1.8;">
+                    <p>📦 <strong>Compras Realizadas:</strong> <span id="purchasesCount">0 pedidos</span></p>
+                    <p>🏷 <strong>Publicaciones C2C:</strong> <span id="c2cCount">0 productos activos</span></p>
+                    <p>🏷 <strong>Descuento Promocional:</strong> <span id="discountStatus">Ninguno aplicado</span></p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
+                    <a href="publicar.html" class="btn-primary"
+                        style="flex: 1; text-align: center; text-decoration: none;">Publicar Calzado (C2C)</a>
+                    <a href="subasta.html" class="btn-secondary"
+                        style="flex: 1; text-align: center; text-decoration: none;">Ir a Subasta</a>
                 </div>
             </div>
-        </div>
-
-        <div style="margin-top: 2.5rem; text-align: center;">
-            <div id="logoutNotice" class="alert success"
-                style="margin-bottom: 1rem; display: none; background: #2ecc71; color: white; padding: 0.5rem; border-radius: 4px;">
-                Sesión cerrada correctamente (Simulado). Redirigiendo al inicio...
-            </div>
-            <button id="btnLogout" class="btn-secondary">Cerrar Sesión</button>
         </div>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" style="margin-top: 4rem;">
         <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
     </footer>
 
     <script>
-        const viewData = document.getElementById('viewData');
-        const editForm = document.getElementById('editForm');
-        const btnEdit = document.getElementById('btnEdit');
-        const btnCancel = document.getElementById('btnCancel');
-        const editNotice = document.getElementById('editNotice');
+        function loadProfile() {
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
 
-        btnEdit.addEventListener('click', () => {
-            viewData.style.display = 'none';
-            editForm.style.display = 'block';
-            editNotice.style.display = 'none';
-        });
+            // Si no hay sesión iniciada, enviar al Login
+            if (!session || !session.isLoggedIn) {
+                window.location.href = 'login.html';
+                return;
+            }
 
-        btnCancel.addEventListener('click', () => {
-            editForm.style.display = 'none';
-            viewData.style.display = 'block';
-        });
+            document.getElementById('profileName').textContent = session.name;
+            document.getElementById('profileEmail').textContent = session.email;
+            document.getElementById('profileRole').textContent = `Rol: ${session.role}`;
 
-        editForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            document.getElementById('dispName').innerText = document.getElementById('inputName').value || 'Usuario Strydr';
-            document.getElementById('dispEmail').innerText = document.getElementById('inputEmail').value || 'usuario@strydr.com';
-            document.getElementById('dispAddress').innerText = document.getElementById('inputAddress').value || 'Sin especificar';
+            // Mostrar el botón Admin únicamente si el usuario tiene Rol "Admin"
+            const adminLink = document.getElementById('adminNavLink');
+            if (session.role === 'Admin') {
+                adminLink.style.display = 'inline-block';
+            } else {
+                adminLink.style.display = 'none';
+            }
 
-            editForm.style.display = 'none';
-            viewData.style.display = 'block';
-            editNotice.style.display = 'block';
-        });
+            // Cargar métricas dinámicas
+            const c2cPosts = JSON.parse(localStorage.getItem('strydr_c2c_posts')) || [];
+            document.getElementById('c2cCount').textContent = `${c2cPosts.length} productos`;
 
-        document.getElementById('btnLogout').addEventListener('click', () => {
-            localStorage.removeItem('isLoggedIn');
-            sessionStorage.removeItem('isLoggedIn');
-            document.getElementById('logoutNotice').style.display = 'block';
+            const discount = localStorage.getItem('strydr_discount');
+            document.getElementById('discountStatus').textContent = discount ? `${discount}% Activo` : 'Ninguno';
+        }
 
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
-        });
+        function logout() {
+            localStorage.removeItem('strydr_session');
+            window.location.href = 'login.html';
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const badge = document.getElementById('cartCount');

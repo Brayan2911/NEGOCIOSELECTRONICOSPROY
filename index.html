@@ -19,9 +19,9 @@
             <a href="publicar.html">Vender (C2C)</a>
             <a href="subasta.html">Subasta</a>
             <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">0</span></a>
-            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
-                Perfil</a>
-            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
+            <a href="perfil.html" id="profileNavLink" class="btn-secondary"
+                style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi Perfil</a>
+            <a href="admin.html" id="adminNavLink" style="font-size: 0.85rem; opacity: 0.8; display: none;">Admin</a>
         </nav>
     </header>
 
@@ -39,6 +39,30 @@
                 </div>
             </div>
         </section>
+
+        <!-- SECCIÓN DE BENEFICIOS / CARACTERÍSTICAS -->
+        <section class="container" style="margin-top: 3rem; margin-bottom: 3rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+                <div
+                    style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; text-align: center; border: 1px solid #eee;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🚀</div>
+                    <h3>Envío Rápido</h3>
+                    <p style="color: #666; font-size: 0.9rem;">Envíos a todo el país con rastreo en tiempo real.</p>
+                </div>
+                <div
+                    style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; text-align: center; border: 1px solid #eee;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔥</div>
+                    <h3>Calzado 100% Original</h3>
+                    <p style="color: #666; font-size: 0.9rem;">Modelos verificados con garantía de autenticidad.</p>
+                </div>
+                <div
+                    style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; text-align: center; border: 1px solid #eee;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔄</div>
+                    <h3>Marketplace C2C</h3>
+                    <p style="color: #666; font-size: 0.9rem;">Compra y vende tenis seminuevos con la comunidad.</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
@@ -48,12 +72,28 @@
     </footer>
 
     <script>
-        // Sincronización dinámica del contador del carrito en el Inicio
         document.addEventListener('DOMContentLoaded', () => {
+            // Sincronización dinámica del contador del carrito en el Inicio
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const badge = document.getElementById('cartCount');
             if (badge) badge.textContent = totalItems;
+
+            // Control dinámico para mostrar Admin solo a administradores
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const adminLink = document.getElementById('adminNavLink');
+            const profileLink = document.getElementById('profileNavLink');
+
+            if (session && session.isLoggedIn) {
+                if (session.role === 'Admin' && adminLink) {
+                    adminLink.style.display = 'inline-block';
+                }
+            } else {
+                if (profileLink) {
+                    profileLink.textContent = "Iniciar Sesión";
+                    profileLink.href = "login.html";
+                }
+            }
         });
     </script>
 

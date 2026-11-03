@@ -19,9 +19,9 @@
             <a href="publicar.html" class="active">Vender (C2C)</a>
             <a href="subasta.html">Subasta</a>
             <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">0</span></a>
-            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
-                Perfil</a>
-            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
+            <a href="perfil.html" id="profileNavLink" class="btn-secondary"
+                style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi Perfil</a>
+            <a href="admin.html" id="adminNavLink" style="font-size: 0.85rem; opacity: 0.8; display: none;">Admin</a>
         </nav>
     </header>
 
@@ -35,47 +35,42 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
             <!-- FORMULARIO DE PUBLICACIÓN -->
             <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px;">
-                <h3>Publica tu Producto</h3>
-                <form id="c2cForm" style="margin-top: 1rem;">
+                <h3 id="formTitle">Publica tu Producto</h3>
+                <form id="c2cForm" novalidate style="margin-top: 1rem;">
+                    <input type="hidden" id="editIndex" value="-1">
                     <div style="margin-bottom: 1rem;">
                         <label>Nombre del Producto</label>
-                        <input type="text" id="c2cName" placeholder="Ej. Nike Jordan 1 Retro (Seminuevo)" required
+                        <input type="text" id="c2cName" placeholder="Ej. Nike Jordan 1 Retro (Seminuevo)"
                             style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
                     </div>
                     <div style="margin-bottom: 1rem;">
                         <label>Precio Propuesto (MXN)</label>
-                        <input type="number" id="c2cPrice" placeholder="1800" required
+                        <input type="number" id="c2cPrice" placeholder="1800"
                             style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
                     </div>
                     <div style="margin-bottom: 1rem;">
                         <label>Descripción del Estado</label>
-                        <textarea id="c2cDesc" placeholder="Detalla uso, talla y condición..." rows="3" required
+                        <textarea id="c2cDesc" placeholder="Detalla uso, talla y condición..." rows="3"
                             style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"></textarea>
                     </div>
                     <div style="margin-bottom: 1rem;">
-                        <label>Fotografía (Simulada / Icono)</label>
+                        <label>Fotografía (Icono Simulado)</label>
                         <select id="c2cIcon"
                             style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
                             <option value="👟">👟 Tenis Urbanos</option>
-                            <option value="🏀">🏀 Basquetbol</option>
+                            <option value="🏀">🏀 Básquetbol</option>
                             <option value="🏃">🏃 Running</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn-primary" style="width: 100%; cursor: pointer;">Publicar
-                        Producto</button>
+                    <button type="submit" id="btnSubmitForm" class="btn-primary"
+                        style="width: 100%; cursor: pointer;">Publicar Producto</button>
                 </form>
-
-                <div id="c2cNotice" class="alert success"
-                    style="display: none; margin-top: 1rem; background: #2ecc71; color: white; padding: 0.75rem; border-radius: 4px;">
-                    ¡Publicado con éxito (Simulado)! Puedes verlo en la lista.
-                </div>
             </div>
 
-            <!-- SECCIÓN MIS PUBLICACIONES -->
+            <!-- ESCAPARATE PÚBLICO C2C -->
             <div>
-                <h3>Mis Publicaciones Activas</h3>
+                <h3>Catálogo de Productos de la Comunidad</h3>
                 <div id="userPostsList" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
-                    <!-- Lista C2C renderizada dinámicamente -->
                 </div>
             </div>
         </div>
@@ -86,16 +81,22 @@
     </footer>
 
     <script>
-        function renderUserPosts() {
+        function getPosts() {
             const defaultPosts = [
-                { id: 1, name: "Adidas Ultraboost 21", price: 1650, desc: "Talla 27.5 MX, 9/10 de estética.", icon: "🏃" }
+                { id: 1, name: "Adidas Ultraboost 21", price: 1650, desc: "Talla 27.5 MX, 9/10 de estética.", icon: "🏃" },
+                { id: 2, name: "Puma Suede Classic", price: 1200, desc: "Talla 26 MX, seminuevos.", icon: "👟" }
             ];
+            return JSON.parse(localStorage.getItem('strydr_c2c_posts')) || defaultPosts;
+        }
 
-            const posts = JSON.parse(localStorage.getItem('strydr_c2c_posts')) || defaultPosts;
+        function renderUserPosts() {
+            const posts = getPosts();
             const container = document.getElementById('userPostsList');
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const isAdmin = session && session.isLoggedIn && session.role === 'Admin';
 
             if (posts.length === 0) {
-                container.innerHTML = `<p style="color: #666;">No tienes productos publicados actualmente.</p>`;
+                container.innerHTML = `<p style="color: #666;">No hay productos publicados en la comunidad actualmente.</p>`;
                 return;
             }
 
@@ -106,10 +107,11 @@
                         <h4 style="margin: 0;">${p.name}</h4>
                         <p style="margin: 0.25rem 0; color: #e67e22; font-weight: bold;">$${p.price.toLocaleString()} MXN</p>
                         <small style="color: #666;">${p.desc}</small>
+                        ${isAdmin ? `
                         <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
-                            <button onclick="editPost(${index})" style="background: #3498db; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Editar (Simulado)</button>
-                            <button onclick="deletePost(${index})" style="background: #e74c3c; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Eliminar</button>
-                        </div>
+                            <button onclick="editPost(${index})" style="background: #3498db; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Editar</button>
+                            <button onclick="deletePost(${index})" style="background: #e74c3c; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Eliminar</button>
+                        </div>` : ''}
                     </div>
                 </div>
             `).join('');
@@ -117,40 +119,69 @@
 
         document.getElementById('c2cForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const name = document.getElementById('c2cName').value;
-            const price = parseFloat(document.getElementById('c2cPrice').value);
-            const desc = document.getElementById('c2cDesc').value;
+
+            const editIdx = parseInt(document.getElementById('editIndex').value);
+            const name = document.getElementById('c2cName').value.trim() || 'Calzado Deportivo C2C';
+            const price = parseFloat(document.getElementById('c2cPrice').value) || 1500;
+            const desc = document.getElementById('c2cDesc').value.trim() || 'Seminuevo en excelente estado.';
             const icon = document.getElementById('c2cIcon').value;
 
-            let posts = JSON.parse(localStorage.getItem('strydr_c2c_posts')) || [
-                { id: 1, name: "Adidas Ultraboost 21", price: 1650, desc: "Talla 27.5 MX, 9/10 de estética.", icon: "🏃" }
-            ];
+            let posts = getPosts();
 
-            posts.unshift({ id: Date.now(), name, price, desc, icon });
+            if (editIdx >= 0) {
+                posts[editIdx] = { ...posts[editIdx], name, price, desc, icon };
+                document.getElementById('editIndex').value = "-1";
+                document.getElementById('formTitle').textContent = "Publica tu Producto";
+                document.getElementById('btnSubmitForm').textContent = "Publicar Producto";
+            } else {
+                posts.unshift({ id: Date.now(), name, price, desc, icon });
+            }
+
             localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
-
-            document.getElementById('c2cNotice').style.display = 'block';
             document.getElementById('c2cForm').reset();
             renderUserPosts();
-
-            setTimeout(() => {
-                document.getElementById('c2cNotice').style.display = 'none';
-            }, 2500);
         });
 
         function deletePost(index) {
-            let posts = JSON.parse(localStorage.getItem('strydr_c2c_posts')) || [];
+            let posts = getPosts();
             posts.splice(index, 1);
             localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
             renderUserPosts();
         }
 
         function editPost(index) {
-            alert('Modo edición activado (Simulado). Puedes reescribir los datos en el formulario.');
+            const posts = getPosts();
+            const p = posts[index];
+
+            document.getElementById('editIndex').value = index;
+            document.getElementById('c2cName').value = p.name;
+            document.getElementById('c2cPrice').value = p.price;
+            document.getElementById('c2cDesc').value = p.desc;
+            document.getElementById('c2cIcon').value = p.icon;
+
+            document.getElementById('formTitle').textContent = "Editar Publicación C2C";
+            document.getElementById('btnSubmitForm').textContent = "Guardar Cambios";
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             renderUserPosts();
+
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const adminLink = document.getElementById('adminNavLink');
+            const profileLink = document.getElementById('profileNavLink');
+
+            if (session && session.isLoggedIn && session.role === 'Admin') {
+                if (adminLink) adminLink.style.display = 'inline-block';
+            } else {
+                if (adminLink) adminLink.style.display = 'none';
+                if (!session || !session.isLoggedIn) {
+                    if (profileLink) {
+                        profileLink.textContent = "Iniciar Sesión";
+                        profileLink.href = "login.html";
+                    }
+                }
+            }
+
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const badge = document.getElementById('cartCount');

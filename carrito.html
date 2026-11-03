@@ -15,19 +15,20 @@
         <nav class="nav-links">
             <a href="index.html">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
-            <a href="nosotros.html">Nosotros</a>
-            <a href="contacto.html">Contacto</a>
+            <a href="campana.html">Campañas & Promos</a>
+            <a href="publicar.html">Vender (C2C)</a>
+            <a href="subasta.html">Subasta</a>
             <a href="carrito.html" class="active">Carrito <span class="cart-badge" id="cartCount">0</span></a>
-            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
-                Perfil</a>
-            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
+            <a href="perfil.html" id="profileNavLink" class="btn-secondary"
+                style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi Perfil</a>
+            <a href="admin.html" id="adminNavLink" style="font-size: 0.85rem; opacity: 0.8; display: none;">Admin</a>
         </nav>
     </header>
 
     <main class="container">
         <section class="page-header">
             <h2>Carrito de Compras</h2>
-            <p class="subtitle">Ajusta las cantidades o elimina productos antes de finalizar la compra.</p>
+            <p class="subtitle">Ajusta las cantidades, aplica tus cupones de descuento y finaliza tu pedido.</p>
         </section>
 
         <div id="cartContent"></div>
@@ -56,24 +57,28 @@
                 return;
             }
 
-            let total = 0;
+            let subtotal = 0;
             let rowsHtml = cart.map((item, index) => {
-                const subtotal = item.price * item.quantity;
-                total += subtotal;
+                const itemSubtotal = item.price * item.quantity;
+                subtotal += itemSubtotal;
                 return `
                     <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 1rem;"><strong>${item.name}</strong><br><small style="color:#777;">${item.category}</small></td>
+                        <td style="padding: 1rem;"><strong>${item.name}</strong><br><small style="color:#777;">${item.category || 'Deportivo'}</small></td>
                         <td style="padding: 1rem;">$${item.price.toLocaleString()} MXN</td>
                         <td style="padding: 1rem;">
                             <input type="number" value="${item.quantity}" min="1" max="10" onchange="updateQuantity(${index}, this.value)" style="width: 60px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 4px;">
                         </td>
-                        <td style="padding: 1rem;">$${subtotal.toLocaleString()} MXN</td>
+                        <td style="padding: 1rem;">$${itemSubtotal.toLocaleString()} MXN</td>
                         <td style="padding: 1rem;">
                             <button onclick="removeItem(${index})" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-weight: bold;">Eliminar</button>
                         </td>
                     </tr>
                 `;
             }).join('');
+
+            const savedDiscountPct = parseFloat(localStorage.getItem('strydr_discount')) || 0;
+            const discountAmount = (subtotal * savedDiscountPct) / 100;
+            const finalTotal = Math.max(0, subtotal - discountAmount);
 
             container.innerHTML = `
                 <div style="overflow-x: auto;">
@@ -93,15 +98,55 @@
                     </table>
                 </div>
 
-                <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; max-width: 400px; margin-left: auto;">
-                    <h3>Resumen del Pedido</h3>
-                    <p style="font-size: 1.2rem; margin: 1rem 0;"><strong>Total a pagar:</strong> $${total.toLocaleString()} MXN</p>
-                    <button onclick="simulateCheckout()" class="btn-primary w-full" style="width: 100%; cursor: pointer;">Simular Compra</button>
-                    <div id="checkoutNotice" class="alert success" style="display: none; margin-top: 1rem; background: #2ecc71; color: white; padding: 0.75rem; border-radius: 4px;">
-                        ¡Compra realizada con éxito! Redirigiendo...
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;">
+                    <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; flex: 1; min-width: 280px;">
+                        <h3>🏷 ¿Tienes un Cupón de Descuento?</h3>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Ingresa tu código promocional (ej. STRYDR10 o 2X1SPECIAL):</p>
+                        <form id="cartCouponForm" novalidate style="display: flex; gap: 0.5rem;">
+                            <input type="text" id="cartCouponInput" placeholder="Ej. STRYDR10" style="flex: 1; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; text-transform: uppercase;">
+                            <button type="submit" class="btn-primary" style="cursor: pointer;">Aplicar</button>
+                        </form>
+                        <div id="cartCouponMsg" class="alert success" style="display: ${savedDiscountPct > 0 ? 'block' : 'none'}; margin-top: 1rem; background: #2ecc71; color: white; padding: 0.6rem; border-radius: 4px; font-size: 0.85rem;">
+                            ¡Descuento del ${savedDiscountPct}% aplicado!
+                        </div>
+                    </div>
+
+                    <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; width: 340px;">
+                        <h3>Resumen del Pedido</h3>
+                        <div style="margin: 1rem 0; font-size: 0.95rem; line-height: 1.8;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Subtotal:</span>
+                                <strong>$${subtotal.toLocaleString()} MXN</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: #27ae60;">
+                                <span>Descuento (${savedDiscountPct}%):</span>
+                                <strong>-$${discountAmount.toLocaleString()} MXN</strong>
+                            </div>
+                            <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #ddd;">
+                            <div style="display: flex; justify-content: space-between; font-size: 1.25rem; color: #e67e22;">
+                                <span>Total a pagar:</span>
+                                <strong>$${finalTotal.toLocaleString()} MXN</strong>
+                            </div>
+                        </div>
+                        <button onclick="simulateCheckout()" class="btn-primary w-full" style="width: 100%; cursor: pointer;">Simular Compra</button>
                     </div>
                 </div>
             `;
+
+            document.getElementById('cartCouponForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const input = document.getElementById('cartCouponInput');
+                const code = input ? input.value.trim().toUpperCase() : '';
+
+                if (code === 'STRYDR10') {
+                    localStorage.setItem('strydr_discount', '10');
+                } else if (code === '2X1SPECIAL') {
+                    localStorage.setItem('strydr_discount', '50');
+                } else if (code !== '') {
+                    localStorage.setItem('strydr_discount', '15');
+                }
+                renderCart();
+            });
         }
 
         function updateQuantity(index, newQty) {
@@ -122,14 +167,31 @@
         }
 
         function simulateCheckout() {
-            document.getElementById('checkoutNotice').style.display = 'block';
             localStorage.removeItem('strydr_cart');
-            setTimeout(() => {
-                window.location.href = 'perfil.html';
-            }, 1200);
+            localStorage.removeItem('strydr_discount');
+            window.location.href = 'perfil.html';
         }
 
-        document.addEventListener('DOMContentLoaded', renderCart);
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCart();
+
+            // CONTROL ESTRICTO DE NAVEGACIÓN Y ROL ADMIN
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const adminLink = document.getElementById('adminNavLink');
+            const profileLink = document.getElementById('profileNavLink');
+
+            if (session && session.isLoggedIn && session.role === 'Admin') {
+                if (adminLink) adminLink.style.display = 'inline-block';
+            } else {
+                if (adminLink) adminLink.style.display = 'none';
+                if (!session || !session.isLoggedIn) {
+                    if (profileLink) {
+                        profileLink.textContent = "Iniciar Sesión";
+                        profileLink.href = "login.html";
+                    }
+                }
+            }
+        });
     </script>
 </body>
 

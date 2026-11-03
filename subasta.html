@@ -19,9 +19,9 @@
             <a href="publicar.html">Vender (C2C)</a>
             <a href="subasta.html" class="active">Subasta</a>
             <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">0</span></a>
-            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
-                Perfil</a>
-            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
+            <a href="perfil.html" id="profileNavLink" class="btn-secondary"
+                style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi Perfil</a>
+            <a href="admin.html" id="adminNavLink" style="font-size: 0.85rem; opacity: 0.8; display: none;">Admin</a>
         </nav>
     </header>
 
@@ -54,16 +54,16 @@
                     <h3 id="currentHighestBid" style="font-size: 2rem; color: #27ae60; margin: 0;">$3,500 MXN</h3>
                 </div>
 
-                <!-- FORMULARIO DE OFERTA -->
-                <form id="bidForm">
+                <!-- FORMULARIO DE PUJA -->
+                <form id="bidForm" novalidate>
                     <div style="margin-bottom: 1rem;">
                         <label>Tu Nombre o Alias:</label>
-                        <input type="text" id="bidderName" placeholder="Ej. Coleccionista_99" required
+                        <input type="text" id="bidderName" placeholder="Ej. Coleccionista_99"
                             style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
                     </div>
                     <div style="margin-bottom: 1rem;">
                         <label>Monto a Ofertar (MXN):</label>
-                        <input type="number" id="bidAmount" placeholder="3600" min="3501" required
+                        <input type="number" id="bidAmount" placeholder="3600"
                             style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
                     </div>
                     <button type="submit" class="btn-primary" style="width: 100%; cursor: pointer;">Ofertar
@@ -72,7 +72,7 @@
 
                 <div id="bidNotice" class="alert success"
                     style="display: none; margin-top: 1rem; background: #2ecc71; color: white; padding: 0.75rem; border-radius: 4px;">
-                    ¡Oferta registrada (simulado) con éxito!
+                    ¡Oferta registrada con éxito!
                 </div>
             </div>
 
@@ -80,9 +80,7 @@
             <div style="flex: 1; min-width: 280px; background: #f9f9f9; padding: 1.5rem; border-radius: 8px;">
                 <h3>Historial de Ofertas Simuladas</h3>
                 <div id="bidsHistoryList"
-                    style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                    <!-- Subastas renderizadas dinámicamente -->
-                </div>
+                    style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;"></div>
             </div>
         </div>
     </main>
@@ -92,8 +90,7 @@
     </footer>
 
     <script>
-        // 1. Temporizador visual interactivo
-        let totalSeconds = 899; // 14m 59s
+        let totalSeconds = 899;
         function updateTimer() {
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
@@ -108,7 +105,6 @@
         }
         setInterval(updateTimer, 1000);
 
-        // 2. Control de historial de ofertas
         function renderBids() {
             const defaultBids = [
                 { name: "SNEAKER_HEAD_01", amount: 3500, time: "Hace 5 min" },
@@ -122,8 +118,6 @@
 
             if (bids.length > 0) {
                 highestDisplay.textContent = `$${bids[0].amount.toLocaleString()} MXN`;
-                document.getElementById('bidAmount').min = bids[0].amount + 100;
-                document.getElementById('bidAmount').placeholder = bids[0].amount + 100;
             }
 
             container.innerHTML = bids.map(b => `
@@ -137,15 +131,19 @@
             `).join('');
         }
 
+        // Al ofertar: guarda la puja en la lista y actualiza el historial
         document.getElementById('bidForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const name = document.getElementById('bidderName').value;
-            const amount = parseFloat(document.getElementById('bidAmount').value);
+            const nameInput = document.getElementById('bidderName');
+            const amountInput = document.getElementById('bidAmount');
 
             let bids = JSON.parse(localStorage.getItem('strydr_bids')) || [
-                { name: "SNEAKER_HEAD_01", amount: 3500, time: "Hace 5 min" },
-                { name: "Alex_Aguascalientes", amount: 3200, time: "Hace 18 min" }
+                { name: "SNEAKER_HEAD_01", amount: 3500, time: "Hace 5 min" }
             ];
+
+            const currentHighest = bids.length > 0 ? bids[0].amount : 3500;
+            const name = nameInput.value.trim() || 'Oferente_Anonimo';
+            const amount = parseFloat(amountInput.value) || (currentHighest + 100);
 
             bids.unshift({ name, amount, time: "Ahora mismo" });
             localStorage.setItem('strydr_bids', JSON.stringify(bids));
@@ -165,6 +163,21 @@
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const badge = document.getElementById('cartCount');
             if (badge) badge.textContent = totalItems;
+
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const adminLink = document.getElementById('adminNavLink');
+            const profileLink = document.getElementById('profileNavLink');
+
+            if (session && session.isLoggedIn) {
+                if (session.role === 'Admin' && adminLink) {
+                    adminLink.style.display = 'inline-block';
+                }
+            } else {
+                if (profileLink) {
+                    profileLink.textContent = "Iniciar Sesión";
+                    profileLink.href = "login.html";
+                }
+            }
         });
     </script>
 </body>
