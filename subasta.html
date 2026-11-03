@@ -115,23 +115,45 @@
             const bids = JSON.parse(localStorage.getItem('strydr_bids')) || defaultBids;
             const container = document.getElementById('bidsHistoryList');
             const highestDisplay = document.getElementById('currentHighestBid');
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const isAdmin = session && session.isLoggedIn && session.role === 'Admin';
 
             if (bids.length > 0) {
-                highestDisplay.textContent = `$${bids[0].amount.toLocaleString()} MXN`;
+                // Calcular el monto más alto real numéricamente
+                const maxBid = Math.max(...bids.map(b => b.amount));
+                highestDisplay.textContent = `$${maxBid.toLocaleString()} MXN`;
+            } else {
+                highestDisplay.textContent = "$0 MXN";
             }
 
-            container.innerHTML = bids.map(b => `
+            container.innerHTML = bids.map((b, index) => `
                 <div style="background: white; padding: 0.75rem 1rem; border-radius: 6px; border-left: 4px solid #2ecc71; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <strong>${b.name}</strong><br>
                         <small style="color: #888;">${b.time || 'Reciente'}</small>
                     </div>
-                    <span style="font-weight: bold; color: #27ae60; font-size: 1.1rem;">$${b.amount.toLocaleString()} MXN</span>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-weight: bold; color: #27ae60; font-size: 1.1rem;">$${b.amount.toLocaleString()} MXN</span>
+                        ${isAdmin ? `<button onclick="confirmDeleteBid(this, ${index})" data-confirm="false" style="background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Eliminar</button>` : ''}
+                    </div>
                 </div>
             `).join('');
         }
 
-        // Al ofertar: guarda la puja en la lista y actualiza el historial
+        function confirmDeleteBid(btn, index) {
+            if (btn.getAttribute('data-confirm') === 'false') {
+                btn.setAttribute('data-confirm', 'true');
+                btn.textContent = '¿Seguro de querer borrar?';
+                btn.style.background = '#c0392b';
+                btn.style.fontWeight = 'bold';
+            } else {
+                let bids = JSON.parse(localStorage.getItem('strydr_bids')) || [];
+                bids.splice(index, 1);
+                localStorage.setItem('strydr_bids', JSON.stringify(bids));
+                renderBids();
+            }
+        }
+
         document.getElementById('bidForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const nameInput = document.getElementById('bidderName');
@@ -141,11 +163,14 @@
                 { name: "SNEAKER_HEAD_01", amount: 3500, time: "Hace 5 min" }
             ];
 
-            const currentHighest = bids.length > 0 ? bids[0].amount : 3500;
             const name = nameInput.value.trim() || 'Oferente_Anonimo';
-            const amount = parseFloat(amountInput.value) || (currentHighest + 100);
+            const amount = parseFloat(amountInput.value) || 3600;
 
             bids.unshift({ name, amount, time: "Ahora mismo" });
+
+            // Ordenar de mayor a menor monto
+            bids.sort((a, b) => b.amount - a.amount);
+
             localStorage.setItem('strydr_bids', JSON.stringify(bids));
 
             document.getElementById('bidNotice').style.display = 'block';
