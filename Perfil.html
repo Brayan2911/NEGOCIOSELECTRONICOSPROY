@@ -11,8 +11,8 @@
 <body>
 
     <header class="navbar">
-        <div class="logo">STRYDR<span>.</span></div>
-        <nav class="nav-links" id="navLinksContainer">
+        <div class="logo">STRYDR<span>.PERFIL</span></div>
+        <nav class="nav-links">
             <a href="index.html">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
             <a href="campana.html">Campañas & Promos</a>
@@ -22,84 +22,260 @@
             <a href="perfil.html" class="active btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
                 Perfil</a>
             <a href="admin.html" id="adminNavLink" style="font-size: 0.85rem; opacity: 0.8; display: none;">Admin</a>
-            <button onclick="logout()"
-                style="background: #e74c3c; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; cursor: pointer; margin-left: 0.5rem;">Cerrar
-                Sesión</button>
         </nav>
     </header>
 
-    <main class="container">
+    <main class="container" style="padding-bottom: 4rem;">
         <section class="page-header">
             <h2>Mi Perfil de Usuario</h2>
-            <p class="subtitle">Gestiona tu información personal, publicaciones C2C y compras recientes.</p>
+            <p class="subtitle">Gestiona tu información personal, tus publicaciones C2C de calzado y tu actividad
+                reciente.</p>
         </section>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-            <!-- DETALLES DEL USUARIO LOGUEADO -->
-            <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px;">
-                <div style="text-align: center; margin-bottom: 1rem;">
-                    <div style="font-size: 4rem;">👤</div>
-                    <h3 id="profileName">Cargando...</h3>
-                    <p id="profileEmail" style="color: #666; font-size: 0.9rem;"></p>
-                    <span id="profileRole"
-                        style="background: #e67e22; color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;"></span>
-                </div>
-                <hr style="border: none; border-top: 1px solid #ddd; margin: 1rem 0;">
-                <button onclick="logout()" class="btn-primary"
-                    style="width: 100%; background: #e74c3c; cursor: pointer;">Cerrar Sesión Activa</button>
-            </div>
-
-            <!-- HISTORIAL / ACTIVIDAD -->
-            <div style="background: #fff; border: 1px solid #eee; padding: 1.5rem; border-radius: 8px;">
-                <h3>Resumen de Actividad</h3>
-                <div style="margin-top: 1rem; line-height: 1.8;">
-                    <p>📦 <strong>Compras Realizadas:</strong> <span id="purchasesCount">0 pedidos</span></p>
-                    <p>🏷 <strong>Publicaciones C2C:</strong> <span id="c2cCount">0 productos activos</span></p>
-                    <p>🏷 <strong>Descuento Promocional:</strong> <span id="discountStatus">Ninguno aplicado</span></p>
-                </div>
-                <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
-                    <a href="publicar.html" class="btn-primary"
-                        style="flex: 1; text-align: center; text-decoration: none;">Publicar Calzado (C2C)</a>
-                    <a href="subasta.html" class="btn-secondary"
-                        style="flex: 1; text-align: center; text-decoration: none;">Ir a Subasta</a>
-                </div>
+        <!-- TARJETA DE DATOS DE SESIÓN -->
+        <div
+            style="background: white; border: 1px solid #ddd; padding: 2rem; border-radius: 12px; max-width: 600px; margin: 0 auto 2rem auto; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div style="font-size: 4rem; margin-bottom: 0.5rem;">👤</div>
+            <h3 id="userNameDisplay" style="margin: 0; font-size: 1.5rem;">Brayan Camarillo</h3>
+            <p id="userEmailDisplay" style="color: #666; margin: 0.25rem 0 1rem 0;">brayan@strydr.com</p>
+            <span id="userRoleBadge"
+                style="display: inline-block; background: #e67e22; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Rol:
+                User</span>
+            <div style="margin-top: 1.5rem;">
+                <button onclick="logout()"
+                    style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: bold;">Cerrar
+                    Sesión Activa</button>
             </div>
         </div>
+
+        <!-- RESUMEN DE ACTIVIDAD -->
+        <div
+            style="background: #f9f9f9; border: 1px solid #eee; padding: 1.5rem; border-radius: 8px; max-width: 600px; margin: 0 auto 3rem auto;">
+            <h3>Resumen de Actividad</h3>
+            <ul style="list-style: none; padding: 0; margin: 1rem 0 0 0; line-height: 2;">
+                <li>📦 <strong>Compras Realizadas:</strong> 0 pedidos</li>
+                <li>🏷 <strong>Descuento Promocional:</strong> <span id="activeDiscountText">0% Activo</span></li>
+            </ul>
+        </div>
+
+        <!-- SECCIÓN EXCLUSIVA: GESTIÓN DE MIS PUBLICACIONES C2C (CREAR, EDITAR, BORRAR) -->
+        <section
+            style="background: #fff; border: 1px solid #ddd; padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">
+            <h2>👟 Mis Publicaciones C2C (Gestión de Calzado)</h2>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 2rem;">Aquí puedes publicar tus tenis, ajustar
+                precios, descuentos, stock o eliminarlos de la plataforma.</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+
+                <!-- FORMULARIO DE CREACIÓN / EDICIÓN PERSONAL -->
+                <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
+                    <h3 id="formTitle">➕ Publicar Nuevo Calzado</h3>
+                    <form id="c2cForm" novalidate style="margin-top: 1rem;">
+                        <input type="hidden" id="editIndex" value="-1">
+
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; font-size: 0.85rem; font-weight: bold;">Nombre del
+                                Producto</label>
+                            <input type="text" id="c2cName" placeholder="Ej. Nike Jordan 1 Retro (Seminuevo)"
+                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: bold;">Precio Base
+                                    (MXN)</label>
+                                <input type="number" id="c2cPrice" placeholder="1800"
+                                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: bold;">Descuento
+                                    (%)</label>
+                                <input type="number" id="c2cDiscount" placeholder="0" min="0" max="90"
+                                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: bold;">Stock
+                                    (Quedan)</label>
+                                <input type="number" id="c2cStock" placeholder="1" min="1"
+                                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: bold;">Categoría
+                                    Visual</label>
+                                <select id="c2cIcon"
+                                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                                    <option value="👟">👟 Tenis Urbanos / Casual</option>
+                                    <option value="🏀">🏀 Básquetbol</option>
+                                    <option value="🏃">🏃 Running / Atletismo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-size: 0.85rem; font-weight: bold;">Descripción del
+                                Estado</label>
+                            <textarea id="c2cDesc" placeholder="Detalla uso, talla y condición..." rows="3"
+                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+                        </div>
+
+                        <button type="submit" id="btnSubmitForm" class="btn-primary"
+                            style="width: 100%; cursor: pointer;">Publicar Calzado</button>
+                        <button type="button" id="btnCancelEdit" onclick="resetForm()"
+                            style="display: none; width: 100%; margin-top: 0.5rem; background: #7f8c8d; color: white; border: none; padding: 0.5rem; border-radius: 4px; cursor: pointer;">Cancelar
+                            Edición</button>
+                    </form>
+                </div>
+
+                <!-- LISTADO DE MIS CALZADOS CON DOBLE CONFIRMACIÓN -->
+                <div>
+                    <h3>📋 Tus Anuncios Activos</h3>
+                    <div id="myPostsList" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                    </div>
+                </div>
+
+            </div>
+        </section>
     </main>
 
-    <footer class="footer" style="margin-top: 4rem;">
-        <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
+    <footer class="footer">
+        <p>&copy; 2026 Strydr Inc. Mi Perfil.</p>
     </footer>
 
     <script>
-        function loadProfile() {
-            const session = JSON.parse(localStorage.getItem('strydr_session'));
+        const defaultUserEmail = "brayanlealcl1129@gmail.com";
 
-            // Si no hay sesión iniciada, enviar al Login
-            if (!session || !session.isLoggedIn) {
-                window.location.href = 'login.html';
+        function getAllPosts() {
+            const defaultPosts = [
+                { id: 1, name: "Adidas Ultraboost 21", price: 1650, discount: 0, stock: 2, desc: "Talla 27.5 MX, 9/10 de estética.", icon: "🏃", owner: "otros@strydr.com" },
+                { id: 2, name: "Jordan 1 Retro", price: 2600, discount: 15, stock: 3, desc: "Talla 26 semi nuevo", icon: "👟", owner: defaultUserEmail },
+                { id: 3, name: "Jordan 2", price: 2400, discount: 0, stock: 1, desc: "Jordan estado impecable", icon: "👟", owner: defaultUserEmail }
+            ];
+            return JSON.parse(localStorage.getItem('strydr_c2c_posts')) || defaultPosts;
+        }
+
+        function renderMyProfilePosts() {
+            const allPosts = getAllPosts();
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const myEmail = session ? session.email : defaultUserEmail;
+
+            const myPosts = allPosts.filter(p => p.owner === myEmail || p.owner === defaultUserEmail);
+            const container = document.getElementById('myPostsList');
+
+            if (myPosts.length === 0) {
+                container.innerHTML = `<p style="color: #666; background: #f9f9f9; padding: 1rem; border-radius: 6px;">No tienes publicaciones activas en este momento.</p>`;
                 return;
             }
 
-            document.getElementById('profileName').textContent = session.name;
-            document.getElementById('profileEmail').textContent = session.email;
-            document.getElementById('profileRole').textContent = `Rol: ${session.role}`;
+            container.innerHTML = allPosts.map((p, globalIndex) => {
+                if (p.owner !== myEmail && p.owner !== defaultUserEmail) return '';
+                const discountPct = p.discount || 0;
+                const finalPrice = discountPct > 0 ? p.price * (1 - discountPct / 100) : p.price;
+                const stockQty = p.stock || 1;
 
-            // Mostrar el botón Admin únicamente si el usuario tiene Rol "Admin"
-            const adminLink = document.getElementById('adminNavLink');
-            if (session.role === 'Admin') {
-                adminLink.style.display = 'inline-block';
+                return `
+                    <div style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px; background: white; display: flex; gap: 1rem; align-items: center;">
+                        <div style="font-size: 2.5rem;">${p.icon}</div>
+                        <div style="flex: 1;">
+                            <h4 style="margin: 0;">${p.name}</h4>
+                            <div style="margin: 0.25rem 0;">
+                                ${discountPct > 0 ? `<span style="text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 0.4rem;">$${p.price}</span>` : ''}
+                                <span style="color: #e67e22; font-weight: bold; font-size: 1.1rem;">$${finalPrice.toLocaleString()} MXN</span>
+                                ${discountPct > 0 ? `<span style="background: #e74c3c; color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.7p; font-weight: bold; margin-left: 0.5rem;">-${discountPct}%</span>` : ''}
+                            </div>
+                            <small style="color: #666; display: block;">${p.desc}</small>
+                            <small style="color: #27ae60; font-weight: bold; display: block; margin-top: 0.2rem;">⚡ Stock disponible: ${stockQty} pares</small>
+                            <div id="c2cActions-${globalIndex}" style="margin-top: 0.75rem; display: flex; gap: 0.5rem; align-items: center;">
+                                <button onclick="editPost(${globalIndex})" style="background: #3498db; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">Editar</button>
+                                <button onclick="confirmDeleteC2C(this, ${globalIndex})" data-confirm="false" style="background: #e74c3c; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function editPost(index) {
+            const posts = getAllPosts();
+            const p = posts[index];
+
+            document.getElementById('editIndex').value = index;
+            document.getElementById('c2cName').value = p.name;
+            document.getElementById('c2cPrice').value = p.price;
+            document.getElementById('c2cDiscount').value = p.discount || 0;
+            document.getElementById('c2cStock').value = p.stock || 1;
+            document.getElementById('c2cDesc').value = p.desc;
+            document.getElementById('c2cIcon').value = p.icon;
+
+            document.getElementById('formTitle').textContent = "✏️ Editar Calzado, Descuento y Stock";
+            document.getElementById('btnSubmitForm').textContent = "Guardar Cambios";
+            document.getElementById('btnCancelEdit').style.display = 'block';
+            window.scrollTo({ top: 350, behavior: 'smooth' });
+        }
+
+        function confirmDeleteC2C(btn, index) {
+            const container = document.getElementById(`c2cActions-${index}`);
+            if (btn.getAttribute('data-confirm') === 'false') {
+                btn.setAttribute('data-confirm', 'true');
+                btn.textContent = '¿Seguro de querer borrar esto?';
+                btn.style.background = '#c0392b';
+                btn.style.fontWeight = 'bold';
+
+                if (!document.getElementById(`cancelC2C-${index}`)) {
+                    const cancelBtn = document.createElement('button');
+                    cancelBtn.id = `cancelC2C-${index}`;
+                    cancelBtn.textContent = 'Cancelar';
+                    cancelBtn.style.cssText = 'background: #7f8c8d; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;';
+                    cancelBtn.onclick = () => renderMyProfilePosts();
+                    container.appendChild(cancelBtn);
+                }
             } else {
-                adminLink.style.display = 'none';
+                deletePost(index);
+            }
+        }
+
+        function deletePost(index) {
+            let posts = getAllPosts();
+            posts.splice(index, 1);
+            localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
+            renderMyProfilePosts();
+        }
+
+        function resetForm() {
+            document.getElementById('c2cForm').reset();
+            document.getElementById('editIndex').value = "-1";
+            document.getElementById('formTitle').textContent = "➕ Publicar Nuevo Calzado";
+            document.getElementById('btnSubmitForm').textContent = "Publicar Calzado";
+            document.getElementById('btnCancelEdit').style.display = 'none';
+        }
+
+        document.getElementById('c2cForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const myEmail = session ? session.email : defaultUserEmail;
+
+            const editIdx = parseInt(document.getElementById('editIndex').value);
+            const name = document.getElementById('c2cName').value.trim() || 'Calzado Deportivo C2C';
+            const price = parseFloat(document.getElementById('c2cPrice').value) || 1500;
+            const discount = parseFloat(document.getElementById('c2cDiscount').value) || 0;
+            const stock = parseInt(document.getElementById('c2cStock').value) || 1;
+            const desc = document.getElementById('c2cDesc').value.trim() || 'Seminuevo en excelente estado.';
+            const icon = document.getElementById('c2cIcon').value;
+
+            let posts = getAllPosts();
+
+            if (editIdx >= 0) {
+                posts[editIdx] = { ...posts[editIdx], name, price, discount, stock, desc, icon };
+            } else {
+                posts.unshift({ id: Date.now(), name, price, discount, stock, desc, icon, owner: myEmail });
             }
 
-            // Cargar métricas dinámicas
-            const c2cPosts = JSON.parse(localStorage.getItem('strydr_c2c_posts')) || [];
-            document.getElementById('c2cCount').textContent = `${c2cPosts.length} productos`;
-
-            const discount = localStorage.getItem('strydr_discount');
-            document.getElementById('discountStatus').textContent = discount ? `${discount}% Activo` : 'Ninguno';
-        }
+            localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
+            resetForm();
+            renderMyProfilePosts();
+        });
 
         function logout() {
             localStorage.removeItem('strydr_session');
@@ -107,7 +283,22 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadProfile();
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            if (session && session.isLoggedIn) {
+                document.getElementById('userNameDisplay').textContent = session.name || session.email;
+                document.getElementById('userEmailDisplay').textContent = session.email;
+                document.getElementById('userRoleBadge').textContent = `Rol: ${session.role}`;
+                if (session.role === 'Admin') {
+                    const adminLink = document.getElementById('adminNavLink');
+                    if (adminLink) adminLink.style.display = 'inline-block';
+                }
+            }
+
+            const discount = localStorage.getItem('strydr_discount') || '0';
+            document.getElementById('activeDiscountText').textContent = `${discount}% Activo`;
+
+            renderMyProfilePosts();
+
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const badge = document.getElementById('cartCount');

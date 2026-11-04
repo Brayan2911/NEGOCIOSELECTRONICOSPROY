@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strydr | Vender mi Calzado (C2C)</title>
+    <title>Strydr | Marketplace C2C</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
@@ -28,109 +28,27 @@
     <main class="container">
         <section class="page-header">
             <h2>Marketplace C2C — Compra y Venta entre Usuarios</h2>
-            <p class="subtitle">Explora las ofertas de la comunidad o gestiona tus calzados publicados en tu espacio
-                personal.</p>
+            <p class="subtitle">Explora el catálogo público de calzado ofrecido por la comunidad de atletas.</p>
         </section>
 
-        <!-- NAVEGACIÓN POR PESTAÑAS (MERCADO / MIS PUBLICACIONES) -->
-        <div style="display: flex; gap: 1rem; border-bottom: 2px solid #eee; margin-bottom: 2rem;">
-            <button id="tabExploreBtn" onclick="switchTab('explore')"
-                style="background: none; border: none; padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid #e67e22; color: #e67e22;">
-                🛒 Explorar Marketplace
-            </button>
-            <button id="tabMyPostsBtn" onclick="switchTab('myposts')"
-                style="background: none; border: none; padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid transparent; color: #666;">
-                👟 Mis Publicaciones (<span id="myPostsCount">0</span>)
-            </button>
+        <!-- AVISO SI NO ESTÁ LOGEADO -->
+        <div id="loginWarning"
+            style="display: none; background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 1.5rem; border-radius: 8px; text-align: center; margin-bottom: 2rem;">
+            <h3>⚠️ Sesión no iniciada</h3>
+            <p style="margin: 0.5rem 0 1rem 0;">Para publicar, editar o gestionar tus propios calzados, necesitas
+                iniciar sesión en tu cuenta.</p>
+            <a href="login.html" class="btn-primary"
+                style="text-decoration: none; padding: 0.5rem 1.5rem; display: inline-block;">Iniciar Sesión /
+                Registrarse</a>
         </div>
 
-        <!-- VISTA 1: EXPLORAR MARKETPLACE (CATÁLOGO PÚBLICO CON BORRADO PARA ADMIN) -->
-        <div id="tabExplore" style="display: block;">
+        <!-- ESCAPARATE PÚBLICO C2C -->
+        <div>
             <h3>Catálogo de Productos de la Comunidad</h3>
-            <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">Tenis publicados por otros coleccionistas
-                y atletas.</p>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">Tenis publicados y verificados en la
+                plataforma.</p>
             <div id="publicPostsList"
                 style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;"></div>
-        </div>
-
-        <!-- VISTA 2: ESPACIO PERSONAL DE EDICIÓN Y GESTIÓN ("MIS CALZADOS") -->
-        <div id="tabMyPosts" style="display: none;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-
-                <!-- FORMULARIO DE CREACIÓN / EDICIÓN -->
-                <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
-                    <h3 id="formTitle">➕ Publicar Nuevo Calzado</h3>
-                    <p style="color: #666; font-size: 0.85rem; margin-bottom: 1rem;">Completa los datos de tus tenis
-                        para ponerlos a la venta.</p>
-
-                    <form id="c2cForm" novalidate>
-                        <input type="hidden" id="editIndex" value="-1">
-
-                        <div style="margin-bottom: 1rem;">
-                            <label style="display: block; font-size: 0.85rem; font-weight: bold;">Nombre del
-                                Producto</label>
-                            <input type="text" id="c2cName" placeholder="Ej. Nike Jordan 1 Retro (Seminuevo)"
-                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
-                            <div>
-                                <label style="display: block; font-size: 0.85rem; font-weight: bold;">Precio Base
-                                    (MXN)</label>
-                                <input type="number" id="c2cPrice" placeholder="1800"
-                                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
-                            </div>
-                            <div>
-                                <label style="display: block; font-size: 0.85rem; font-weight: bold;">Descuento
-                                    (%)</label>
-                                <input type="number" id="c2cDiscount" placeholder="0" min="0" max="90"
-                                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
-                            <div>
-                                <label style="display: block; font-size: 0.85rem; font-weight: bold;">Stock
-                                    (Quedan)</label>
-                                <input type="number" id="c2cStock" placeholder="1" min="1"
-                                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
-                            </div>
-                            <div>
-                                <label style="display: block; font-size: 0.85rem; font-weight: bold;">Categoría
-                                    Visual</label>
-                                <select id="c2cIcon"
-                                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
-                                    <option value="👟">👟 Tenis Urbanos / Casual</option>
-                                    <option value="🏀">🏀 Básquetbol</option>
-                                    <option value="🏃">🏃 Running / Atletismo</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; font-size: 0.85rem; font-weight: bold;">Descripción del
-                                Estado</label>
-                            <textarea id="c2cDesc" placeholder="Detalla uso, talla y condición..." rows="3"
-                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"></textarea>
-                        </div>
-
-                        <button type="submit" id="btnSubmitForm" class="btn-primary"
-                            style="width: 100%; cursor: pointer;">Publicar Calzado</button>
-                        <button type="button" id="btnCancelEdit" onclick="resetForm()"
-                            style="display: none; width: 100%; margin-top: 0.5rem; background: #7f8c8d; color: white; border: none; padding: 0.5rem; border-radius: 4px; cursor: pointer;">Cancelar
-                            Edición</button>
-                    </form>
-                </div>
-
-                <!-- LISTADO PERSONAL DE "MIS CALZADOS" -->
-                <div>
-                    <h3>📋 Mis Calzados a la Venta</h3>
-                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Aquí puedes modificar precios,
-                        descuentos, stock disponible o borrar tus publicaciones.</p>
-                    <div id="myPostsList" style="display: flex; flex-direction: column; gap: 1rem;"></div>
-                </div>
-
-            </div>
         </div>
     </main>
 
@@ -139,50 +57,27 @@
     </footer>
 
     <script>
-        const currentUserEmail = "brayanlealcl1129@gmail.com";
-
-        const defaultPosts = [
-            { id: 1, name: "Adidas Ultraboost 21", price: 1650, discount: 0, stock: 2, desc: "Talla 27.5 MX, 9/10 de estética.", icon: "🏃", owner: "otros@strydr.com" },
-            { id: 2, name: "Puma Suede Classic", price: 1200, discount: 10, stock: 1, desc: "Talla 26 MX, seminuevos.", icon: "👟", owner: "otros@strydr.com" },
-            { id: 3, name: "Jordan 1 Retro", price: 2600, discount: 15, stock: 3, desc: "Talla 26 semi nuevo", icon: "👟", owner: currentUserEmail },
-            { id: 4, name: "Jordan 2", price: 2400, discount: 0, stock: 1, desc: "Jordan estado impecable", icon: "👟", owner: currentUserEmail }
-        ];
-
         function getAllPosts() {
+            const defaultPosts = [
+                { id: 1, name: "Adidas Ultraboost 21", price: 1650, discount: 0, stock: 2, desc: "Talla 27.5 MX, 9/10 de estética.", icon: "🏃", owner: "otros@strydr.com" },
+                { id: 2, name: "Jordan 1 Retro", price: 2600, discount: 15, stock: 3, desc: "Talla 26 semi nuevo", icon: "👟", owner: "brayanlealcl1129@gmail.com" },
+                { id: 3, name: "Jordan 2", price: 2400, discount: 0, stock: 1, desc: "Jordan estado impecable", icon: "👟", owner: "brayanlealcl1129@gmail.com" }
+            ];
             return JSON.parse(localStorage.getItem('strydr_c2c_posts')) || defaultPosts;
         }
 
-        function switchTab(tab) {
-            const tabExplore = document.getElementById('tabExplore');
-            const tabMyPosts = document.getElementById('tabMyPosts');
-            const btnExplore = document.getElementById('tabExploreBtn');
-            const btnMyPosts = document.getElementById('tabMyPostsBtn');
-
-            if (tab === 'explore') {
-                tabExplore.style.display = 'block';
-                tabMyPosts.style.display = 'none';
-                btnExplore.style.borderBottom = '3px solid #e67e22';
-                btnExplore.style.color = '#e67e22';
-                btnMyPosts.style.borderBottom = '3px solid transparent';
-                btnMyPosts.style.color = '#666';
-            } else {
-                tabExplore.style.display = 'none';
-                tabMyPosts.style.display = 'block';
-                btnMyPosts.style.borderBottom = '3px solid #e67e22';
-                btnMyPosts.style.color = '#e67e22';
-                btnExplore.style.borderBottom = '3px solid transparent';
-                btnExplore.style.color = '#666';
-            }
-        }
-
-        function renderMarketplace() {
+        function renderPublicMarketplace() {
             const allPosts = getAllPosts();
             const session = JSON.parse(localStorage.getItem('strydr_session'));
-            const myEmail = session ? session.email : currentUserEmail;
             const isAdmin = session && session.isLoggedIn && session.role === 'Admin';
 
-            // 1. Renderizar Mercado Público
             const publicContainer = document.getElementById('publicPostsList');
+
+            if (allPosts.length === 0) {
+                publicContainer.innerHTML = `<p style="color: #666;">No hay productos publicados actualmente.</p>`;
+                return;
+            }
+
             publicContainer.innerHTML = allPosts.map((p, globalIndex) => {
                 const discountPct = p.discount || 0;
                 const finalPrice = discountPct > 0 ? p.price * (1 - discountPct / 100) : p.price;
@@ -200,179 +95,54 @@
                         <p style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem;">${p.desc}</p>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; font-size: 0.75rem;">
                             <span style="background: #e8f8f5; color: #27ae60; padding: 2px 6px; border-radius: 4px; font-weight: bold;">⚡ Quedan ${stockQty} pares</span>
-                            <span style="color: #999;">Vendedor: ${p.owner === myEmail ? 'Tú' : 'Comunidad'}</span>
                         </div>
                         ${isAdmin ? `
                         <div id="adminExploreActions-${globalIndex}" style="margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px dashed #eee; display: flex; gap: 0.5rem; align-items: center;">
-                            <button onclick="confirmDeleteAdmin(this, ${globalIndex}, 'adminExploreActions')" data-confirm="false" style="background: #e74c3c; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; width: 100%;">Eliminar Publicación (Admin)</button>
+                            <button onclick="confirmDeleteAdmin(this, ${globalIndex})" data-confirm="false" style="background: #e74c3c; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; width: 100%;">Eliminar Publicación (Admin)</button>
                         </div>` : ''}
                     </div>
                 `;
             }).join('');
-
-            // 2. Renderizar Pestaña "Mis Publicaciones"
-            const myPosts = allPosts.filter(p => p.owner === myEmail || p.owner === currentUserEmail);
-            document.getElementById('myPostsCount').textContent = myPosts.length;
-            const myContainer = document.getElementById('myPostsList');
-
-            if (myPosts.length === 0) {
-                myContainer.innerHTML = `<p style="color: #666; background: #fff; padding: 1rem; border-radius: 6px; border: 1px solid #eee;">Aún no has publicado ningún calzado.</p>`;
-                return;
-            }
-
-            myContainer.innerHTML = allPosts.map((p, globalIndex) => {
-                if (p.owner !== myEmail && p.owner !== currentUserEmail) return '';
-                const discountPct = p.discount || 0;
-                const finalPrice = discountPct > 0 ? p.price * (1 - discountPct / 100) : p.price;
-                const stockQty = p.stock || 1;
-
-                return `
-                    <div style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px; background: white; display: flex; gap: 1rem; align-items: center;">
-                        <div style="font-size: 2.5rem;">${p.icon}</div>
-                        <div style="flex: 1;">
-                            <h4 style="margin: 0;">${p.name}</h4>
-                            <div style="margin: 0.25rem 0;">
-                                ${discountPct > 0 ? `<span style="text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 0.4rem;">$${p.price}</span>` : ''}
-                                <span style="color: #e67e22; font-weight: bold; font-size: 1.1rem;">$${finalPrice.toLocaleString()} MXN</span>
-                                ${discountPct > 0 ? `<span style="background: #e74c3c; color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-left: 0.5rem;">-${discountPct}%</span>` : ''}
-                            </div>
-                            <small style="color: #666; display: block;">${p.desc}</small>
-                            <small style="color: #27ae60; font-weight: bold; display: block; margin-top: 0.2rem;">⚡ Stock disponible: ${stockQty} pares</small>
-                            <div id="c2cActions-${globalIndex}" style="margin-top: 0.75rem; display: flex; gap: 0.5rem; align-items: center;">
-                                <button onclick="editPost(${globalIndex})" style="background: #3498db; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">Editar</button>
-                                <button onclick="confirmDeleteC2C(this, ${globalIndex})" data-confirm="false" style="background: #e74c3c; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Eliminar</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
         }
 
-        function confirmDeleteAdmin(btn, index, prefix) {
-            const container = document.getElementById(`${prefix}-${index}`);
+        function confirmDeleteAdmin(btn, index) {
             if (btn.getAttribute('data-confirm') === 'false') {
                 btn.setAttribute('data-confirm', 'true');
-                btn.textContent = '¿Borrar Publicacion?';
+                btn.textContent = '¿Seguro de querer borrar esto?';
                 btn.style.background = '#c0392b';
                 btn.style.fontWeight = 'bold';
-
-                if (!document.getElementById(`cancelAdmin-${index}`)) {
-                    const cancelBtn = document.createElement('button');
-                    cancelBtn.id = `cancelAdmin-${index}`;
-                    cancelBtn.textContent = 'Cancelar';
-                    cancelBtn.style.cssText = 'background: #7f8c8d; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;';
-                    cancelBtn.onclick = () => renderMarketplace();
-                    container.appendChild(cancelBtn);
-                }
             } else {
-                deletePost(index);
+                let posts = getAllPosts();
+                posts.splice(index, 1);
+                localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
+                renderPublicMarketplace();
             }
         }
-
-        function editPost(index) {
-            const posts = getAllPosts();
-            const p = posts[index];
-
-            document.getElementById('editIndex').value = index;
-            document.getElementById('c2cName').value = p.name;
-            document.getElementById('c2cPrice').value = p.price;
-            document.getElementById('c2cDiscount').value = p.discount || 0;
-            document.getElementById('c2cStock').value = p.stock || 1;
-            document.getElementById('c2cDesc').value = p.desc;
-            document.getElementById('c2cIcon').value = p.icon;
-
-            document.getElementById('formTitle').textContent = "✏️ Editar Calzado, Descuento y Stock";
-            document.getElementById('btnSubmitForm').textContent = "Guardar Cambios";
-            document.getElementById('btnCancelEdit').style.display = 'block';
-            window.scrollTo({ top: 150, behavior: 'smooth' });
-        }
-
-        function confirmDeleteC2C(btn, index) {
-            const container = document.getElementById(`c2cActions-${index}`);
-            if (btn.getAttribute('data-confirm') === 'false') {
-                btn.setAttribute('data-confirm', 'true');
-                btn.textContent = '¿Eliminar Publicacion?';
-                btn.style.background = '#c0392b';
-                btn.style.fontWeight = 'bold';
-
-                if (!document.getElementById(`cancelC2C-${index}`)) {
-                    const cancelBtn = document.createElement('button');
-                    cancelBtn.id = `cancelC2C-${index}`;
-                    cancelBtn.textContent = 'Cancelar';
-                    cancelBtn.style.cssText = 'background: #7f8c8d; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;';
-                    cancelBtn.onclick = () => renderMarketplace();
-                    container.appendChild(cancelBtn);
-                }
-            } else {
-                deletePost(index);
-            }
-        }
-
-        function deletePost(index) {
-            let posts = getAllPosts();
-            posts.splice(index, 1);
-            localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
-            renderMarketplace();
-        }
-
-        function resetForm() {
-            document.getElementById('c2cForm').reset();
-            document.getElementById('editIndex').value = "-1";
-            document.getElementById('formTitle').textContent = "➕ Publicar Nuevo Calzado";
-            document.getElementById('btnSubmitForm').textContent = "Publicar Calzado";
-            document.getElementById('btnCancelEdit').style.display = 'none';
-        }
-
-        document.getElementById('c2cForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const session = JSON.parse(localStorage.getItem('strydr_session'));
-            const myEmail = session ? session.email : currentUserEmail;
-
-            const editIdx = parseInt(document.getElementById('editIndex').value);
-            const name = document.getElementById('c2cName').value.trim() || 'Calzado Deportivo C2C';
-            const price = parseFloat(document.getElementById('c2cPrice').value) || 1500;
-            const discount = parseFloat(document.getElementById('c2cDiscount').value) || 0;
-            const stock = parseInt(document.getElementById('c2cStock').value) || 1;
-            const desc = document.getElementById('c2cDesc').value.trim() || 'Seminuevo en excelente estado.';
-            const icon = document.getElementById('c2cIcon').value;
-
-            let posts = getAllPosts();
-
-            if (editIdx >= 0) {
-                posts[editIdx] = { ...posts[editIdx], name, price, discount, stock, desc, icon };
-            } else {
-                posts.unshift({ id: Date.now(), name, price, discount, stock, desc, icon, owner: myEmail });
-            }
-
-            localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
-            resetForm();
-            renderMarketplace();
-        });
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderMarketplace();
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const adminLink = document.getElementById('adminNavLink');
+            const profileLink = document.getElementById('profileNavLink');
+            const loginWarning = document.getElementById('loginWarning');
+
+            if (!session || !session.isLoggedIn) {
+                if (loginWarning) loginWarning.style.display = 'block';
+                if (profileLink) {
+                    profileLink.textContent = "Iniciar Sesión";
+                    profileLink.href = "login.html";
+                }
+            } else {
+                if (session.role === 'Admin' && adminLink) {
+                    adminLink.style.display = 'inline-block';
+                }
+            }
+
+            renderPublicMarketplace();
 
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const badge = document.getElementById('cartCount');
             if (badge) badge.textContent = totalItems;
-
-            const session = JSON.parse(localStorage.getItem('strydr_session'));
-            const adminLink = document.getElementById('adminNavLink');
-            const profileLink = document.getElementById('profileNavLink');
-
-            if (session && session.isLoggedIn && session.role === 'Admin') {
-                if (adminLink) adminLink.style.display = 'inline-block';
-            } else {
-                if (adminLink) adminLink.style.display = 'none';
-                if (!session || !session.isLoggedIn) {
-                    if (profileLink) {
-                        profileLink.textContent = "Iniciar Sesión";
-                        profileLink.href = "login.html";
-                    }
-                }
-            }
         });
     </script>
 </body>
