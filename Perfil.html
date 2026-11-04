@@ -28,8 +28,8 @@
     <main class="container" style="padding-bottom: 4rem;">
         <section class="page-header">
             <h2>Mi Perfil de Usuario</h2>
-            <p class="subtitle">Gestiona tu información personal, tus publicaciones C2C de calzado y tu actividad
-                reciente.</p>
+            <p class="subtitle">Gestiona tu información personal, tus publicaciones C2C de calzado y tus reseñas de la
+                comunidad.</p>
         </section>
 
         <!-- TARJETA DE DATOS DE SESIÓN -->
@@ -58,20 +58,18 @@
             </ul>
         </div>
 
-        <!-- SECCIÓN EXCLUSIVA: GESTIÓN DE MIS PUBLICACIONES C2C (CREAR, EDITAR, BORRAR) -->
+        <!-- SECCIÓN 1: GESTIÓN DE MIS PUBLICACIONES C2C -->
         <section
             style="background: #fff; border: 1px solid #ddd; padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">
             <h2>👟 Mis Publicaciones C2C (Gestión de Calzado)</h2>
             <p style="color: #666; font-size: 0.9rem; margin-bottom: 2rem;">Aquí puedes publicar tus tenis, ajustar
-                precios, descuentos, stock o eliminarlos de la plataforma.</p>
+                precios, descuentos, stock o eliminarlos.</p>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-
-                <!-- FORMULARIO DE CREACIÓN / EDICIÓN PERSONAL -->
                 <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
-                    <h3 id="formTitle">➕ Publicar Nuevo Calzado</h3>
+                    <h3 id="formTitleC2C">➕ Publicar Nuevo Calzado</h3>
                     <form id="c2cForm" novalidate style="margin-top: 1rem;">
-                        <input type="hidden" id="editIndex" value="-1">
+                        <input type="hidden" id="editIndexC2C" value="-1">
 
                         <div style="margin-bottom: 1rem;">
                             <label style="display: block; font-size: 0.85rem; font-weight: bold;">Nombre del
@@ -121,18 +119,73 @@
                                 style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"></textarea>
                         </div>
 
-                        <button type="submit" id="btnSubmitForm" class="btn-primary"
+                        <button type="submit" id="btnSubmitC2C" class="btn-primary"
                             style="width: 100%; cursor: pointer;">Publicar Calzado</button>
-                        <button type="button" id="btnCancelEdit" onclick="resetForm()"
+                        <button type="button" id="btnCancelC2C" onclick="resetFormC2C()"
                             style="display: none; width: 100%; margin-top: 0.5rem; background: #7f8c8d; color: white; border: none; padding: 0.5rem; border-radius: 4px; cursor: pointer;">Cancelar
                             Edición</button>
                     </form>
                 </div>
 
-                <!-- LISTADO DE MIS CALZADOS CON DOBLE CONFIRMACIÓN -->
                 <div>
                     <h3>📋 Tus Anuncios Activos</h3>
                     <div id="myPostsList" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: GESTIÓN DE MIS RESEÑAS DE CALZADO (ABIERTA A COMUNIDAD / MODO ADMIN) -->
+        <section style="background: #fff; border: 1px solid #ddd; padding: 2rem; border-radius: 12px;">
+            <h2 id="reviewSectionTitle">💬 Mis Reseñas de Calzado en la Comunidad</h2>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 2rem;">Escribe o edita tus reseñas sobre los
+                modelos de Strydr. (Si eres Admin, puedes ver y moderar todas las reseñas).</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+
+                <!-- FORMULARIO DE RESEÑA -->
+                <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
+                    <h3 id="reviewFormTitle">✍️ Escribir Reseña de Calzado</h3>
+                    <form id="reviewForm" novalidate style="margin-top: 1rem;">
+                        <input type="hidden" id="editReviewIndex" value="-1">
+
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; font-size: 0.85rem; font-weight: bold;">Modelo de
+                                Calzado</label>
+                            <input type="text" id="revModel" placeholder="Ej. Strydr Velocity Pro"
+                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; font-size: 0.85rem; font-weight: bold;">Calificación</label>
+                            <select id="revStars"
+                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                                <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐ (5/5)</option>
+                                <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ (4/5)</option>
+                                <option value="⭐⭐⭐">⭐⭐⭐ (3/5)</option>
+                                <option value="⭐⭐">⭐⭐ (2/5)</option>
+                                <option value="⭐">⭐ (1/5)</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-size: 0.85rem; font-weight: bold;">Tu Opinión</label>
+                            <textarea id="revText" placeholder="Comparte tu experiencia con este modelo..." rows="3"
+                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+                        </div>
+
+                        <button type="submit" id="btnSubmitReview" class="btn-primary"
+                            style="width: 100%; cursor: pointer;">Publicar Reseña</button>
+                        <button type="button" id="btnCancelReview" onclick="resetReviewForm()"
+                            style="display: none; width: 100%; margin-top: 0.5rem; background: #7f8c8d; color: white; border: none; padding: 0.5rem; border-radius: 4px; cursor: pointer;">Cancelar
+                            Edición</button>
+                    </form>
+                </div>
+
+                <!-- LISTADO DE RESEÑAS (PROPIAS O TODAS SI ES ADMIN) -->
+                <div>
+                    <h3 id="reviewSubTitle">📋 Reseñas Registradas</h3>
+                    <div id="myReviewsList" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
                     </div>
                 </div>
 
@@ -147,6 +200,9 @@
     <script>
         const defaultUserEmail = "brayanlealcl1129@gmail.com";
 
+        // -------------------------------------------------------------
+        // GESTIÓN DE C2C (MIS PUBLICACIONES)
+        // -------------------------------------------------------------
         function getAllPosts() {
             const defaultPosts = [
                 { id: 1, name: "Adidas Ultraboost 21", price: 1650, discount: 0, stock: 2, desc: "Talla 27.5 MX, 9/10 de estética.", icon: "🏃", owner: "otros@strydr.com" },
@@ -161,8 +217,8 @@
             const session = JSON.parse(localStorage.getItem('strydr_session'));
             const myEmail = session ? session.email : defaultUserEmail;
 
-            const myPosts = allPosts.filter(p => p.owner === myEmail || p.owner === defaultUserEmail);
             const container = document.getElementById('myPostsList');
+            const myPosts = allPosts.filter(p => p.owner === myEmail || p.owner === defaultUserEmail);
 
             if (myPosts.length === 0) {
                 container.innerHTML = `<p style="color: #666; background: #f9f9f9; padding: 1rem; border-radius: 6px;">No tienes publicaciones activas en este momento.</p>`;
@@ -183,7 +239,6 @@
                             <div style="margin: 0.25rem 0;">
                                 ${discountPct > 0 ? `<span style="text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 0.4rem;">$${p.price}</span>` : ''}
                                 <span style="color: #e67e22; font-weight: bold; font-size: 1.1rem;">$${finalPrice.toLocaleString()} MXN</span>
-                                ${discountPct > 0 ? `<span style="background: #e74c3c; color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.7p; font-weight: bold; margin-left: 0.5rem;">-${discountPct}%</span>` : ''}
                             </div>
                             <small style="color: #666; display: block;">${p.desc}</small>
                             <small style="color: #27ae60; font-weight: bold; display: block; margin-top: 0.2rem;">⚡ Stock disponible: ${stockQty} pares</small>
@@ -201,7 +256,7 @@
             const posts = getAllPosts();
             const p = posts[index];
 
-            document.getElementById('editIndex').value = index;
+            document.getElementById('editIndexC2C').value = index;
             document.getElementById('c2cName').value = p.name;
             document.getElementById('c2cPrice').value = p.price;
             document.getElementById('c2cDiscount').value = p.discount || 0;
@@ -209,9 +264,9 @@
             document.getElementById('c2cDesc').value = p.desc;
             document.getElementById('c2cIcon').value = p.icon;
 
-            document.getElementById('formTitle').textContent = "✏️ Editar Calzado, Descuento y Stock";
-            document.getElementById('btnSubmitForm').textContent = "Guardar Cambios";
-            document.getElementById('btnCancelEdit').style.display = 'block';
+            document.getElementById('formTitleC2C').textContent = "✏️ Editar Calzado, Descuento y Stock";
+            document.getElementById('btnSubmitC2C').textContent = "Guardar Cambios";
+            document.getElementById('btnCancelC2C').style.display = 'block';
             window.scrollTo({ top: 350, behavior: 'smooth' });
         }
 
@@ -232,23 +287,19 @@
                     container.appendChild(cancelBtn);
                 }
             } else {
-                deletePost(index);
+                let posts = getAllPosts();
+                posts.splice(index, 1);
+                localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
+                renderMyProfilePosts();
             }
         }
 
-        function deletePost(index) {
-            let posts = getAllPosts();
-            posts.splice(index, 1);
-            localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
-            renderMyProfilePosts();
-        }
-
-        function resetForm() {
+        function resetFormC2C() {
             document.getElementById('c2cForm').reset();
-            document.getElementById('editIndex').value = "-1";
-            document.getElementById('formTitle').textContent = "➕ Publicar Nuevo Calzado";
-            document.getElementById('btnSubmitForm').textContent = "Publicar Calzado";
-            document.getElementById('btnCancelEdit').style.display = 'none';
+            document.getElementById('editIndexC2C').value = "-1";
+            document.getElementById('formTitleC2C').textContent = "➕ Publicar Nuevo Calzado";
+            document.getElementById('btnSubmitC2C').textContent = "Publicar Calzado";
+            document.getElementById('btnCancelC2C').style.display = 'none';
         }
 
         document.getElementById('c2cForm').addEventListener('submit', (e) => {
@@ -256,7 +307,7 @@
             const session = JSON.parse(localStorage.getItem('strydr_session'));
             const myEmail = session ? session.email : defaultUserEmail;
 
-            const editIdx = parseInt(document.getElementById('editIndex').value);
+            const editIdx = parseInt(document.getElementById('editIndexC2C').value);
             const name = document.getElementById('c2cName').value.trim() || 'Calzado Deportivo C2C';
             const price = parseFloat(document.getElementById('c2cPrice').value) || 1500;
             const discount = parseFloat(document.getElementById('c2cDiscount').value) || 0;
@@ -273,8 +324,139 @@
             }
 
             localStorage.setItem('strydr_c2c_posts', JSON.stringify(posts));
-            resetForm();
+            resetFormC2C();
             renderMyProfilePosts();
+        });
+
+
+        // -------------------------------------------------------------
+        // GESTIÓN DE RESEÑAS DE CALZADO DE LA COMUNIDAD (MODO USUARIO / ADMIN)
+        // -------------------------------------------------------------
+        function getUserReviews() {
+            const defaultReviews = [
+                { id: 1, model: "Strydr Velocity Pro", user: "Mateo_Runner", stars: "⭐⭐⭐⭐⭐", text: "Me encantó la amortiguación, los recomiendo ampliamente para running.", owner: "mateo@strydr.com" },
+                { id: 2, model: "Strydr Court King", user: "Brayan Camarillo", stars: "⭐⭐⭐⭐⭐", text: "Excelente soporte en duela, ideales para básquetbol.", owner: defaultUserEmail }
+            ];
+            return JSON.parse(localStorage.getItem('strydr_user_reviews')) || defaultReviews;
+        }
+
+        function renderUserReviewsProfile() {
+            const reviews = getUserReviews();
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const myEmail = session ? session.email : defaultUserEmail;
+            const isAdmin = session && session.isLoggedIn && session.role === 'Admin';
+
+            const container = document.getElementById('myReviewsList');
+            const titleElem = document.getElementById('reviewSectionTitle');
+            const subTitleElem = document.getElementById('reviewSubTitle');
+
+            if (isAdmin) {
+                titleElem.textContent = "💬 Moderación de Reseñas de la Comunidad (Modo Admin)";
+                subTitleElem.textContent = "📋 Todas las Reseñas Publicadas (Control Total)";
+            } else {
+                titleElem.textContent = "💬 Mis Reseñas de Calzado en la Comunidad";
+                subTitleElem.textContent = "📋 Tus Reseñas Publicadas";
+            }
+
+            // Si es Admin ve todas, si es usuario normal solo ve las suyas
+            const filteredReviews = isAdmin ? reviews : reviews.filter(r => r.owner === myEmail || r.owner === defaultUserEmail);
+
+            if (filteredReviews.length === 0) {
+                container.innerHTML = `<p style="color: #666; background: #f9f9f9; padding: 1rem; border-radius: 6px;">No tienes reseñas registradas.</p>`;
+                return;
+            }
+
+            container.innerHTML = reviews.map((r, globalIndex) => {
+                if (!isAdmin && r.owner !== myEmail && r.owner !== defaultUserEmail) return '';
+
+                return `
+                    <div style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px; background: white;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="background: #3498db; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">👟 ${r.model}</span>
+                            <span style="color: #f39c12; font-size: 0.9rem;">${r.stars}</span>
+                        </div>
+                        <p style="color: #444; margin: 0.5rem 0; font-size: 0.9rem;">"${r.text}"</p>
+                        <small style="color: #777; display: block; margin-bottom: 0.5rem;">Autor: <strong>${r.user}</strong></small>
+                        <div id="reviewActions-${globalIndex}" style="display: flex; gap: 0.5rem; align-items: center;">
+                            ${(isAdmin || r.owner === myEmail || r.owner === defaultUserEmail) ? `
+                                <button onclick="editReview(${globalIndex})" style="background: #3498db; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: bold;">Editar</button>
+                                <button onclick="confirmDeleteReview(this, ${globalIndex})" data-confirm="false" style="background: #e74c3c; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Eliminar</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function editReview(index) {
+            const reviews = getUserReviews();
+            const r = reviews[index];
+
+            document.getElementById('editReviewIndex').value = index;
+            document.getElementById('revModel').value = r.model;
+            document.getElementById('revStars').value = r.stars;
+            document.getElementById('revText').value = r.text;
+
+            document.getElementById('reviewFormTitle').textContent = "✏️ Editar Reseña";
+            document.getElementById('btnSubmitReview').textContent = "Guardar Cambios";
+            document.getElementById('btnCancelReview').style.display = 'block';
+            window.scrollTo({ top: 750, behavior: 'smooth' });
+        }
+
+        function confirmDeleteReview(btn, index) {
+            const container = document.getElementById(`reviewActions-${index}`);
+            if (btn.getAttribute('data-confirm') === 'false') {
+                btn.setAttribute('data-confirm', 'true');
+                btn.textContent = '¿Seguro de querer borrar esto?';
+                btn.style.background = '#c0392b';
+                btn.style.fontWeight = 'bold';
+
+                if (!document.getElementById(`cancelRev-${index}`)) {
+                    const cancelBtn = document.createElement('button');
+                    cancelBtn.id = `cancelRev-${index}`;
+                    cancelBtn.textContent = 'Cancelar';
+                    cancelBtn.style.cssText = 'background: #7f8c8d; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;';
+                    cancelBtn.onclick = () => renderUserReviewsProfile();
+                    container.appendChild(cancelBtn);
+                }
+            } else {
+                let reviews = getUserReviews();
+                reviews.splice(index, 1);
+                localStorage.setItem('strydr_user_reviews', JSON.stringify(reviews));
+                renderUserReviewsProfile();
+            }
+        }
+
+        function resetReviewForm() {
+            document.getElementById('reviewForm').reset();
+            document.getElementById('editReviewIndex').value = "-1";
+            document.getElementById('reviewFormTitle').textContent = "✍️ Escribir Reseña de Calzado";
+            document.getElementById('btnSubmitReview').textContent = "Publicar Reseña";
+            document.getElementById('btnCancelReview').style.display = 'none';
+        }
+
+        document.getElementById('reviewForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const myEmail = session ? session.email : defaultUserEmail;
+            const myName = session ? (session.name || session.email) : "Brayan Camarillo";
+
+            const editIdx = parseInt(document.getElementById('editReviewIndex').value);
+            const model = document.getElementById('revModel').value.trim() || 'Strydr Velocity Pro';
+            const stars = document.getElementById('revStars').value;
+            const text = document.getElementById('revText').value.trim() || 'Muy buen calzado.';
+
+            let reviews = getUserReviews();
+
+            if (editIdx >= 0) {
+                reviews[editIdx] = { ...reviews[editIdx], model, stars, text };
+            } else {
+                reviews.unshift({ id: Date.now(), model, user: myName, stars, text, owner: myEmail });
+            }
+
+            localStorage.setItem('strydr_user_reviews', JSON.stringify(reviews));
+            resetReviewForm();
+            renderUserReviewsProfile();
         });
 
         function logout() {
@@ -298,6 +480,7 @@
             document.getElementById('activeDiscountText').textContent = `${discount}% Activo`;
 
             renderMyProfilePosts();
+            renderUserReviewsProfile();
 
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);

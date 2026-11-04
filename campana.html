@@ -73,7 +73,7 @@
             </div>
         </section>
 
-        <!-- RESEÑAS Y TESTIMONIOS (DINÁMICOS DESDE EL ADMIN) -->
+        <!-- SECCIÓN 1: RESEÑAS OFICIALES (ADMIN) -->
         <section style="margin-bottom: 3.5rem;">
             <div style="text-align: center; margin-bottom: 2rem;">
                 <span
@@ -83,12 +83,27 @@
             </div>
 
             <div id="testimonialsContainer"
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-                <!-- Testimonios renderizados dinámicamente -->
-            </div>
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;"></div>
         </section>
 
-        <!-- MÓDULO DE CUPONES DE DESCUENTO (REDIRIGE AL CARRITO AL APLICAR) -->
+        <!-- SECCIÓN 2: RESEÑAS DE CALZADO DEJADAS POR LOS USUARIOS (DESDE EL PERFIL) -->
+        <section
+            style="margin-bottom: 3.5rem; background: #f9f9f9; padding: 2rem; border-radius: 12px; border: 1px solid #eee;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <span
+                    style="color: #3498db; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Comunidad
+                    Abierta</span>
+                <h2 style="font-size: 2rem; margin-top: 0.3rem;">Reseñas de Calzado por los Usuarios</h2>
+                <p style="color: #666; font-size: 0.9rem;">¿Quieres dejar tu propia opinión sobre un modelo? Dirígete a
+                    <a href="perfil.html" style="color: #e67e22; font-weight: bold;">Mi Perfil</a> para publicarla y
+                    gestionarla.</p>
+            </div>
+
+            <div id="userReviewsContainer"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;"></div>
+        </section>
+
+        <!-- MÓDULO DE CUPONES DE DESCUENTO -->
         <section
             style="background: #f9f9f9; border: 1px solid #eee; padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">
             <h3>🏷 Promociones Activas & Cupones</h3>
@@ -111,26 +126,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- MURO DE LA COMUNIDAD (CON DOBLE CONFIRMACIÓN Y BOTÓN CANCELAR) -->
-        <section style="background: #f4f4f4; padding: 2rem; border-radius: 12px;">
-            <h3>💬 Muro de la Comunidad</h3>
-            <p style="color: #666; font-size: 0.9rem;">Déjanos tus comentarios sobre la nueva colección.</p>
-
-            <form id="commentForm" novalidate style="margin: 1rem 0;">
-                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-                    <input type="text" id="commentUser" placeholder="Tu nombre"
-                        style="padding: 0.5rem; flex: 1; border: 1px solid #ccc; border-radius: 4px;">
-                </div>
-                <textarea id="commentText" placeholder="Escribe tu opinión aquí..." rows="3"
-                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
-                <button type="submit" class="btn-primary" style="margin-top: 0.5rem; cursor: pointer;">Publicar
-                    Comentario</button>
-            </form>
-
-            <div id="commentsList" style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
-            </div>
-        </section>
     </main>
 
     <footer class="footer" style="margin-top: 4rem;">
@@ -138,7 +133,7 @@
     </footer>
 
     <script>
-        // Carga de Testimonios Dinámicos
+        // Carga de Testimonios del Admin
         const defaultTestimonials = [
             { id: 1, name: "Carlos Rodríguez", role: "Maratonista Semi-Profesional", initials: "CR", color: "#e67e22", stars: "⭐⭐⭐⭐⭐", text: "La respuesta de la suela en distancias superiores a 21k es increíble. Ningún cansancio acumulado en las rodillas. Simplemente el mejor par que he usado este año." },
             { id: 2, name: "Andrea Mendoza", role: "Jugadora de Básquetbol Liga Estatal", initials: "AM", color: "#2980b9", stars: "⭐⭐⭐⭐⭐", text: "El agarre en duela del Court King me dio la estabilidad necesaria para mis saltos en cancha. La tracción lateral es de nivel profesional." },
@@ -166,7 +161,30 @@
             `).join('');
         }
 
-        // Manejo de Cupones con redirección automática al carrito
+        // Carga de Reseñas de Calzado dejadas por los Usuarios
+        function loadUserReviewsPublic() {
+            const defaultUserReviews = [
+                { id: 1, model: "Strydr Velocity Pro", user: "Mateo_Runner", stars: "⭐⭐⭐⭐⭐", text: "Me encantó la amortiguación, los recomiendo ampliamente para running." }
+            ];
+
+            const reviews = JSON.parse(localStorage.getItem('strydr_user_reviews')) || defaultUserReviews;
+            const container = document.getElementById('userReviewsContainer');
+
+            if (reviews.length === 0) {
+                container.innerHTML = `<p style="color: #666; text-align: center; grid-column: 1 / -1;">Aún no hay reseñas de calzado publicadas por la comunidad.</p>`;
+                return;
+            }
+
+            container.innerHTML = reviews.map(r => `
+                <div style="background: #ffffff; border: 1px solid #e1e1e1; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                    <span style="background: #3498db; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">👟 ${r.model}</span>
+                    <div style="color: #f39c12; font-size: 1rem; margin-top: 0.5rem;">${r.stars}</div>
+                    <p style="color: #444; line-height: 1.5; margin: 0.5rem 0 1rem 0; font-size: 0.95rem;">"${r.text}"</p>
+                    <small style="color: #777; font-weight: bold;">Por: ${r.user}</small>
+                </div>
+            `).join('');
+        }
+
         document.getElementById('couponForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const codeInput = document.getElementById('couponCode');
@@ -183,81 +201,10 @@
             window.location.href = 'carrito.html';
         });
 
-        // Muro de la Comunidad con doble confirmación y botón cancelar
-        function loadComments() {
-            const defaultComments = [
-                { user: "Mateo_Runner", text: "¡Esperando la llegada de los nuevos modelos de Training!" },
-                { user: "Sofia_Sneakers", text: "El envío llegó súper rápido, excelente calidad de calzado." }
-            ];
-
-            const stored = JSON.parse(localStorage.getItem('strydr_comments')) || defaultComments;
-            const container = document.getElementById('commentsList');
-
-            container.innerHTML = stored.map((c, index) => `
-                <div style="background: white; padding: 0.75rem 1rem; border-radius: 6px; border-left: 4px solid #e67e22; display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong>${c.user}</strong>
-                        <p style="margin: 0.25rem 0 0 0; color: #444; font-size: 0.95rem;">${c.text}</p>
-                    </div>
-                    <div id="actionContainer-${index}" style="display: flex; gap: 0.4rem; align-items: center;">
-                        <button onclick="confirmDeleteComment(this, ${index})" data-confirm="false" style="background: #e74c3c; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; white-space: nowrap; margin-left: 1rem;">Eliminar</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function confirmDeleteComment(btn, index) {
-            const container = document.getElementById(`actionContainer-${index}`);
-            if (btn.getAttribute('data-confirm') === 'false') {
-                btn.setAttribute('data-confirm', 'true');
-                btn.textContent = '¿Seguro de querer borrar esto?';
-                btn.style.background = '#c0392b';
-                btn.style.fontWeight = 'bold';
-
-                if (!document.getElementById(`cancelBtn-${index}`)) {
-                    const cancelBtn = document.createElement('button');
-                    cancelBtn.id = `cancelBtn-${index}`;
-                    cancelBtn.textContent = 'Cancelar';
-                    cancelBtn.style.cssText = 'background: #7f8c8d; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; white-space: nowrap;';
-                    cancelBtn.onclick = () => loadComments();
-                    container.appendChild(cancelBtn);
-                }
-            } else {
-                deleteComment(index);
-            }
-        }
-
-        function deleteComment(index) {
-            let stored = JSON.parse(localStorage.getItem('strydr_comments')) || [];
-            stored.splice(index, 1);
-            localStorage.setItem('strydr_comments', JSON.stringify(stored));
-            loadComments();
-        }
-
-        document.getElementById('commentForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const userInput = document.getElementById('commentUser');
-            const textInput = document.getElementById('commentText');
-
-            const user = userInput.value.trim() || 'Atleta Strydr';
-            const text = textInput.value.trim() || '¡Excelente calidad de calzado deportivo!';
-
-            let stored = JSON.parse(localStorage.getItem('strydr_comments')) || [
-                { user: "Mateo_Runner", text: "¡Esperando la llegada de los nuevos modelos de Training!" },
-                { user: "Sofia_Sneakers", text: "El envío llegó súper rápido, excelente calidad de calzado." }
-            ];
-
-            stored.unshift({ user, text });
-            localStorage.setItem('strydr_comments', JSON.stringify(stored));
-
-            userInput.value = '';
-            textInput.value = '';
-            loadComments();
-        });
-
         document.addEventListener('DOMContentLoaded', () => {
             loadTestimonials();
-            loadComments();
+            loadUserReviewsPublic();
+
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const badge = document.getElementById('cartCount');
