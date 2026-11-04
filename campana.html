@@ -73,7 +73,7 @@
             </div>
         </section>
 
-        <!-- RESEÑAS Y TESTIMONIOS -->
+        <!-- RESEÑAS Y TESTIMONIOS (DINÁMICOS DESDE EL ADMIN) -->
         <section style="margin-bottom: 3.5rem;">
             <div style="text-align: center; margin-bottom: 2rem;">
                 <span
@@ -84,16 +84,16 @@
 
             <div id="testimonialsContainer"
                 style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-                <!-- Testimonios dinámicos -->
+                <!-- Testimonios renderizados dinámicamente -->
             </div>
         </section>
 
-        <!-- MÓDULO DE CUPONES DE DESCUENTO -->
+        <!-- MÓDULO DE CUPONES DE DESCUENTO (REDIRIGE AL CARRITO AL APLICAR) -->
         <section
             style="background: #f9f9f9; border: 1px solid #eee; padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">
             <h3>🏷 Promociones Activas & Cupones</h3>
-            <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Ingresa un código de promoción para aplicar
-                un descuento directo en tu carrito:</p>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Ingresa un código de promoción para
+                aplicarlo y verificarlo en tu carrito:</p>
 
             <form id="couponForm" novalidate style="display: flex; gap: 0.5rem; max-width: 420px;">
                 <input type="text" id="couponCode" placeholder="Ej. STRYDR10 o 2X1SPECIAL"
@@ -101,10 +101,6 @@
                 <button type="submit" class="btn-primary"
                     style="cursor: pointer; padding: 0.6rem 1.5rem;">Aplicar</button>
             </form>
-
-            <div id="couponNotice" class="alert success"
-                style="display: none; margin-top: 1rem; background: #2ecc71; color: white; padding: 0.75rem; border-radius: 6px; font-weight: bold;">
-            </div>
 
             <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
                 <div style="background: #fff; border: 1px dashed #e74c3c; padding: 0.75rem 1rem; border-radius: 6px;">
@@ -116,7 +112,7 @@
             </div>
         </section>
 
-        <!-- MURO DE LA COMUNIDAD CON CONFIRMACIÓN Y BOTÓN DE CANCELAR -->
+        <!-- MURO DE LA COMUNIDAD (CON DOBLE CONFIRMACIÓN Y BOTÓN CANCELAR) -->
         <section style="background: #f4f4f4; padding: 2rem; border-radius: 12px;">
             <h3>💬 Muro de la Comunidad</h3>
             <p style="color: #666; font-size: 0.9rem;">Déjanos tus comentarios sobre la nueva colección.</p>
@@ -142,6 +138,7 @@
     </footer>
 
     <script>
+        // Carga de Testimonios Dinámicos
         const defaultTestimonials = [
             { id: 1, name: "Carlos Rodríguez", role: "Maratonista Semi-Profesional", initials: "CR", color: "#e67e22", stars: "⭐⭐⭐⭐⭐", text: "La respuesta de la suela en distancias superiores a 21k es increíble. Ningún cansancio acumulado en las rodillas. Simplemente el mejor par que he usado este año." },
             { id: 2, name: "Andrea Mendoza", role: "Jugadora de Básquetbol Liga Estatal", initials: "AM", color: "#2980b9", stars: "⭐⭐⭐⭐⭐", text: "El agarre en duela del Court King me dio la estabilidad necesaria para mis saltos en cancha. La tracción lateral es de nivel profesional." },
@@ -169,11 +166,11 @@
             `).join('');
         }
 
+        // Manejo de Cupones con redirección automática al carrito
         document.getElementById('couponForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const codeInput = document.getElementById('couponCode');
             const code = codeInput.value.trim().toUpperCase() || 'STRYDR10';
-            const notice = document.getElementById('couponNotice');
 
             let pct = 10;
             if (code === '2X1SPECIAL') pct = 50;
@@ -183,16 +180,10 @@
             localStorage.setItem('strydr_discount', pct);
             localStorage.setItem('strydr_discount_code', code);
 
-            notice.textContent = `¡Cupón ${code} aplicado (${pct}% de descuento)!`;
-            notice.style.display = 'block';
-            codeInput.value = '';
-
-            setTimeout(() => {
-                notice.style.display = 'none';
-            }, 3000);
+            window.location.href = 'carrito.html';
         });
 
-        // CARGA Y ACCIONES DE BORRADO / CANCELACIÓN EN EL MURO
+        // Muro de la Comunidad con doble confirmación y botón cancelar
         function loadComments() {
             const defaultComments = [
                 { user: "Mateo_Runner", text: "¡Esperando la llegada de los nuevos modelos de Training!" },
@@ -223,7 +214,6 @@
                 btn.style.background = '#c0392b';
                 btn.style.fontWeight = 'bold';
 
-                // Añadir botón Cancelar si aún no existe
                 if (!document.getElementById(`cancelBtn-${index}`)) {
                     const cancelBtn = document.createElement('button');
                     cancelBtn.id = `cancelBtn-${index}`;
