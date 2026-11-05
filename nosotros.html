@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strydr | Nosotros</title>
+    <title>Strydr | Sobre Nosotros</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
@@ -19,55 +19,75 @@
             <a href="publicar.html">Vender (C2C)</a>
             <a href="subasta.html">Subasta</a>
             <a href="carrito.html">Carrito <span class="cart-badge" id="cartCount">0</span></a>
-            <a href="perfil.html" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi
-                Perfil</a>
-            <a href="admin.html" style="font-size: 0.85rem; opacity: 0.8;">Admin</a>
+            <a href="perfil.html" id="profileNavLink" class="btn-secondary"
+                style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Mi Perfil</a>
+            <a href="admin.html" id="adminNavLink" style="font-size: 0.85rem; opacity: 0.8; display: none;">Admin</a>
         </nav>
     </header>
 
     <main class="container">
-        <section class="page-header">
+        <section class="page-header" style="text-align: center; margin-top: 2rem;">
             <h2>Sobre Nosotros</h2>
             <p class="subtitle">Conoce la historia detrás de la zancada perfecta.</p>
         </section>
 
-        <div class="card-grid">
-            <div class="info-card">
-                <h3>Nuestra Historia</h3>
-                <p>Strydr nació de la idea de que el calzado deportivo no debería ser solo funcional, sino parte de tu
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem;">
+            <div style="background: white; border: 1px solid #ddd; padding: 2rem; border-radius: 8px;">
+                <h3 style="color: #e67e22; margin-bottom: 1rem;">Nuestra Historia</h3>
+                <p style="color: #666; line-height: 1.6;">
+                    Strydr nació de la idea de que el calzado deportivo no debería ser solo funcional, sino parte de tu
                     identidad. Desde 2024 seleccionamos modelos de running, básquetbol y estilo urbano para acompañarte
-                    en cada meta que te propongas alcanzar.</p>
+                    en cada meta que te propongas alcanzar.
+                </p>
             </div>
 
-            <div class="info-card">
-                <h3>Misión</h3>
-                <p>Ofrecer calzado deportivo de calidad superior, cómodo y con estilo innovador, manteniéndolo accesible
-                    para cualquier tipo de atleta y apasionado del deporte.</p>
+            <div style="background: white; border: 1px solid #ddd; padding: 2rem; border-radius: 8px;">
+                <h3 style="color: #e67e22; margin-bottom: 1rem;">Misión</h3>
+                <p style="color: #666; line-height: 1.6;">
+                    Ofrecer calzado deportivo de calidad superior, cómodo y con estilo innovador, manteniéndolo
+                    accesible para cualquier tipo de atleta y apasionado del deporte.
+                </p>
             </div>
 
-            <div class="info-card">
-                <h3>Ubicación y Horarios</h3>
-                <p><strong>Sede Central:</strong> Av. Adolfo López Mateos #120, Aguascalientes, Ags.</p>
-                <p><strong>Horario:</strong> Lunes a Sábado de 10:00 a 21:00 hrs.</p>
-                <p><strong>Teléfono:</strong> +52 (449) 468-0659</p>
+            <div style="background: white; border: 1px solid #ddd; padding: 2rem; border-radius: 8px;">
+                <h3 style="color: #e67e22; margin-bottom: 1rem;">Ubicación y Horarios</h3>
+                <p style="color: #666; line-height: 1.6;">
+                    <strong>Sede Central:</strong> Av. Adolfo López Mateos #120, Aguascalientes, Ags.<br>
+                    <strong>Horario:</strong> Lunes a Sábado de 10:00 a 21:00 hrs.<br>
+                    <strong>Teléfono:</strong> +52 (449) 468-0659
+                </p>
             </div>
         </div>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" style="margin-top: 5rem;">
         <p>&copy; 2026 Strydr Inc. Todos los derechos reservados.</p>
     </footer>
 
     <script>
-        // Sincronización dinámica del contador del carrito
         document.addEventListener('DOMContentLoaded', () => {
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const badge = document.getElementById('cartCount');
             if (badge) badge.textContent = totalItems;
+
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const adminLink = document.getElementById('adminNavLink');
+            const profileLink = document.getElementById('profileNavLink');
+
+            if (session && session.isLoggedIn) {
+                if (session.role === 'Admin' && adminLink) {
+                    adminLink.style.display = 'inline-block';
+                }
+            } else {
+                if (profileLink) {
+                    profileLink.textContent = "Iniciar Sesión";
+                    profileLink.href = "login.html";
+                }
+            }
         });
     </script>
-
 </body>
 
 </html>
