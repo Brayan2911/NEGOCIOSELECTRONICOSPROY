@@ -28,8 +28,8 @@
     <main class="container" style="padding-bottom: 4rem;">
         <section class="page-header">
             <h2>Carrito de Compras y Pasarela de Pago</h2>
-            <p class="subtitle">Selecciona tu método de pago, completa los datos y genera tu factura digital
-                instantánea.</p>
+            <p class="subtitle">Selecciona tu método de pago, completa los datos y visualiza tu ticket o factura digital
+                en pantalla.</p>
         </section>
 
         <!-- CONTENEDOR PRINCIPAL DEL CARRITO / PAGO / TICKET -->
@@ -108,8 +108,8 @@
                         
                         <div style="margin: 1rem 0; display: flex; gap: 1rem;">
                             <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="Tarjeta" checked onclick="togglePaymentFields('card')"> Tarjeta</label>
-                            <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="PayPal" onclick="togglePaymentFields('paypal')"> PayPal</label>
-                            <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="OXXO" onclick="togglePaymentFields('oxxo')"> OXXO Pay</label>
+                            <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="Transferencia" onclick="togglePaymentFields('transfer')"> Transferencia</label>
+                            <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="E-wallet" onclick="togglePaymentFields('ewallet')"> E-wallet (Saldo)</label>
                         </div>
 
                         <div id="paymentFormFields" style="background: white; padding: 1rem; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 1.5rem;">
@@ -140,7 +140,7 @@
                                 <strong>$${finalTotal.toLocaleString()} MXN</strong>
                             </div>
                         </div>
-                        <button onclick="processCheckout(${finalTotal})" class="btn-primary" style="width: 100%; cursor: pointer; padding: 0.75rem; font-size: 1rem; font-weight: bold;">Confirmar Pago y Facturar</button>
+                        <button onclick="processCheckout(${finalTotal})" class="btn-primary" style="width: 100%; cursor: pointer; padding: 0.75rem; font-size: 1rem; font-weight: bold;">Pagar / Confirmar Compra</button>
                     </div>
                 </div>
             `;
@@ -151,19 +151,20 @@
             const fields = document.getElementById('paymentFormFields');
             if (type === 'card') {
                 fields.innerHTML = `
+                    <div style="margin-bottom: 0.75rem;"><label style="font-size:0.8rem; font-weight:bold;">Nombre del Titular</label><input type="text" placeholder="Ej. Brayan Camarillo" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
                     <div style="margin-bottom: 0.75rem;"><label style="font-size:0.8rem; font-weight:bold;">Número de Tarjeta</label><input type="text" placeholder="4532 •••• •••• 8921" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
                     <div style="display:flex; gap:0.5rem;">
                         <div><label style="font-size:0.8rem; font-weight:bold;">Exp.</label><input type="text" placeholder="MM/AA" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
                         <div><label style="font-size:0.8rem; font-weight:bold;">CVV</label><input type="password" placeholder="123" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
                     </div>
                 `;
-            } else if (type === 'paypal') {
+            } else if (type === 'transfer') {
                 fields.innerHTML = `
-                    <div style="margin-bottom: 0.5rem;"><label style="font-size:0.8rem; font-weight:bold;">Correo Electrónico PayPal</label><input type="email" placeholder="usuario@paypal.com" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
+                    <p style="font-size: 0.85rem; color: #555; margin:0;"><strong>CLABE Interbancaria:</strong> 012345678901234567<br><strong>Banco:</strong> Strydr Bank<br>El pago se valida automáticamente al confirmar.</p>
                 `;
             } else {
                 fields.innerHTML = `
-                    <p style="font-size: 0.85rem; color: #555; margin:0;">Se generará una referencia numérica de pago en efectivo para OXXO Pay con vigencia de 24 horas.</p>
+                    <p style="font-size: 0.85rem; color: #555; margin:0;"><strong>Saldo Disponible en E-wallet:</strong> $15,400.00 MXN<br>Se descontará el total de tu saldo simulado actual.</p>
                 `;
             }
         }
@@ -193,7 +194,7 @@
             localStorage.removeItem('strydr_cart');
             localStorage.removeItem('strydr_discount');
 
-            // Renderizar el Ticket en pantalla (Factura digital)
+            // Renderizar el Ticket / Factura digital exclusivamente en pantalla
             renderTicketScreen(newTicket);
         }
 
@@ -210,15 +211,15 @@
             container.innerHTML = `
                 <div style="max-width: 600px; margin: 0 auto; background: white; border: 2px solid #333; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
                     <div style="text-align: center; border-bottom: 2px dashed #ccc; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
-                        <h2 style="margin:0; font-size:1.8rem;">STRYDR INC.</h2>
-                        <p style="margin:0.2rem 0; color:#666; font-size:0.85rem;">Comprobante Fiscal Digital / Ticket de Compra</p>
+                        <span style="background: #27ae60; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Pago Aprobado ✔</span>
+                        <h2 style="margin:0.5rem 0 0 0; font-size:1.8rem;">STRYDR INC.</h2>
+                        <p style="margin:0.2rem 0; color:#666; font-size:0.85rem;">Factura / Comprobante Electrónico</p>
                         <strong style="color: #e67e22; font-size: 1.1rem; display:block; margin-top:0.5rem;">Folio: ${ticket.id}</strong>
                     </div>
 
                     <div style="margin-bottom: 1.5rem; font-size: 0.9rem; color: #444;">
                         <p style="margin:0.2rem 0;"><strong>Fecha y Hora:</strong> ${ticket.date}</p>
                         <p style="margin:0.2rem 0;"><strong>Método de Pago:</strong> ${ticket.method}</p>
-                        <p style="margin:0.2rem 0;"><strong>Estado:</strong> Pagado con Éxito ✔</p>
                     </div>
 
                     <div style="border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1rem 0; margin-bottom: 1.5rem;">
@@ -232,27 +233,11 @@
                     </div>
 
                     <div style="display: flex; gap: 1rem; justify-content: center;">
-                        <button onclick="downloadTicketFile('${ticket.id}', '${ticket.date}', ${ticket.total}, '${ticket.method}')" class="btn-primary" style="cursor: pointer; padding: 0.7rem 1.5rem; font-weight: bold;">📥 Descargar Factura (TXT)</button>
-                        <a href="perfil.html" class="btn-secondary" style="text-decoration:none; padding: 0.7rem 1.5rem; background:#7f8c8d; color:white; border-radius:6px; font-weight:bold;">Ver en Mis Compras (Perfil)</a>
+                        <a href="perfil.html" class="btn-primary" style="text-decoration:none; padding: 0.7rem 2rem; font-weight: bold; border-radius:6px;">Ver en Mis Compras (Perfil)</a>
                     </div>
                 </div>
             `;
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Función para descargar el ticket como archivo sin abrir ventanas nuevas
-        function downloadTicketFile(id, date, total, method) {
-            const textContent = `========================================\n           STRYDR INC. - FACTURA\n========================================\nFolio: ${id}\nFecha: ${date}\nMétodo: ${method}\nTotal Pagado: $${total.toLocaleString()} MXN\n========================================\n¡Gracias por tu compra en Strydr!`;
-
-            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${id}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
         }
 
         function updateQuantity(index, newQty) {
