@@ -28,7 +28,7 @@
     <main class="container" style="padding-bottom: 4rem;">
         <section class="page-header">
             <h2>Mi Perfil de Usuario</h2>
-            <p class="subtitle">Gestiona tu información personal, tus publicaciones C2C de calzado y tus reseñas de la
+            <p class="subtitle">Gestiona tus compras, historial de tickets/facturas, publicaciones C2C y reseñas de la
                 comunidad.</p>
         </section>
 
@@ -53,17 +53,28 @@
             style="background: #f9f9f9; border: 1px solid #eee; padding: 1.5rem; border-radius: 8px; max-width: 600px; margin: 0 auto 3rem auto;">
             <h3>Resumen de Actividad</h3>
             <ul style="list-style: none; padding: 0; margin: 1rem 0 0 0; line-height: 2;">
-                <li>📦 <strong>Compras Realizadas:</strong> 0 pedidos</li>
                 <li>🏷 <strong>Descuento Promocional:</strong> <span id="activeDiscountText">0% Activo</span></li>
             </ul>
         </div>
 
-        <!-- SECCIÓN 1: GESTIÓN DE MIS PUBLICACIONES C2C -->
+        <!-- SECCIÓN: HISTORIAL DE COMPRAS Y TICKETS / FACTURAS -->
+        <section
+            style="background: #fff; border: 1px solid #ddd; padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">
+            <h2>📦 Mis Compras y Tickets Generados</h2>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">Consulta y descarga tus comprobantes
+                fiscales y tickets de pago generados en la pasarela.</p>
+
+            <div id="purchasesHistoryList" style="display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Carga dinámica -->
+            </div>
+        </section>
+
+        <!-- SECCIÓN: GESTIÓN DE MIS PUBLICACIONES C2C -->
         <section
             style="background: #fff; border: 1px solid #ddd; padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">
             <h2>👟 Mis Publicaciones C2C (Gestión de Calzado)</h2>
-            <p style="color: #666; font-size: 0.9rem; margin-bottom: 2rem;">Aquí puedes publicar tus tenis, ajustar
-                precios, descuentos, stock o eliminarlos.</p>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 2rem;">Publica tus tenis, ajusta precios,
+                descuentos, stock o elimina tus anuncios.</p>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
                 <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
@@ -135,15 +146,13 @@
             </div>
         </section>
 
-        <!-- SECCIÓN 2: GESTIÓN DE MIS RESEÑAS DE CALZADO (ABIERTA A COMUNIDAD / MODO ADMIN) -->
+        <!-- SECCIÓN: GESTIÓN DE RESEÑAS DE CALZADO DE LA COMUNIDAD -->
         <section style="background: #fff; border: 1px solid #ddd; padding: 2rem; border-radius: 12px;">
             <h2 id="reviewSectionTitle">💬 Mis Reseñas de Calzado en la Comunidad</h2>
             <p style="color: #666; font-size: 0.9rem; margin-bottom: 2rem;">Escribe o edita tus reseñas sobre los
-                modelos de Strydr. (Si eres Admin, puedes ver y moderar todas las reseñas).</p>
+                modelos de Strydr (los administradores pueden moderar todas).</p>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-
-                <!-- FORMULARIO DE RESEÑA -->
                 <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
                     <h3 id="reviewFormTitle">✍️ Escribir Reseña de Calzado</h3>
                     <form id="reviewForm" novalidate style="margin-top: 1rem;">
@@ -163,8 +172,6 @@
                                 <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐ (5/5)</option>
                                 <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ (4/5)</option>
                                 <option value="⭐⭐⭐">⭐⭐⭐ (3/5)</option>
-                                <option value="⭐⭐">⭐⭐ (2/5)</option>
-                                <option value="⭐">⭐ (1/5)</option>
                             </select>
                         </div>
 
@@ -182,13 +189,11 @@
                     </form>
                 </div>
 
-                <!-- LISTADO DE RESEÑAS (PROPIAS O TODAS SI ES ADMIN) -->
                 <div>
                     <h3 id="reviewSubTitle">📋 Reseñas Registradas</h3>
                     <div id="myReviewsList" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
                     </div>
                 </div>
-
             </div>
         </section>
     </main>
@@ -200,9 +205,46 @@
     <script>
         const defaultUserEmail = "brayanlealcl1129@gmail.com";
 
-        // -------------------------------------------------------------
-        // GESTIÓN DE C2C (MIS PUBLICACIONES)
-        // -------------------------------------------------------------
+        // HISTORIAL DE COMPRAS
+        function renderPurchasesHistory() {
+            const purchases = JSON.parse(localStorage.getItem('strydr_purchases')) || [];
+            const container = document.getElementById('purchasesHistoryList');
+
+            if (purchases.length === 0) {
+                container.innerHTML = `<p style="color: #666; background: #f9f9f9; padding: 1rem; border-radius: 6px;">Aún no has registrado ninguna compra en la plataforma.</p>`;
+                return;
+            }
+
+            container.innerHTML = purchases.map(p => `
+                <div style="border: 1px solid #e1e1e1; padding: 1.25rem; border-radius: 8px; background: #fafafa; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <strong style="color: #e67e22; font-size: 1.05rem;">${p.id}</strong><br>
+                        <small style="color: #666;">Fecha: ${p.date} | Método: ${p.method}</small>
+                        <p style="margin: 0.3rem 0 0 0; font-size: 0.85rem; color: #444;">${p.items.length} producto(s) adquirido(s)</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-weight: bold; font-size: 1.1rem; color: #27ae60;">$${p.total.toLocaleString()} MXN</span>
+                        <button onclick="downloadExistingTicket('${p.id}', '${p.date}', ${p.total}, '${p.method}')" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; cursor: pointer;">Descargar Ticket</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function downloadExistingTicket(id, date, total, method) {
+            const textContent = `========================================\n           STRYDR INC. - FACTURA\n========================================\nFolio: ${id}\nFecha: ${date}\nMétodo: ${method}\nTotal Pagado: $${total.toLocaleString()} MXN\n========================================\n¡Gracias por tu compra en Strydr!`;
+
+            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${id}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // GESTIÓN DE C2C
         function getAllPosts() {
             const defaultPosts = [
                 { id: 1, name: "Adidas Ultraboost 21", price: 1650, discount: 0, stock: 2, desc: "Talla 27.5 MX, 9/10 de estética.", icon: "🏃", owner: "otros@strydr.com" },
@@ -328,10 +370,7 @@
             renderMyProfilePosts();
         });
 
-
-        // -------------------------------------------------------------
-        // GESTIÓN DE RESEÑAS DE CALZADO DE LA COMUNIDAD (MODO USUARIO / ADMIN)
-        // -------------------------------------------------------------
+        // GESTIÓN DE RESEÑAS DE COMUNIDAD
         function getUserReviews() {
             const defaultReviews = [
                 { id: 1, model: "Strydr Velocity Pro", user: "Mateo_Runner", stars: "⭐⭐⭐⭐⭐", text: "Me encantó la amortiguación, los recomiendo ampliamente para running.", owner: "mateo@strydr.com" },
@@ -356,14 +395,6 @@
             } else {
                 titleElem.textContent = "💬 Mis Reseñas de Calzado en la Comunidad";
                 subTitleElem.textContent = "📋 Tus Reseñas Publicadas";
-            }
-
-            // Si es Admin ve todas, si es usuario normal solo ve las suyas
-            const filteredReviews = isAdmin ? reviews : reviews.filter(r => r.owner === myEmail || r.owner === defaultUserEmail);
-
-            if (filteredReviews.length === 0) {
-                container.innerHTML = `<p style="color: #666; background: #f9f9f9; padding: 1rem; border-radius: 6px;">No tienes reseñas registradas.</p>`;
-                return;
             }
 
             container.innerHTML = reviews.map((r, globalIndex) => {
@@ -400,7 +431,7 @@
             document.getElementById('reviewFormTitle').textContent = "✏️ Editar Reseña";
             document.getElementById('btnSubmitReview').textContent = "Guardar Cambios";
             document.getElementById('btnCancelReview').style.display = 'block';
-            window.scrollTo({ top: 750, behavior: 'smooth' });
+            window.scrollTo({ top: 950, behavior: 'smooth' });
         }
 
         function confirmDeleteReview(btn, index) {
@@ -479,6 +510,7 @@
             const discount = localStorage.getItem('strydr_discount') || '0';
             document.getElementById('activeDiscountText').textContent = `${discount}% Activo`;
 
+            renderPurchasesHistory();
             renderMyProfilePosts();
             renderUserReviewsProfile();
 
