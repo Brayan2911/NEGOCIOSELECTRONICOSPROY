@@ -47,3 +47,5 @@ Strydr/
 2. **Promoción:** Aplicación opcional de cupón de descuento (`campana.html`).
 3. **Checkout (`carrito.html`):** Captura de dirección de envío, selección de método de pago y confirmación.
 4. **Comprobante e Historial (`perfil.html`):** Visualización inmediata de la factura electrónica y consulta posterior en el historial de compras.
+
+.FIN
