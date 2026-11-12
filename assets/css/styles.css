@@ -498,3 +498,9 @@ button,
 .nav-links a {
   transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(230, 126, 34, 0.35);
+  filter: brightness(1.05);
+}
