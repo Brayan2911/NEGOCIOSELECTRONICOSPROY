@@ -64,7 +64,8 @@
             <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">Consulta tu historial de pedidos, abre el
                 detalle de cada factura electrónica o descarga el PDF simulado.</p>
 
-            <div id="purchasesHistoryList" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+            <div id="purchasesHistoryList" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            </div>
         </section>
 
         <!-- SECCIÓN: GESTIÓN DE MIS PUBLICACIONES C2C -->
@@ -218,15 +219,27 @@
     <script>
         const defaultUserEmail = "brayanlealcl1129@gmail.com";
 
-        // HISTORIAL DE COMPRAS Y TICKETS
+        // HISTORIAL DE COMPRAS Y TICKETS (CON DATOS DE EJEMPLO PRECARGADOS)
         function renderPurchasesHistory() {
-            const purchases = JSON.parse(localStorage.getItem('strydr_purchases')) || [];
-            const container = document.getElementById('purchasesHistoryList');
+            let purchases = JSON.parse(localStorage.getItem('strydr_purchases'));
 
-            if (purchases.length === 0) {
-                container.innerHTML = `<p style="color: #666; background: #f9f9f9; padding: 1rem; border-radius: 6px;">Aún no has registrado ninguna compra en la plataforma.</p>`;
-                return;
+            // Si no hay compras guardadas, precargamos un ticket de ejemplo para que la sección nunca luzca vacía
+            if (!purchases || purchases.length === 0) {
+                purchases = [
+                    {
+                        id: "STRYDR-FAC-849201",
+                        date: "12/11/2026, 10:30:15",
+                        customer: { name: "Brayan Camarillo", street: "Av. López Mateos #120", city: "Aguascalientes", cp: "20000" },
+                        items: [{ name: "Strydr Velocity Pro", quantity: 1, price: 2499 }],
+                        total: 2249.1,
+                        method: "Tarjeta (Débito)",
+                        status: "Aprobado ✔"
+                    }
+                ];
+                localStorage.setItem('strydr_purchases', JSON.stringify(purchases));
             }
+
+            const container = document.getElementById('purchasesHistoryList');
 
             container.innerHTML = purchases.map((p, idx) => `
                 <div style="border: 1px solid #e1e1e1; padding: 1.25rem; border-radius: 8px; background: #fafafa; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
@@ -260,7 +273,7 @@
                     <strong style="color: #e67e22;">Folio: ${p.id}</strong>
                 </div>
                 <p style="margin:0.2rem 0; font-size:0.9rem;"><strong>Cliente:</strong> ${p.customer ? p.customer.name : 'N/A'}</p>
-                <p style="margin:0.2rem 0; font-size:0.9rem;"><strong>Dirección:</strong> ${p.customer ? p.customer.street + ', ' + p.customer.city : 'N/A'}</p>
+                <p style="margin:0.2rem 0; font-size:0.9rem;"><strong>Dirección:</strong> ${p.customer ? p.customer.street + ', ' + p.customer.city + ' (C.P. ' + p.customer.cp + ')' : 'N/A'}</p>
                 <p style="margin:0.2rem 0; font-size:0.9rem;"><strong>Fecha:</strong> ${p.date}</p>
                 <p style="margin:0.2rem 0; font-size:0.9rem;"><strong>Método de Pago:</strong> ${p.method}</p>
                 <div style="border-top:1px solid #eee; border-bottom:1px solid #eee; padding:0.75rem 0; margin:1rem 0;">
@@ -502,4 +515,63 @@
             document.getElementById('editReviewIndex').value = "-1";
             document.getElementById('reviewFormTitle').textContent = "✍️ Escribir Reseña de Calzado";
             document.getElementById('btnSubmitReview').textContent = "Publicar Reseña";
-            document.getElementById('btnCancelReview').style.
+            document.getElementById('btnCancelReview').style.display = 'none';
+        }
+
+        document.getElementById('reviewForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const myEmail = session ? session.email : defaultUserEmail;
+            const myName = session ? (session.name || session.email) : "Brayan Camarillo";
+
+            const editIdx = parseInt(document.getElementById('editReviewIndex').value);
+            const model = document.getElementById('revModel').value.trim() || 'Strydr Velocity Pro';
+            const stars = document.getElementById('revStars').value;
+            const text = document.getElementById('revText').value.trim() || 'Muy buen calzado.';
+
+            let reviews = getUserReviews();
+
+            if (editIdx >= 0) {
+                reviews[editIdx] = { ...reviews[editIdx], model, stars, text };
+            } else {
+                reviews.unshift({ id: Date.now(), model, user: myName, stars, text, owner: myEmail });
+            }
+
+            localStorage.setItem('strydr_user_reviews', JSON.stringify(reviews));
+            resetReviewForm();
+            renderUserReviewsProfile();
+        });
+
+        function logout() {
+            localStorage.removeItem('strydr_session');
+            window.location.href = 'login.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            if (session && session.isLoggedIn) {
+                document.getElementById('userNameDisplay').textContent = session.name || session.email;
+                document.getElementById('userEmailDisplay').textContent = session.email;
+                document.getElementById('userRoleBadge').textContent = `Rol: ${session.role}`;
+                if (session.role === 'Admin') {
+                    const adminLink = document.getElementById('adminNavLink');
+                    if (adminLink) adminLink.style.display = 'inline-block';
+                }
+            }
+
+            const discount = localStorage.getItem('strydr_discount') || '0';
+            document.getElementById('activeDiscountText').textContent = `${discount}% Activo`;
+
+            renderPurchasesHistory();
+            renderMyProfilePosts();
+            renderUserReviewsProfile();
+
+            const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) badge.textContent = totalItems;
+        });
+    </script>
+</body>
+
+</html>
