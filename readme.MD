@@ -36,3 +36,7 @@ Strydr/
 
 ## Versión de Entrega
 * **Versión:** 1.0.0 (Bloque 4 completado — Checkout, Facturación Digital e Historial).        
+
+## Credenciales de Demostración
+* **Rol Usuario (`User`):** `brayanlealcl1129@gmail.com`
+* **Rol Administrador (`Admin`):** Iniciar sesión seleccionando el rol `Admin` en `login.html` para habilitar moderación global.
