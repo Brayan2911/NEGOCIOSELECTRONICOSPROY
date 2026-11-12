@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strydr | Carrito y Pago</title>
+    <title>Strydr | Checkout y Pago</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
@@ -27,12 +27,11 @@
 
     <main class="container" style="padding-bottom: 4rem;">
         <section class="page-header">
-            <h2>Carrito de Compras y Pasarela de Pago</h2>
-            <p class="subtitle">Selecciona tu método de pago, completa los datos y visualiza tu ticket o factura digital
-                en pantalla.</p>
+            <h2>Pasarela de Checkout y Pago</h2>
+            <p class="subtitle">Completa tu dirección, selecciona el método de pago y confirma tu compra.</p>
         </section>
 
-        <!-- CONTENEDOR PRINCIPAL DEL CARRITO / PAGO / TICKET -->
+        <!-- CONTENEDOR PRINCIPAL -->
         <div id="checkoutContainer"></div>
     </main>
 
@@ -65,15 +64,13 @@
                 subtotal += itemSubtotal;
                 return `
                     <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 1rem;"><strong>${item.name}</strong><br><small style="color:#777;">${item.category || 'Deportivo'}</small></td>
-                        <td style="padding: 1rem;">$${item.price.toLocaleString()} MXN</td>
-                        <td style="padding: 1rem;">
-                            <input type="number" value="${item.quantity}" min="1" max="10" onchange="updateQuantity(${index}, this.value)" style="width: 60px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 4px;">
+                        <td style="padding: 0.75rem;"><strong>${item.name}</strong></td>
+                        <td style="padding: 0.75rem;">$${item.price.toLocaleString()} MXN</td>
+                        <td style="padding: 0.75rem;">
+                            <input type="number" value="${item.quantity}" min="1" max="10" onchange="updateQuantity(${index}, this.value)" style="width: 50px; padding: 0.2rem;">
                         </td>
-                        <td style="padding: 1rem;">$${itemSubtotal.toLocaleString()} MXN</td>
-                        <td style="padding: 1rem;">
-                            <button onclick="removeItem(${index})" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-weight: bold;">Eliminar</button>
-                        </td>
+                        <td style="padding: 0.75rem;">$${itemSubtotal.toLocaleString()} MXN</td>
+                        <td style="padding: 0.75rem;"><button onclick="removeItem(${index})" style="background:none; border:none; color:#e74c3c; cursor:pointer;">Eliminar</button></td>
                     </tr>
                 `;
             }).join('');
@@ -86,7 +83,7 @@
                 <div style="overflow-x: auto; margin-bottom: 2rem;">
                     <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; border: 1px solid #eee;">
                         <thead>
-                            <tr style="border-bottom: 2px solid #ddd; text-align: left; background: #fafafa;">
+                            <tr style="background: #fafafa; border-bottom: 2px solid #ddd; text-align: left;">
                                 <th style="padding: 0.75rem;">Producto</th>
                                 <th style="padding: 0.75rem;">Precio</th>
                                 <th style="padding: 0.75rem;">Cantidad</th>
@@ -94,54 +91,51 @@
                                 <th style="padding: 0.75rem;">Acción</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            ${rowsHtml}
-                        </tbody>
+                        <tbody>${rowsHtml}</tbody>
                     </table>
                 </div>
 
-                <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;">
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: flex-start;">
                     
-                    <!-- FORMULARIO DE MÉTODOS DE PAGO -->
-                    <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; flex: 1; min-width: 300px; border: 1px solid #ddd;">
-                        <h3>💳 Selecciona Método de Pago</h3>
+                    <!-- PASO 1: DIRECCIÓN Y PASO 2: MÉTODO DE PAGO -->
+                    <div style="flex: 1; min-width: 320px; display: flex; flexDirection: column; gap: 1.5rem;">
                         
-                        <div style="margin: 1rem 0; display: flex; gap: 1rem;">
-                            <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="Tarjeta" checked onclick="togglePaymentFields('card')"> Tarjeta</label>
-                            <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="Transferencia" onclick="togglePaymentFields('transfer')"> Transferencia</label>
-                            <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="E-wallet" onclick="togglePaymentFields('ewallet')"> E-wallet (Saldo)</label>
+                        <!-- PASO 1: DIRECCIÓN -->
+                        <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
+                            <h3>📍 Paso 1: Dirección de Envío</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
+                                <div style="grid-column: 1 / -1;"><label style="font-size:0.8rem; font-weight:bold;">Nombre Completo del Cliente</label><input type="text" id="shippingName" placeholder="Brayan Camarillo" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
+                                <div style="grid-column: 1 / -1;"><label style="font-size:0.8rem; font-weight:bold;">Calle y Número</label><input type="text" id="shippingStreet" placeholder="Av. Adolfo López Mateos #120" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
+                                <div><label style="font-size:0.8rem; font-weight:bold;">Ciudad</label><input type="text" id="shippingCity" placeholder="Aguascalientes" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
+                                <div><label style="font-size:0.8rem; font-weight:bold;">Código Postal</label><input type="text" id="shippingCp" placeholder="20000" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
+                            </div>
                         </div>
 
-                        <div id="paymentFormFields" style="background: white; padding: 1rem; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 1.5rem;">
-                            <!-- Dinámico según método -->
+                        <!-- PASO 2: MÉTODO DE PAGO -->
+                        <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
+                            <h3>💳 Paso 2: Método de Pago</h3>
+                            <div style="margin: 1rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
+                                <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="Tarjeta" checked onclick="togglePaymentFields('card')"> Tarjeta</label>
+                                <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="Transferencia" onclick="togglePaymentFields('transfer')"> Transferencia</label>
+                                <label style="cursor: pointer;"><input type="radio" name="paymentMethod" value="E-wallet" onclick="togglePaymentFields('ewallet')"> E-wallet (Saldo)</label>
+                            </div>
+                            <div id="paymentFormFields" style="background: white; padding: 1rem; border-radius: 6px; border: 1px solid #ccc;"></div>
                         </div>
 
-                        <div style="background: #fff; padding: 1rem; border-radius: 6px; border: 1px dashed #ccc;">
-                            <label style="font-size: 0.85rem; font-weight: bold;">Cupón Activo:</label>
-                            <p style="margin: 0.2rem 0; color: #27ae60; font-weight: bold;">${savedDiscountPct > 0 ? `Descuento del ${savedDiscountPct}% aplicado` : 'Ninguno (Puedes aplicar en Campañas)'}</p>
-                        </div>
                     </div>
 
-                    <!-- RESUMEN Y BOTÓN DE CONFIRMAR -->
+                    <!-- RESUMEN Y BOTÓN PAGAR (PASO 3) -->
                     <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; width: 340px; border: 1px solid #ddd;">
                         <h3>Resumen del Pedido</h3>
                         <div style="margin: 1rem 0; font-size: 0.95rem; line-height: 1.8;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span>Subtotal:</span>
-                                <strong>$${subtotal.toLocaleString()} MXN</strong>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; color: #27ae60;">
-                                <span>Descuento (${savedDiscountPct}%):</span>
-                                <strong>-$${discountAmount.toLocaleString()} MXN</strong>
-                            </div>
+                            <div style="display: flex; justify-content: space-between;"><span>Subtotal:</span><strong>$${subtotal.toLocaleString()} MXN</strong></div>
+                            <div style="display: flex; justify-content: space-between; color: #27ae60;"><span>Descuento (${savedDiscountPct}%):</span><strong>-$${discountAmount.toLocaleString()} MXN</strong></div>
                             <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #ddd;">
-                            <div style="display: flex; justify-content: space-between; font-size: 1.25rem; color: #e67e22;">
-                                <span>Total a pagar:</span>
-                                <strong>$${finalTotal.toLocaleString()} MXN</strong>
-                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 1.25rem; color: #e67e22;"><span>Total a pagar:</span><strong>$${finalTotal.toLocaleString()} MXN</strong></div>
                         </div>
                         <button onclick="processCheckout(${finalTotal})" class="btn-primary" style="width: 100%; cursor: pointer; padding: 0.75rem; font-size: 1rem; font-weight: bold;">Pagar / Confirmar Compra</button>
                     </div>
+
                 </div>
             `;
             togglePaymentFields('card');
@@ -151,8 +145,15 @@
             const fields = document.getElementById('paymentFormFields');
             if (type === 'card') {
                 fields.innerHTML = `
-                    <div style="margin-bottom: 0.75rem;"><label style="font-size:0.8rem; font-weight:bold;">Nombre del Titular</label><input type="text" placeholder="Ej. Brayan Camarillo" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
-                    <div style="margin-bottom: 0.75rem;"><label style="font-size:0.8rem; font-weight:bold;">Número de Tarjeta</label><input type="text" placeholder="4532 •••• •••• 8921" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
+                    <div style="margin-bottom: 0.75rem;">
+                        <label style="font-size:0.8rem; font-weight:bold;">Tipo de Tarjeta</label>
+                        <select id="cardType" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;">
+                            <option value="Débito">Tarjeta de Débito</option>
+                            <option value="Crédito">Tarjeta de Crédito</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 0.75rem;"><label style="font-size:0.8rem; font-weight:bold;">Nombre en la Tarjeta</label><input type="text" id="cardName" placeholder="Brayan Camarillo" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
+                    <div style="margin-bottom: 0.75rem;"><label style="font-size:0.8rem; font-weight:bold;">Número de Tarjeta</label><input type="text" id="cardNum" placeholder="4532 •••• •••• 8921" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
                     <div style="display:flex; gap:0.5rem;">
                         <div><label style="font-size:0.8rem; font-weight:bold;">Exp.</label><input type="text" placeholder="MM/AA" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
                         <div><label style="font-size:0.8rem; font-weight:bold;">CVV</label><input type="password" placeholder="123" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
@@ -160,11 +161,11 @@
                 `;
             } else if (type === 'transfer') {
                 fields.innerHTML = `
-                    <p style="font-size: 0.85rem; color: #555; margin:0;"><strong>CLABE Interbancaria:</strong> 012345678901234567<br><strong>Banco:</strong> Strydr Bank<br>El pago se valida automáticamente al confirmar.</p>
+                    <p style="font-size: 0.85rem; color: #555; margin:0;"><strong>CLABE Interbancaria:</strong> 012345678901234567<br><strong>Banco:</strong> Strydr Bank<br>Validación automática al confirmar.</p>
                 `;
             } else {
                 fields.innerHTML = `
-                    <p style="font-size: 0.85rem; color: #555; margin:0;"><strong>Saldo Disponible en E-wallet:</strong> $15,400.00 MXN<br>Se descontará el total de tu saldo simulado actual.</p>
+                    <p style="font-size: 0.85rem; color: #555; margin:0;"><strong>Saldo E-wallet:</strong> $15,400.00 MXN<br>Se descontará de inmediato de tu saldo.</p>
                 `;
             }
         }
@@ -173,28 +174,38 @@
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             if (cart.length === 0) return;
 
+            const name = document.getElementById('shippingName').value.trim() || 'Brayan Camarillo';
+            const street = document.getElementById('shippingStreet').value.trim() || 'Av. López Mateos #120';
+            const city = document.getElementById('shippingCity').value.trim() || 'Aguascalientes';
+            const cp = document.getElementById('shippingCp').value.trim() || '20000';
+
             const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            let cardDetail = '';
+            if (selectedMethod === 'Tarjeta') {
+                const cType = document.getElementById('cardType').value;
+                cardDetail = ` (${cType})`;
+            }
+
             const ticketId = 'STRYDR-FAC-' + Math.floor(100000 + Math.random() * 900000);
             const now = new Date().toLocaleString();
 
             const newTicket = {
                 id: ticketId,
                 date: now,
+                customer: { name, street, city, cp },
                 items: cart,
                 total: totalPaid,
-                method: selectedMethod
+                method: selectedMethod + cardDetail,
+                status: 'Aprobado ✔'
             };
 
-            // Guardar en historial de compras del usuario
             let userPurchases = JSON.parse(localStorage.getItem('strydr_purchases')) || [];
             userPurchases.unshift(newTicket);
             localStorage.setItem('strydr_purchases', JSON.stringify(userPurchases));
 
-            // Limpiar carrito y descuento activo
             localStorage.removeItem('strydr_cart');
             localStorage.removeItem('strydr_discount');
 
-            // Renderizar el Ticket / Factura digital exclusivamente en pantalla
             renderTicketScreen(newTicket);
         }
 
@@ -209,7 +220,7 @@
             `).join('');
 
             container.innerHTML = `
-                <div style="max-width: 600px; margin: 0 auto; background: white; border: 2px solid #333; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                <div style="max-width: 650px; margin: 0 auto; background: white; border: 2px solid #333; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
                     <div style="text-align: center; border-bottom: 2px dashed #ccc; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
                         <span style="background: #27ae60; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Pago Aprobado ✔</span>
                         <h2 style="margin:0.5rem 0 0 0; font-size:1.8rem;">STRYDR INC.</h2>
@@ -217,9 +228,15 @@
                         <strong style="color: #e67e22; font-size: 1.1rem; display:block; margin-top:0.5rem;">Folio: ${ticket.id}</strong>
                     </div>
 
-                    <div style="margin-bottom: 1.5rem; font-size: 0.9rem; color: #444;">
-                        <p style="margin:0.2rem 0;"><strong>Fecha y Hora:</strong> ${ticket.date}</p>
-                        <p style="margin:0.2rem 0;"><strong>Método de Pago:</strong> ${ticket.method}</p>
+                    <div style="display:flex; justify-content:space-between; margin-bottom: 1.5rem; font-size: 0.9rem; color: #444; flex-wrap:wrap; gap:1rem;">
+                        <div>
+                            <p style="margin:0.2rem 0;"><strong>Cliente:</strong> ${ticket.customer.name}</p>
+                            <p style="margin:0.2rem 0;"><strong>Dirección:</strong> ${ticket.customer.street}, ${ticket.customer.city} (C.P. ${ticket.customer.cp})</p>
+                        </div>
+                        <div>
+                            <p style="margin:0.2rem 0;"><strong>Fecha:</strong> ${ticket.date}</p>
+                            <p style="margin:0.2rem 0;"><strong>Método:</strong> ${ticket.method}</p>
+                        </div>
                     </div>
 
                     <div style="border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1rem 0; margin-bottom: 1.5rem;">
@@ -232,12 +249,23 @@
                         <span>$${ticket.total.toLocaleString()} MXN</span>
                     </div>
 
-                    <div style="display: flex; gap: 1rem; justify-content: center;">
-                        <a href="perfil.html" class="btn-primary" style="text-decoration:none; padding: 0.7rem 2rem; font-weight: bold; border-radius:6px;">Ver en Mis Compras (Perfil)</a>
+                    <div id="downloadNotice" style="display:none; background:#e8f8f5; color:#27ae60; padding:0.5rem; border-radius:4px; text-align:center; font-size:0.85rem; margin-bottom:1rem;">
+                        ✔ PDF simulado guardado correctamente en el sistema.
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="fakePdfDownload()" class="btn-primary" style="cursor: pointer; padding: 0.7rem 1.5rem; font-weight: bold;">📥 Descargar PDF (Simulado)</button>
+                        <a href="perfil.html" class="btn-secondary" style="text-decoration:none; padding: 0.7rem 1.5rem; background:#7f8c8d; color:white; border-radius:6px; font-weight:bold; display:inline-block;">Ver en Mis Compras (Perfil)</a>
                     </div>
                 </div>
             `;
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function fakePdfDownload() {
+            const notice = document.getElementById('downloadNotice');
+            notice.style.display = 'block';
+            setTimeout(() => { notice.style.display = 'none'; }, 3000);
         }
 
         function updateQuantity(index, newQty) {
@@ -259,22 +287,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             renderCheckout();
-
-            const session = JSON.parse(localStorage.getItem('strydr_session'));
-            const adminLink = document.getElementById('adminNavLink');
-            const profileLink = document.getElementById('profileNavLink');
-
-            if (session && session.isLoggedIn && session.role === 'Admin') {
-                if (adminLink) adminLink.style.display = 'inline-block';
-            } else {
-                if (adminLink) adminLink.style.display = 'none';
-                if (!session || !session.isLoggedIn) {
-                    if (profileLink) {
-                        profileLink.textContent = "Iniciar Sesión";
-                        profileLink.href = "login.html";
-                    }
-                }
-            }
         });
     </script>
 </body>
