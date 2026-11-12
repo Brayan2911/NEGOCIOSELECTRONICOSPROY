@@ -33,3 +33,6 @@ Strydr/
 └── assets/
     └── css/
         └── styles.css  # Hoja de estilos principal y transiciones UI
+
+## Versión de Entrega
+* **Versión:** 1.0.0 (Bloque 4 completado — Checkout, Facturación Digital e Historial).        
