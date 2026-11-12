@@ -7,3 +7,10 @@
 * **CSS3 Personalizado:** Diseño responsivo, variables visuales, transiciones suaves y animaciones de interfaz (`assets/css/styles.css`).
 * **JavaScript (ES6+):** Lógica de negocio, validaciones en tiempo real y manipulación dinámica del DOM.
 * **Web Storage (`localStorage`):** Persistencia completa en el navegador para sesiones, roles, carrito de compras, publicaciones C2C, pujas, reseñas e historial de facturas.
+
+## Roles y Control de Acceso
+
+El sistema cuenta con autenticación simulada y protección de vistas mediante `strydr_session` en `localStorage`:
+* **Visitante (Sin sesión):** Puede explorar el catálogo, campañas y detalles de productos, pero requiere iniciar sesión para comprar, pujar o publicar.
+* **Usuario (`User`):** Acceso completo al checkout, generación de facturas, historial de compras, creación/edición de anuncios C2C y publicación de reseñas.
+* **Administrador (`Admin`):** Desbloquea la pestaña **Admin** en la barra de navegación y obtiene permisos globales para moderar o eliminar anuncios C2C y reseñas de cualquier usuario.
