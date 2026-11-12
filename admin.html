@@ -32,7 +32,6 @@
                 de atletas.</p>
         </section>
 
-        <!-- MÓDULO 1: GESTIÓN DE RESEÑAS Y TESTIMONIOS -->
         <section
             style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2.5rem; border: 1px solid #ddd;">
             <h3 id="tFormTitle">⭐ Gestionar Reseñas y Testimonios de Atletas</h3>
@@ -89,7 +88,7 @@
             </div>
         </section>
 
-        <!-- MÓDULO 2: GESTIÓN DE INVENTARIO B2C CON SCROLL HORIZONTAL DE LOS 8 MODELOS -->
+
         <section
             style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2.5rem; border: 1px solid #ddd;">
             <h3>👟 Precios e Inventario del Catálogo B2C (Desliza hacia los lados)</h3>
@@ -99,12 +98,12 @@
             <div
                 style="overflow-x: auto; padding-bottom: 0.75rem; border: 1px dashed #ccc; background: #fff; padding: 1rem; border-radius: 6px;">
                 <div id="adminInventoryList" style="display: flex; gap: 1rem; width: max-content;">
-                    <!-- Se inyectan los 8 productos con scroll lateral -->
+
                 </div>
             </div>
         </section>
 
-        <!-- MÓDULO 3: ASIGNADOR DE ETIQUETAS DE PROMOCIÓN CON BOTÓN DE GUARDAR -->
+
         <section style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
             <h3>🔥 Asignador de Etiquetas de Promoción</h3>
             <p style="color: #666; font-size: 0.85rem; margin-bottom: 1.5rem;">Asigna distintivos visuales (Oferta, %
@@ -112,7 +111,7 @@
 
             <div id="adminPromosList"
                 style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;">
-                <!-- Carga dinámica con selector y botón guardar -->
+
             </div>
         </section>
     </main>
@@ -122,9 +121,7 @@
     </footer>
 
     <script>
-        // -------------------------------------------------------------
-        // MÓDULO 1: RESEÑAS Y TESTIMONIOS
-        // -------------------------------------------------------------
+
         const defaultTestimonials = [
             { id: 1, name: "Carlos Rodríguez", role: "Maratonista Semi-Profesional", initials: "CR", color: "#e67e22", stars: "⭐⭐⭐⭐⭐", text: "La respuesta de la suela en distancias superiores a 21k es increíble. Ningún cansancio acumulado en las rodillas. Simplemente el mejor par que he usado este año." },
             { id: 2, name: "Andrea Mendoza", role: "Jugadora de Básquetbol Liga Estatal", initials: "AM", color: "#2980b9", stars: "⭐⭐⭐⭐⭐", text: "El agarre en duela del Court King me dio la estabilidad necesaria para mis saltos en cancha. La tracción lateral es de nivel profesional." },
@@ -212,9 +209,7 @@
             document.getElementById('tSubmitBtn').textContent = "Guardar Reseña";
         }
 
-        // -------------------------------------------------------------
-        // MÓDULO 2 Y 3: INVENTARIO Y ETIQUETAS DE PROMOCIÓN
-        // -------------------------------------------------------------
+
         const defaultCatalogProducts = [
             { id: 1, name: 'Strydr Velocity Pro', category: 'Running', price: 2499, emoji: '👟', defaultTag: 'Nuevo' },
             { id: 2, name: 'Strydr Court King', category: 'Básquetbol', price: 2899, emoji: '🏀', defaultTag: 'Oferta' },

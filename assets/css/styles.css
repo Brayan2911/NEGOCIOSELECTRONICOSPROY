@@ -491,3 +491,10 @@ body {
   border-radius: 4px;
   cursor: pointer;
 }
+
+.btn-primary,
+.btn-secondary,
+button,
+.nav-links a {
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
