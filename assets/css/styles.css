@@ -573,3 +573,13 @@ input[type="radio"],
 select {
   cursor: pointer;
 }
+
+.cart-badge {
+  background-color: #e67e22;
+  color: #ffffff;
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: bold;
+  margin-left: 4px;
+}
