@@ -558,3 +558,13 @@ textarea:focus {
 .alert {
   animation: fadeInScale 0.25s ease-out forwards;
 }
+
+@media print {
+
+  .navbar,
+  .footer,
+  button,
+  a {
+    display: none !important;
+  }
+}
