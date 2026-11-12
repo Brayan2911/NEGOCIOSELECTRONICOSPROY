@@ -1,0 +1,9 @@
+# Strydr — Plataforma E-Commerce de Calzado Deportivo
+
+**Strydr** es una aplicación web integral de comercio electrónico especializada en calzado deportivo y urbano. Combina modelos de negocio **B2C** (tienda oficial), **C2C** (marketplace entre usuarios) y **subastas en tiempo real**, gestionando todo el flujo desde la exploración del catálogo hasta la generación de comprobantes digitales.
+
+## Tecnologías Utilizadas
+* **HTML5 Semántico:** Estructura modular multipágina.
+* **CSS3 Personalizado:** Diseño responsivo, variables visuales, transiciones suaves y animaciones de interfaz (`assets/css/styles.css`).
+* **JavaScript (ES6+):** Lógica de negocio, validaciones en tiempo real y manipulación dinámica del DOM.
+* **Web Storage (`localStorage`):** Persistencia completa en el navegador para sesiones, roles, carrito de compras, publicaciones C2C, pujas, reseñas e historial de facturas.
