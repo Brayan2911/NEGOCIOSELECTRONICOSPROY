@@ -517,3 +517,8 @@ button,
   color: #e67e22;
   transform: translateY(-1px);
 }
+
+main section,
+main div[style*="border: 1px solid"] {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
