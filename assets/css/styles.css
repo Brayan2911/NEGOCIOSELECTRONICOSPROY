@@ -504,3 +504,11 @@ button,
   box-shadow: 0 6px 16px rgba(230, 126, 34, 0.35);
   filter: brightness(1.05);
 }
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
