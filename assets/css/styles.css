@@ -530,3 +530,13 @@ main div[style*="border: 1px solid"] {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
   border-color: #e67e22 !important;
 }
+
+/* Mejora visual al enfocar inputs y textareas */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #e67e22 !important;
+  box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.18);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
