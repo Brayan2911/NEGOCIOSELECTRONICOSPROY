@@ -40,3 +40,10 @@ Strydr/
 ## Credenciales de Demostración
 * **Rol Usuario (`User`):** `brayanlealcl1129@gmail.com`
 * **Rol Administrador (`Admin`):** Iniciar sesión seleccionando el rol `Admin` en `login.html` para habilitar moderación global.
+
+
+## Flujo de Usuario (End-to-End)
+1. **Exploración:** Selección de calzado oficial (`catalogo.html`) o de segunda mano (`publicar.html`).
+2. **Promoción:** Aplicación opcional de cupón de descuento (`campana.html`).
+3. **Checkout (`carrito.html`):** Captura de dirección de envío, selección de método de pago y confirmación.
+4. **Comprobante e Historial (`perfil.html`):** Visualización inmediata de la factura electrónica y consulta posterior en el historial de compras.
