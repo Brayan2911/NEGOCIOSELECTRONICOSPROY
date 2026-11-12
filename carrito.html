@@ -64,13 +64,15 @@
                 subtotal += itemSubtotal;
                 return `
                     <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 0.75rem;"><strong>${item.name}</strong></td>
+                        <td style="padding: 0.75rem;"><strong>${item.name}</strong><br><small style="color:#777;">${item.category || 'Deportivo'}</small></td>
                         <td style="padding: 0.75rem;">$${item.price.toLocaleString()} MXN</td>
                         <td style="padding: 0.75rem;">
-                            <input type="number" value="${item.quantity}" min="1" max="10" onchange="updateQuantity(${index}, this.value)" style="width: 50px; padding: 0.2rem;">
+                            <input type="number" value="${item.quantity}" min="1" max="10" onchange="updateQuantity(${index}, this.value)" style="width: 55px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 4px;">
                         </td>
                         <td style="padding: 0.75rem;">$${itemSubtotal.toLocaleString()} MXN</td>
-                        <td style="padding: 0.75rem;"><button onclick="removeItem(${index})" style="background:none; border:none; color:#e74c3c; cursor:pointer;">Eliminar</button></td>
+                        <td style="padding: 0.75rem;">
+                            <button onclick="removeItem(${index})" style="background:none; border:none; color:#e74c3c; cursor:pointer; font-weight:bold;">Eliminar</button>
+                        </td>
                     </tr>
                 `;
             }).join('');
@@ -80,7 +82,7 @@
             const finalTotal = Math.max(0, subtotal - discountAmount);
 
             container.innerHTML = `
-                <div style="overflow-x: auto; margin-bottom: 2rem;">
+                <div style="overflow-x: auto; margin-bottom: 0.75rem;">
                     <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; border: 1px solid #eee;">
                         <thead>
                             <tr style="background: #fafafa; border-bottom: 2px solid #ddd; text-align: left;">
@@ -95,19 +97,35 @@
                     </table>
                 </div>
 
+                <div style="text-align: right; margin-bottom: 1.5rem;">
+                    <button onclick="clearFullCart()" style="background: transparent; border: 1px solid #e74c3c; color: #e74c3c; padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">🗑️ Vaciar Carrito</button>
+                </div>
+
                 <div style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: flex-start;">
                     
                     <!-- PASO 1: DIRECCIÓN Y PASO 2: MÉTODO DE PAGO -->
-                    <div style="flex: 1; min-width: 320px; display: flex; flexDirection: column; gap: 1.5rem;">
+                    <div style="flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 1.5rem;">
                         
                         <!-- PASO 1: DIRECCIÓN -->
                         <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd;">
                             <h3>📍 Paso 1: Dirección de Envío</h3>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
-                                <div style="grid-column: 1 / -1;"><label style="font-size:0.8rem; font-weight:bold;">Nombre Completo del Cliente</label><input type="text" id="shippingName" placeholder="Brayan Camarillo" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
-                                <div style="grid-column: 1 / -1;"><label style="font-size:0.8rem; font-weight:bold;">Calle y Número</label><input type="text" id="shippingStreet" placeholder="Av. Adolfo López Mateos #120" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
-                                <div><label style="font-size:0.8rem; font-weight:bold;">Ciudad</label><input type="text" id="shippingCity" placeholder="Aguascalientes" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
-                                <div><label style="font-size:0.8rem; font-weight:bold;">Código Postal</label><input type="text" id="shippingCp" placeholder="20000" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
+                                <div style="grid-column: 1 / -1;">
+                                    <label style="font-size:0.8rem; font-weight:bold;">Nombre Completo del Cliente</label>
+                                    <input type="text" id="shippingName" placeholder="Ej. Brayan Camarillo" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;">
+                                </div>
+                                <div style="grid-column: 1 / -1;">
+                                    <label style="font-size:0.8rem; font-weight:bold;">Calle y Número</label>
+                                    <input type="text" id="shippingStreet" placeholder="Ej. Av. Adolfo López Mateos #120" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.8rem; font-weight:bold;">Ciudad</label>
+                                    <input type="text" id="shippingCity" placeholder="Ej. Aguascalientes" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.8rem; font-weight:bold;">Código Postal</label>
+                                    <input type="text" id="shippingCp" placeholder="Ej. 20000" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;">
+                                </div>
                             </div>
                         </div>
 
@@ -152,20 +170,39 @@
                             <option value="Crédito">Tarjeta de Crédito</option>
                         </select>
                     </div>
-                    <div style="margin-bottom: 0.75rem;"><label style="font-size:0.8rem; font-weight:bold;">Nombre en la Tarjeta</label><input type="text" id="cardName" placeholder="Brayan Camarillo" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
-                    <div style="margin-bottom: 0.75rem;"><label style="font-size:0.8rem; font-weight:bold;">Número de Tarjeta</label><input type="text" id="cardNum" placeholder="4532 •••• •••• 8921" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
+                    <div style="margin-bottom: 0.75rem;">
+                        <label style="font-size:0.8rem; font-weight:bold;">Nombre en la Tarjeta</label>
+                        <input type="text" id="cardName" placeholder="Ej. Brayan Camarillo" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;">
+                    </div>
+                    <div style="margin-bottom: 0.75rem;">
+                        <label style="font-size:0.8rem; font-weight:bold;">Número de Tarjeta</label>
+                        <input type="text" id="cardNum" placeholder="4532 1234 5678 8921" maxlength="19" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;">
+                    </div>
                     <div style="display:flex; gap:0.5rem;">
-                        <div><label style="font-size:0.8rem; font-weight:bold;">Exp.</label><input type="text" placeholder="MM/AA" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
-                        <div><label style="font-size:0.8rem; font-weight:bold;">CVV</label><input type="password" placeholder="123" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;"></div>
+                        <div>
+                            <label style="font-size:0.8rem; font-weight:bold;">Exp.</label>
+                            <input type="text" id="cardExp" placeholder="MM/AA" maxlength="5" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;">
+                        </div>
+                        <div>
+                            <label style="font-size:0.8rem; font-weight:bold;">CVV</label>
+                            <input type="password" id="cardCvv" placeholder="123" maxlength="4" style="width:100%; padding:0.4rem; border:1px solid #ccc; border-radius:4px;">
+                        </div>
                     </div>
                 `;
             } else if (type === 'transfer') {
                 fields.innerHTML = `
-                    <p style="font-size: 0.85rem; color: #555; margin:0;"><strong>CLABE Interbancaria:</strong> 012345678901234567<br><strong>Banco:</strong> Strydr Bank<br>Validación automática al confirmar.</p>
+                    <p style="font-size: 0.85rem; color: #555; margin:0;">
+                        <strong>CLABE Interbancaria:</strong> 012345678901234567<br>
+                        <strong>Banco:</strong> Strydr Bank<br>
+                        Validación automática al confirmar.
+                    </p>
                 `;
             } else {
                 fields.innerHTML = `
-                    <p style="font-size: 0.85rem; color: #555; margin:0;"><strong>Saldo E-wallet:</strong> $15,400.00 MXN<br>Se descontará de inmediato de tu saldo.</p>
+                    <p style="font-size: 0.85rem; color: #555; margin:0;">
+                        <strong>Saldo E-wallet:</strong> $15,400.00 MXN<br>
+                        Se descontará de inmediato de tu saldo simulado.
+                    </p>
                 `;
             }
         }
@@ -174,8 +211,12 @@
             const cart = JSON.parse(localStorage.getItem('strydr_cart')) || [];
             if (cart.length === 0) return;
 
-            const name = document.getElementById('shippingName').value.trim() || 'Brayan Camarillo';
-            const street = document.getElementById('shippingStreet').value.trim() || 'Av. López Mateos #120';
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const defaultName = session && session.name ? session.name : 'Brayan Camarillo';
+
+            // Toma lo que escribió el usuario o asigna valores por defecto para nunca detener el flujo
+            const name = document.getElementById('shippingName').value.trim() || defaultName;
+            const street = document.getElementById('shippingStreet').value.trim() || 'Av. Adolfo López Mateos #120';
             const city = document.getElementById('shippingCity').value.trim() || 'Aguascalientes';
             const cp = document.getElementById('shippingCp').value.trim() || '20000';
 
@@ -205,6 +246,9 @@
 
             localStorage.removeItem('strydr_cart');
             localStorage.removeItem('strydr_discount');
+
+            const badge = document.getElementById('cartCount');
+            if (badge) badge.textContent = '0';
 
             renderTicketScreen(newTicket);
         }
@@ -285,8 +329,30 @@
             renderCheckout();
         }
 
+        function clearFullCart() {
+            localStorage.removeItem('strydr_cart');
+            localStorage.removeItem('strydr_discount');
+            renderCheckout();
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             renderCheckout();
+
+            const session = JSON.parse(localStorage.getItem('strydr_session'));
+            const adminLink = document.getElementById('adminNavLink');
+            const profileLink = document.getElementById('profileNavLink');
+
+            if (session && session.isLoggedIn && session.role === 'Admin') {
+                if (adminLink) adminLink.style.display = 'inline-block';
+            } else {
+                if (adminLink) adminLink.style.display = 'none';
+                if (!session || !session.isLoggedIn) {
+                    if (profileLink) {
+                        profileLink.textContent = "Iniciar Sesión";
+                        profileLink.href = "login.html";
+                    }
+                }
+            }
         });
     </script>
 </body>
